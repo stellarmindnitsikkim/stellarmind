@@ -1,0 +1,7 @@
+<div class="blocker">
+        <p>SM</p>
+      </div>
+
+      https://ivirtknjuflrcldghnfv.supabase.co
+
+      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2aXJ0a25qdWZscmNsZGdobmZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExODc1ODcsImV4cCI6MjA2Njc2MzU4N30.rC5U0OGWa48zUpSFn3a1VM8_ResvAraIY4HlXjOEEIk
