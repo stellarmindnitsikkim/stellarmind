@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+  <script type="module" src="script.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="../assets/logo_img.jpg" alt="Logo" class="animated-logo">
+      <span>Attendance Portal</span>
+    </div>
+    <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+      <li><a href="../events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
+      <li id="logoutBtn"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Welcome, <span id="studentName">Loading...</span></h1>
+      <p>Be Proud. You are in NIT</p>
+    </div>
+  </section>
+
+  <!-- Attendance Section -->
+  <section class="attendance-section">
+  <h2>Your Attendance</h2>
+
+  <!-- Subject Pie Charts FIRST -->
+  <div class="summary-top" id="summaryTop"></div>
+
+  <!-- Month Changer -->
+  <div class="month-changer">
+    <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+    <span id="currentMonth">Loading...</span>
+    <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+  </div>
+
+  <!-- Toggle Button -->
+  <button id="toggleViewBtn" class="toggle-btn">See Attendance by Day</button>
+
+  <!-- Attendance Table (Initially Hidden) -->
+  <div class="attendance-grid" id="attendanceGrid" style="display:none;">
+    <table class="attendance-table">
+      <thead id="attendanceHead"></thead>
+      <tbody id="attendanceBody"></tbody>
+    </table>
+  </div>
+</section>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Stellar Mind | NIT Sikkim</p>
+      <p>📞 Contact: <a href="tel:+918769681167">+91 98765 43210</a></p>
+      <div class="social-icons">
+        <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  // Disable right click
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    alert("Inspect is disabled on this site 🚫");
+  });
+</script>
+
+<script>
+  // Disable some keys (F12, Ctrl+Shift+I, Ctrl+U, etc.)
+  document.addEventListener("keydown", (e) => {
+    if (
+      e.key === "F12" || 
+      (e.ctrlKey && e.shiftKey && e.key === "I") ||
+      (e.ctrlKey && e.shiftKey && e.key === "J") ||
+      (e.ctrlKey && e.key === "U") ||
+      (e.ctrlKey && e.key === "S")
+    ) {
+      e.preventDefault();
+      alert("Developer tools are disabled 🚫");
+    }
+  });
+
+  // Try to detect DevTools opening
+  setInterval(() => {
+    if (window.devtools && window.devtools.open) {
+      alert("DevTools is open!");
+      window.location.reload();
+    }
+  }, 1000);
+</script>
+
+
+</body>
+</html>

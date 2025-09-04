@@ -1,0 +1,129 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: rgba(15, 20, 40, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.4);
+}
+
+.sidebar .logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.sidebar .logo img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(87,171,255,0.8);
+}
+.sidebar .logo h2 {
+  margin-top: 10px;
+  color: #57abff;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.sidebar .menu {
+  list-style: none;
+}
+.sidebar .menu li {
+  margin: 20px 0;
+}
+.sidebar .menu a {
+  text-decoration: none;
+  color: #ccc;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+.sidebar .menu a i {
+  margin-right: 12px;
+  font-size: 18px;
+}
+.sidebar .menu a:hover {
+  color: #57abff;
+  transform: translateX(5px);
+}
+.sidebar .menu .logout {
+  color: #ff6b6b;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* Header */
+header {
+  margin-bottom: 30px;
+}
+.glow-text {
+  font-size: 32px;
+  font-weight: bold;
+  color: #57abff;
+  text-shadow: 0 0 10px rgba(87,171,255,0.8);
+  transition: 0.5s;
+}
+.glow-text.pulse {
+  text-shadow: 0 0 25px rgba(130,87,229,1), 0 0 50px rgba(87,171,255,1);
+}
+.subtitle {
+  font-size: 16px;
+  color: #bbb;
+}
+
+/* Dashboard Cards */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+.card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  transition: 0.4s;
+  box-shadow: 0 0 15px rgba(87,171,255,0.2);
+}
+.card:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 0 30px rgba(130,87,229,0.7);
+}
+.card i {
+  font-size: 32px;
+  margin-bottom: 15px;
+  color: #57abff;
+}
+.card h3 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #fff;
+}
+.card p {
+  font-size: 14px;
+  color: #ccc;
+}
