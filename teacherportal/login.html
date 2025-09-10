@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Mind | Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+
+  <div class="login-container">
+    <!-- Glowing Logo -->
+    <div class="logo">
+      <img src="/assets/logo_img.jpg" alt="Stellar Mind Logo">
+    </div>
+
+    <h1><i class="fa-solid fa-user-secret"></i> Welcome Back</h1>
+    <p class="subtitle">Login to explore your Stellar Mind</p>
+    <a href="/admin/index.html"></a>
+
+    <form id="login-form">
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="username" placeholder="Username" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+
+      <button type="submit" class="btn">Login</button>
+      <p id="login-message"></p>
+    </form>
+  </div>
+
+  <script>
+  // Disable right click
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    alert("Inspect is disabled on this site 🚫");
+  });
+</script>
+
+<script>
+  // Disable some keys (F12, Ctrl+Shift+I, Ctrl+U, etc.)
+  document.addEventListener("keydown", (e) => {
+    if (
+      e.key === "F12" || 
+      (e.ctrlKey && e.shiftKey && e.key === "I") ||
+      (e.ctrlKey && e.shiftKey && e.key === "J") ||
+      (e.ctrlKey && e.key === "U") ||
+      (e.ctrlKey && e.key === "S")
+    ) {
+      e.preventDefault();
+      alert("Developer tools are disabled 🚫");
+    }
+  });
+
+  // Try to detect DevTools opening
+  setInterval(() => {
+    if (window.devtools && window.devtools.open) {
+      alert("DevTools is open!");
+      window.location.reload();
+    }
+  }, 1000);
+</script>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

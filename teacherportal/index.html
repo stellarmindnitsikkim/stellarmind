@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Portal — Mark Attendance</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <style>
+    /* Using the same beautiful dark theme from your admin page */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, sans-serif; background: #0b0b12; color: #fff; }
+    .container { max-width: 1200px; margin: 28px auto; padding: 0 16px; }
+    .navbar { display: flex; justify-content: space-between; align-items: center; background: #141426; padding: 10px 20px; box-shadow: 0 0 15px rgba(87, 171, 255, .4); }
+    .navbar .logo { display: flex; gap: 10px; align-items: center; color: #57abff; font-weight: 700; }
+    .nav-links { display: flex; gap: 16px; list-style: none; }
+    .nav-links button { color: #fff; text-decoration: none; background: none; border: none; cursor: pointer; font-size: 1rem; }
+    .nav-links button:hover { color: #57abff; }
+    .teacher-header { background: #141426; border: 1px solid #2a2a40; border-radius: 10px; padding: 16px; margin-bottom: 24px; text-align: center; }
+    .teacher-header h1 { font-size: 1.5rem; color: #cfd8ff; }
+    .teacher-header p { font-size: 1.1rem; color: #57abff; font-weight: 500; margin-top: 4px; }
+    .teacher-header .chip { background: #1e1e35; color: #57abff; border-radius: 999px; padding: 4px 10px; font-size: 14px; display: inline-block; margin-top: 8px; }
+    .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; align-items: flex-end; }
+    .controls .row { margin-bottom: 18px; }
+    .controls label { display: block; margin-bottom: 8px; color: #cfd8ff; }
+    .controls input[type="date"], .controls select { width: 100%; background: #141426; border: 1px solid #2a2a40; border-radius: 8px; color: #fff; padding: 8px 10px; font-size: 1rem; }
+    .actions { display: flex; gap: 10px; }
+    .btn { border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: all 0.2s; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+    .btn.primary { background: #57abff; color: #fff; }
+    .btn.ghost { background: transparent; color: #cfd8ff; border: 1px solid #2a2a40; }
+    .btn.success { background: #31c48d; color: #0b0b12; }
+    .btn:disabled { background: #2a2a40; color: #6b7280; cursor: not-allowed; transform: none; box-shadow: none; }
+    .grid-section { margin-top: 26px; }
+    .grid-wrap { overflow-x: auto; border-radius: 10px; box-shadow: 0 0 20px rgba(87, 171, 255, .3); }
+    .att-table { width: 100%; border-collapse: collapse; min-width: 600px; background: #141426; }
+    .att-table th, .att-table td { border: 1px solid #2a2a40; padding: 12px; text-align: center; }
+    .att-table th { background: #1e1e35; color: #57abff; }
+    .att-table td .status-select { background: #0f0f1f; border: 1px solid #2a2a40; border-radius: 6px; color: #fff; padding: 6px 8px; font-size: 0.9rem; }
+    .roll { font-weight: 700; }
+    .student-name { text-align: left; }
+    .save-bar { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+    .status { color: #cfd8ff; }
+    .footer { text-align: center; margin-top: 40px; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo"><i class="fa-solid fa-chalkboard-user"></i><span>Teacher • Attendance Portal</span></div>
+    <ul class="nav-links"><li><button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></li></ul>
+  </nav>
+  <main class="container">
+    <section id="teacherHeader" class="teacher-header" style="display: none;"><h1 id="teacherName"></h1><p>Please mark attendance for your subject:</p><div id="subjectName" class="chip"></div></section>
+    <section class="controls">
+      <div class="row"><label for="yearSelect"><i class="fa-solid fa-graduation-cap"></i> Year</label><select id="yearSelect"><option value="">— Select Year —</option><option value="2">2nd Year</option><option value="3" disabled>3rd Year (Not Available)</option><option value="4" disabled>4th Year (Not Available)</option></select></div>
+      <div class="row"><label for="attDate"><i class="fa-regular fa-calendar-days"></i> Date</label><input type="date" id="attDate"/></div>
+      <div class="row actions"><button id="buildGridBtn" class="btn primary" disabled><i class="fa-solid fa-table-list"></i> Build Grid</button><button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button></div>
+    </section>
+    <section id="gridSection" class="grid-section" style="display:none;">
+      <div class="grid-wrap"><table id="attTable" class="att-table"><thead><tr><th>Roll Number</th><th>Student Name</th><th>Status</th></tr></thead><tbody id="attBody"></tbody></table></div>
+      <div class="save-bar"><button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button><span id="saveStatus" class="status"></span></div>
+    </section>
+  </main>
+  <footer class="footer"><p>© 2025 Stellar Mind | Teacher Portal</p></footer>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const teacherHeader = document.getElementById('teacherHeader'), teacherNameEl = document.getElementById('teacherName'), subjectNameEl = document.getElementById('subjectName'), yearSelect = document.getElementById('yearSelect'), attDate = document.getElementById('attDate'), buildGridBtn = document.getElementById('buildGridBtn'), clearGridBtn = document.getElementById('clearGridBtn'), gridSection = document.getElementById('gridSection'), attBody = document.getElementById('attBody'), saveBtn = document.getElementById('saveBtn'), saveStatus = document.getElementById('saveStatus'), logoutBtn = document.getElementById('logoutBtn');
+    let currentUser = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const userData = localStorage.getItem('user');
+      if (!userData) return redirectToLogin();
+      currentUser = JSON.parse(userData);
+      if (currentUser.role !== 'teacher') {
+        alert('Access Denied.');
+        return redirectToLogin();
+      }
+      teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
+      subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
+      teacherHeader.style.display = 'block';
+      attDate.value = new Date().toISOString().split('T')[0];
+      validateInputs();
+    });
+
+    function redirectToLogin() {
+      localStorage.removeItem('user');
+      window.location.href = '../login.html';
+    }
+
+    logoutBtn.addEventListener('click', redirectToLogin);
+    yearSelect.addEventListener('change', validateInputs);
+    attDate.addEventListener('change', validateInputs);
+
+    function validateInputs() {
+      buildGridBtn.disabled = !(yearSelect.value === '2' && attDate.value);
+    }
+    
+    clearGridBtn.addEventListener('click', () => {
+        gridSection.style.display = 'none';
+        attBody.innerHTML = '';
+        yearSelect.value = '';
+        attDate.value = new Date().toISOString().split('T')[0];
+        validateInputs();
+    });
+
+    buildGridBtn.addEventListener('click', async () => {
+      saveStatus.textContent = 'Building grid...';
+      try {
+        const students = Array.from({ length: 64 }, (_, i) => {
+          const rollNumber = `B2400${(i + 1).toString().padStart(2, '0')}`;
+          return { roll_no: rollNumber, student_name: `Student ${rollNumber}` };
+        });
+        
+        attBody.innerHTML = students.map(student => {
+          return `<tr data-roll="${student.roll_no}" data-name="${student.student_name}"><td class="roll">${student.roll_no}</td><td class="student-name">${student.student_name}</td><td><select class="status-select"><option value="Present" selected>Present</option><option value="Absent">Absent</option><option value="Late">Late</option></select></td></tr>`;
+        }).join('');
+        gridSection.style.display = 'block';
+        saveStatus.textContent = 'Grid built. Checking for existing records...';
+
+        // CORRECTED: Using 'subject_code' to match the database schema
+        const { data: existingAtt, error } = await supabase.from('attendance').select('username, status').eq('date', attDate.value).eq('subject_code', currentUser.subject_code);
+        if (error) throw error;
+
+        if (existingAtt && existingAtt.length > 0) {
+            existingAtt.forEach(record => {
+                const row = attBody.querySelector(`tr[data-roll="${record.username}"]`);
+                if (row) {
+                    const select = row.querySelector('.status-select');
+                    if(select) select.value = record.status;
+                }
+            });
+        }
+        
+        saveStatus.textContent = 'Grid is up to date. Please mark attendance.';
+      } catch (error) {
+        console.error('Error in build grid process:', error);
+        saveStatus.textContent = `Error: ${error.message}`;
+      }
+    });
+
+    saveBtn.addEventListener('click', async () => {
+      const rows = attBody.querySelectorAll('tr');
+      if (rows.length === 0) return alert('Nothing to save.');
+      saveStatus.textContent = '⏳ Saving attendance...';
+      const date = attDate.value;
+
+      try {
+        // CORRECTED: Using 'subject_code' to match the database schema
+        const { data: existingRecords, error: fetchError } = await supabase.from('attendance').select('username').eq('date', date).eq('subject_code', currentUser.subject_code);
+        if (fetchError) throw fetchError;
+
+        const existingUsernames = new Set(existingRecords.map(r => r.username));
+        const recordsToInsert = [];
+        const recordsToUpdate = [];
+
+        rows.forEach(row => {
+            const roll = row.dataset.roll;
+            const record = {
+                username: roll,
+                student_name: row.dataset.name,
+                branch: 'CSE',
+                date: date,
+                status: row.querySelector('.status-select').value,
+                // CORRECTED: Populating all relevant subject columns from your schema
+                subject: currentUser.subject_code, // Assuming 'subject' column holds the code as well
+                subject_code: currentUser.subject_code,
+                subject_name: currentUser.subject_name
+            };
+            if (existingUsernames.has(roll)) recordsToUpdate.push(record);
+            else recordsToInsert.push(record);
+        });
+
+        const promises = [];
+        if (recordsToInsert.length > 0) {
+            promises.push(supabase.from('attendance').insert(recordsToInsert));
+        }
+        recordsToUpdate.forEach(record => {
+            promises.push(
+                supabase.from('attendance')
+                    .update({ status: record.status, student_name: record.student_name })
+                    // CORRECTED: Using 'subject_code' to match the record
+                    .match({ username: record.username, date: record.date, subject_code: record.subject_code })
+            );
+        });
+
+        const results = await Promise.all(promises);
+        const firstError = results.find(res => res.error);
+        if (firstError) throw firstError.error;
+        
+        saveStatus.textContent = '✅ Attendance saved successfully!';
+        setTimeout(() => saveStatus.textContent = '', 4000);
+      } catch (error) {
+        console.error('Error saving attendance:', error);
+        saveStatus.textContent = `⚠️ Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
+
