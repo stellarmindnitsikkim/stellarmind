@@ -21,10 +21,23 @@ document.getElementById("mobile-menu").addEventListener("click", () => {
 });
 
 // ================= Get logged-in user =================
-function getUser() {
+async function getUser() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (user) {
-    studentNameEl.textContent = user.username || user.email;
+    // Fetch studentname from "users" table
+    const { data, error } = await supabaseClient
+      .from("users")
+      .select("studentname")
+      .eq("username", user.username)
+      .single();
+
+    if (error) {
+      console.error("Error fetching studentname:", error);
+      studentNameEl.textContent = user.username || user.email;
+    } else {
+      studentNameEl.textContent = data.studentname || user.username || user.email;
+    }
+
     loadAttendance(user.username || user.email);
   } else {
     window.location.href = "../login/index.html";

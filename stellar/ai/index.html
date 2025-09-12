@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Mind | StellarChatBot</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+  <!-- Loader Overlay -->
+  <div id="custom-loader">
+    <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="loader-logo">
+    <div class="spinner"></div>
+    <div class="loading-text">Launching StellarChatBot...</div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
+      <span>Stellar Mind</span>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="../attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+      <li><a href="https://wa.me/7037796470"><i class="fas fa-phone-alt"></i> Help</a></li>
+      <li><a href="../terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
+      <li><a href="../login/index.html"><i class="fas fa-user"></i> Login</a></li>
+    </ul>
+    <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>🤖 Chat with <span>StellarChatBot</span></h1>
+      <p>Ask anything — our AI assistant is here to help you 24/7.</p>
+    </div>
+  </section>
+
+  <!-- Chat Section -->
+  <section class="chat-container">
+    <iframe 
+      id="stellar-chat"
+      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json"
+      frameborder="0"
+    ></iframe>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Stellar Mind | NIT Sikkim</p>
+      <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
+      <div class="social-icons">
+        <a href="https://wa.me/7037796470"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://instagram.com/"><i class="fab fa-instagram"></i></a>
+        <a href="https://linkedin.com/"><i class="fab fa-linkedin"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

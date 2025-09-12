@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mobile OTP Auth</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+    .hidden { display: none; }
+    input, button { padding: 10px; margin: 10px; }
+  </style>
+</head>
+<body>
+
+  <h2>Mobile Number Authentication</h2>
+
+  <!-- Signup/Login Form -->
+  <div id="form-section">
+    <input type="text" id="name" placeholder="Enter Name" />
+    <input type="text" id="phone" placeholder="Enter Mobile (+91...)" />
+    <div id="recaptcha-container"></div>
+    <button onclick="sendOTP()">Send OTP</button>
+  </div>
+
+  <!-- OTP Verification -->
+  <div id="otp-section" class="hidden">
+    <h3 id="welcome-text"></h3>
+    <input type="text" id="otp" placeholder="Enter OTP" />
+    <button onclick="verifyOTP()">Verify</button>
+  </div>
+
+  <script type="module">
+    // Import Firebase SDKs via CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    // ✅ Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBP2cncR-Cit9xk5kRJRyglo82kHuN_N-A",
+      authDomain: "stellarmind-8a8a9.firebaseapp.com",
+      projectId: "stellarmind-8a8a9",
+      storageBucket: "stellarmind-8a8a9.firebasestorage.app",
+      messagingSenderId: "977463613888",
+      appId: "1:977463613888:web:ca4a9621b6b5a278775025",
+      measurementId: "G-FHQ9BD3BZ1"
+    };
+
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let confirmationResult;
+    let userPhone;
+    let userName;
+
+    async function sendOTP() {
+      userPhone = document.getElementById("phone").value;
+      userName = document.getElementById("name").value;
+
+      if (!userPhone.startsWith("+")) {
+        alert("Please use country code (e.g. +91XXXXXXXXXX)");
+        return;
+      }
+
+      // Check if user exists
+      const docRef = doc(db, "users", userPhone);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        userName = docSnap.data().name;
+        document.getElementById("welcome-text").innerText = "Welcome back, " + userName;
+        document.getElementById("name").classList.add("hidden");
+      } else {
+        document.getElementById("welcome-text").innerText = "Welcome, please verify your number!";
+      }
+
+      // Setup reCAPTCHA
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", { size: "invisible" });
+
+      try {
+        confirmationResult = await signInWithPhoneNumber(auth, userPhone, window.recaptchaVerifier);
+        alert("OTP sent!");
+        document.getElementById("form-section").classList.add("hidden");
+        document.getElementById("otp-section").classList.remove("hidden");
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    async function verifyOTP() {
+      const code = document.getElementById("otp").value;
+      try {
+        await confirmationResult.confirm(code);
+        const docRef = doc(db, "users", userPhone);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          await setDoc(docRef, { name: userName, phone: userPhone });
+        }
+
+        alert("Login successful!");
+        window.location.href = "main.html";
+      } catch (error) {
+        alert("Invalid OTP: " + error.message);
+      }
+    }
+
+    // Make functions visible to buttons
+    window.sendOTP = sendOTP;
+    window.verifyOTP = verifyOTP;
+  </script>
+</body>
+</html>

@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stellar Mind</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
@@ -14,7 +13,7 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="logo">
-      <img src="assets/logo_img.jpg" alt="Stellar Mind Logo" class="animated-logo">
+      <img src="assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
       <span>Stellar Mind</span>
     </div>
 
@@ -24,8 +23,8 @@
 
     <ul class="nav-links" id="nav-links">
       <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
-      <li><a href="https://wa.me/7037796470"><i class="fas fa-phone-alt"></i> Help</a></li>
+      <li><a href="attendence/index.html" id="attendance-link"><i class="fas fa-user-check"></i> Attendance</a></li>
+      <li><a href="/ai/index.html"><i class="fas fa-robot"></i> AI HELPER</a></li>
       <li><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
       <li id="auth-btn"><a href="login/index.html"><i class="fas fa-user"></i> Login</a></li>
     </ul>
@@ -35,12 +34,9 @@
   <section class="hero">
     <div class="hero-text">
       <h1>
-        
         Welcome to <span>Stellar Mind</span><br>
         <span id="welcome-user" class="gradient-username"></span>
-        
       </h1>
-
       <p>
         Stellar Mind is a community-driven club where innovation meets creativity.
         We explore cutting-edge technology, design, and ideas to inspire the next generation of thinkers and creators.
@@ -49,19 +45,15 @@
     </div>
 
     <div class="spline-card">
-      <!-- Desktop Spline -->
       <div class="spline-frame desktop-only">
         <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.48/build/spline-viewer.js"></script>
         <spline-viewer url="https://prod.spline.design/T-sK3KIXQLUHJVmk/scene.splinecode"></spline-viewer>
       </div>
-
       <div class="blocker">
         <p>SM</p>
       </div>
-
-      <!-- Mobile Animated Logo -->
       <div class="mobile-logo mobile-only">
-        <img src="assets/logo_img.jpg" alt="Stellar Mind Logo" class="glow-logo">
+        <img src="assets/tlogo.png" alt="Stellar Mind Logo" class="glow-logo">
       </div>
     </div>
   </section>
@@ -74,7 +66,6 @@
     </div>
   </section>
 
-
   <!-- Upcoming Events Section -->
   <section class="events">
     <h2>Upcoming Events</h2>
@@ -84,10 +75,24 @@
   </section>
 
   <!-- Footer -->
+  <footer class="footer footer2">
+    <div class="footer-content content2">
+      <h3><i class="fa-solid fa-lightbulb"></i> Important Links</h3>
+      <div class="justify">
+        <ul>
+          <li><a href="https://kic.nitsikkim.ac.in/downloads/Gate%20Pass%202%20(1).pdf"><i class="fas fa-user-check"></i> Gate Pass</a></li>
+          <li><a href="https://nitsikkim.samarth.edu.in/index.php/site/login"><i class="fas fa-user-check"></i> Samarth Portal</a></li>
+          <li><a href="https://nitsikkim.ac.in/documents/downloads/Proforma_Form%20for%20Issuing%20Certificate_English.pdf"><i class="fas fa-user-check"></i> Academic Document</a></li>
+          <li><a href="https://nitsikkim.ac.in/students/academicCalendar.php"><i class="fas fa-user-check"></i> Academic Calendar</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
   <footer class="footer">
     <div class="footer-content">
       <p>© 2025 Stellar Mind | NIT Sikkim</p>
-      <p>📞 Contact: <a href="tel:+918769681167">+91 98765 43210</a></p>
+      <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
       <div class="social-icons">
         <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
         <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -95,38 +100,6 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    // Disable right click
-    document.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-      alert("Inspect is disabled on this site 🚫");
-    });
-  </script>
-
-  <script>
-    // Disable some keys (F12, Ctrl+Shift+I, Ctrl+U, etc.)
-    document.addEventListener("keydown", (e) => {
-      if (
-        e.key === "F12" ||
-        (e.ctrlKey && e.shiftKey && e.key === "I") ||
-        (e.ctrlKey && e.shiftKey && e.key === "J") ||
-        (e.ctrlKey && e.key === "U") ||
-        (e.ctrlKey && e.key === "S")
-      ) {
-        e.preventDefault();
-        alert("Developer tools are disabled 🚫");
-      }
-    });
-
-    // Try to detect DevTools opening
-    setInterval(() => {
-      if (window.devtools && window.devtools.open) {
-        alert("DevTools is open!");
-        window.location.reload();
-      }
-    }, 1000);
-  </script>
 
   <script type="module" src="script.js"></script>
 </body>

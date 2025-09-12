@@ -557,3 +557,87 @@ spline-viewer {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+.footer2 {
+  display: block;
+  text-align: center;
+  background: #111122; 
+  padding: 30px 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 40px;
+}
+
+.content2 {
+  display: inline-block;
+  text-align: left;
+}
+.justify
+{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.content2 h3 {
+  margin-bottom: 1rem;
+  color: goldenrod;
+}
+
+/* Make links horizontal */
+.content2 ul {
+  list-style: none; 
+  padding: 0;
+  margin: 0;
+  display: block;            /* Horizontal layout */;  /* Center them */
+  gap: 2rem;                /* Space between links */
+}
+
+.content2 ul li {
+  display: block;
+  margin-bottom: 1rem;    /* Keep items inline */
+}
+
+.content2 ul li a {
+  text-decoration: none;
+  color: #aaa;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.content2 ul li a:hover {
+  color: #57abff; 
+}
+
+
+/* Fade-in effect for timetable cards */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Uploading soon animation */
+.uploading-soon {
+  font-size: 1.4rem;
+  font-weight: bold;
+  padding: 20px;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #8257e5, #57abff, #ff4e50, #f9d423);
+  background-size: 300% 300%;
+  color: #fff;
+  animation: gradientFlow 5s infinite linear, pulse 2s infinite ease-in-out;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+

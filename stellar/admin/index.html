@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Mark Attendance</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+
+  <!-- Our script -->
+  <script type="module" src="script.js"></script>
+</head>
+<body>
+  <!-- <nav class="navbar">
+    <div class="logo">
+      <i class="fa-solid fa-user-shield"></i>
+      <span>Admin • Attendance</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="../attendance/index.html"><i class="fas fa-user-check"></i> Student View</a></li>
+    </ul>
+  </nav> -->
+
+  <nav class="navbar">
+  <div class="logo">
+    <i class="fa-solid fa-user-shield"></i>
+    <span>Admin • Attendance</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="../attendance/index.html"><i class="fas fa-user-check"></i> Student View</a></li>
+    <li><button id="logoutBtn" class="btn ghost"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+  </ul>
+</nav>
+
+
+  <main class="container">
+    <section class="controls">
+      <!-- ✅ Branch Dropdown -->
+      <div class="row">
+        <label><i class="fa-solid fa-code-branch"></i> Branch</label>
+        <select id="branchSelect">
+          <option value="">— Select Branch —</option>
+          <option value="CSE">CSE</option>
+          <option value="ECE">ECE</option>
+          <option value="EEE">EEE</option>
+          <option value="ME">Mechanical</option>
+          <option value="CE">Civil</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="attDate"><i class="fa-regular fa-calendar-days"></i> Date</label>
+        <input type="date" id="attDate"/>
+      </div>
+
+      <div class="row">
+        <label><i class="fa-solid fa-book"></i> Subjects with class on this date</label>
+        <div id="subjectsBox" class="subjects-box"><!-- checkboxes rendered here --></div>
+      </div>
+
+      <div class="row actions">
+        <button id="buildGridBtn" class="btn primary"><i class="fa-solid fa-table-list"></i> Build Grid</button>
+        <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
+      </div>
+    </section>
+
+    <section id="gridSection" class="grid-section" style="display:none;">
+      <div class="grid-toolbar" id="bulkToolbar"><!-- per-subject bulk controls --></div>
+      <div class="grid-wrap">
+        <table id="attTable" class="att-table">
+          <thead id="attHead"></thead>
+          <tbody id="attBody"></tbody>
+        </table>
+      </div>
+
+      <div class="save-bar">
+        <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
+        <span id="saveStatus" class="status"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Stellar Mind | Admin</p>
+  </footer>
+</body>
+</html>

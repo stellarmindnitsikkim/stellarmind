@@ -1,0 +1,92 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0b0b12;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: #fff;
+}
+
+/* Background animation */
+.bg {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(130,87,229,0.2), transparent 70%),
+              radial-gradient(circle, rgba(87,171,255,0.2), transparent 70%);
+  background-size: 500px 500px;
+  animation: moveBG 25s linear infinite;
+  z-index: -1;
+}
+@keyframes moveBG {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(-150px,-150px); }
+  100% { transform: translate(0,0); }
+}
+
+/* Content */
+.content {
+  text-align: center;
+  animation: fadeIn 1.5s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Glowing Text */
+.glow-text {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #57abff;
+  text-shadow: 0 0 15px rgba(130,87,229,0.9), 0 0 30px rgba(87,171,255,0.7);
+  animation: pulse 2s infinite alternate;
+}
+@keyframes pulse {
+  from { text-shadow: 0 0 10px #8257e5, 0 0 20px #57abff; }
+  to { text-shadow: 0 0 30px #57abff, 0 0 50px #8257e5; }
+}
+
+/* Subtitle */
+.subtitle {
+  color: #ccc;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.countdown div {
+  background: rgba(17,17,34,0.8);
+  padding: 15px 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(87,171,255,0.4);
+  transition: transform 0.3s ease;
+}
+.countdown div:hover {
+  transform: translateY(-8px) scale(1.05);
+}
+.countdown span {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #57abff;
+  display: block;
+}
+.countdown small {
+  font-size: 0.8rem;
+  color: #aaa;
+}
