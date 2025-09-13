@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stellar Mind | Marks</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo" />
+      <span>Stellar Mind</span>
+    </div>
+    <div class="menu-toggle" id="mobile-menu">
+      <i class="fas fa-bars"></i>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="/attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+      <li><a href="/terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
+      <li class="active"><a href="#"><i class="fas fa-graduation-cap"></i> Marks</a></li>
+      <!-- Auth button -->
+      <li id="auth-btn"><a href="../login/index.html"><i class="fas fa-user"></i> Login</a></li>
+      <!-- Welcome message -->
+      <li id="welcome-msg" style="color:#fff; font-weight:600;"></li>
+    </ul>
+  </nav>
+
+  <main class="marks-page" style="padding:60px 10%;">
+  <section class="marks-hero">
+    <h1 id="welcome-student" class="gradient-text"></h1> <!-- 👈 new welcome -->
+    <h1>📊 Your Marks</h1>
+    <p class="sub">View Mid Term 1, Mid Term 2 and End Semester marks for CSE subjects.</p>
+  </section>
+
+  <section class="marks-controls">
+    <div class="tabs">
+      <button class="tab-btn" data-exam="mid1">Mid Term 1</button>
+      <button class="tab-btn" data-exam="mid2">Mid Term 2</button>
+      <button class="tab-btn" data-exam="endsem">End Semester</button>
+    </div>
+  </section>
+
+  <section id="marks-area">
+    <div id="marks-loading" class="uploading-soon">Loading marks...</div>
+  </section>
+</main>
+
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Stellar Mind | NIT Sikkim</p>
+    </div>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

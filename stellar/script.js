@@ -22,13 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  checkLogin();   // Show welcome & set attendance link
+  checkLogin();   // Show welcome & set attendance/marks links
   loadEvents();   // Fetch events from Supabase
   loadClasses();  // Load today's classes
 });
 
 // =============================
-// Check Login & Role-Based Attendance
+// Check Login & Role-Based Links
 // =============================
 let currentUser = null;
 
@@ -41,18 +41,39 @@ async function checkLogin() {
   const welcomeUser = document.getElementById("welcome-user");
   const attendanceLink = document.getElementById("attendance-link");
 
+  // Add Marks link dynamically
+  let marksLink = document.getElementById("marks-link");
+  if (!marksLink) {
+    const navLinks = document.getElementById("nav-links");
+    const li = document.createElement("li");
+    li.id = "marks-link";
+    li.innerHTML = `<a href="#"><i class="fas fa-clipboard"></i> Marks</a>`;
+    navLinks.insertBefore(li, navLinks.children[4]); // Insert before login/logout
+    marksLink = li;
+  }
+
   if (currentUser && (currentUser.username || currentUser.studentname) && currentUser.role) {
-    // Prefer studentname if exists, otherwise fallback to username
     const displayName = currentUser.studentname || currentUser.username;
 
     authBtn.innerHTML = `<a href="#" id="logout-link"><i class="fas fa-user"></i> ${displayName} (Logout)</a>`;
     if (welcomeUser) welcomeUser.textContent = `Hi, ${displayName} 👋`;
 
+    // Attendance link based on role
     if (attendanceLink) {
       if (currentUser.role === "admin") attendanceLink.href = "admin/index.html";
       else if (currentUser.role === "teacher") attendanceLink.href = "teacher/index.html";
       else attendanceLink.href = "attendence/index.html";
     }
+
+    // Marks link redirect based on table
+    marksLink.querySelector("a").addEventListener("click", (e) => {
+      e.preventDefault();
+      if (currentUser.role === "teacher") {
+        window.location.href = "teachermarks/index.html";
+      } else {
+        window.location.href = "marks/index.html";
+      }
+    });
 
     document.getElementById("logout-link").addEventListener("click", (e) => {
       e.preventDefault();
@@ -135,7 +156,6 @@ function loadClasses() {
     return;
   }
 
-  // Check if user is from B.Tech. AI batch
   if (currentUser && /^b2400\d{2}$/i.test(currentUser.username)) {
     const todaySchedule = timetable[today] || [];
     classList.innerHTML = "";
@@ -147,7 +167,6 @@ function loadClasses() {
       classList.appendChild(card);
     });
   } else {
-    // Cool animated fallback
     classList.innerHTML = `
       <div class="uploading-soon">
         <span>📡 Your schedule is uploading soon...</span>

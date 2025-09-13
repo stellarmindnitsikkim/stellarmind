@@ -8,19 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-  <!-- Animated Background -->
   <div class="bg-animation"></div>
 
   <div class="login-container">
-    <!-- Glowing Logo -->
     <div class="logo">
       <img src="/assets/tlogo.png" alt="Stellar Mind Logo">
     </div>
     
-
     <h1><i class="fa-solid fa-user-secret"></i> Welcome Back</h1>
     <p class="subtitle">Login to explore your Stellar Mind</p>
-    <a href="/admin/index.html"></a>
 
     <form id="login-form">
       <div class="input-group">
@@ -35,40 +31,44 @@
 
       <button type="submit" class="btn">Login</button>
       <p id="login-message"></p>
+
+      <p class="signup-link">
+        Not registered yet? <a href="signup.html">Sign Up</a>
+      </p>
     </form>
   </div>
 
   <script>
-  // Disable right click
-  document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    alert("Inspect is disabled on this site 🚫");
-  });
-</script>
+//   // Disable right click
+//   document.addEventListener("contextmenu", (e) => {
+//     e.preventDefault();
+//     alert("Inspect is disabled on this site 🚫");
+//   });
+//   </script>
 
-<script>
-  // Disable some keys (F12, Ctrl+Shift+I, Ctrl+U, etc.)
-  document.addEventListener("keydown", (e) => {
-    if (
-      e.key === "F12" || 
-      (e.ctrlKey && e.shiftKey && e.key === "I") ||
-      (e.ctrlKey && e.shiftKey && e.key === "J") ||
-      (e.ctrlKey && e.key === "U") ||
-      (e.ctrlKey && e.key === "S")
-    ) {
-      e.preventDefault();
-      alert("Developer tools are disabled 🚫");
-    }
-  });
+//   <script>
+//   // Disable some keys (F12, Ctrl+Shift+I, Ctrl+U, etc.)
+//   document.addEventListener("keydown", (e) => {
+//     if (
+//       e.key === "F12" || 
+//       (e.ctrlKey && e.shiftKey && e.key === "I") ||
+//       (e.ctrlKey && e.shiftKey && e.key === "J") ||
+//       (e.ctrlKey && e.key === "U") ||
+//       (e.ctrlKey && e.key === "S")
+//     ) {
+//       e.preventDefault();
+//       alert("Developer tools are disabled 🚫");
+//     }
+//   });
 
-  // Try to detect DevTools opening
-  setInterval(() => {
-    if (window.devtools && window.devtools.open) {
-      alert("DevTools is open!");
-      window.location.reload();
-    }
-  }, 1000);
-</script>
+//   // Try to detect DevTools opening
+//   setInterval(() => {
+//     if (window.devtools && window.devtools.open) {
+//       alert("DevTools is open!");
+//       window.location.reload();
+//     }
+//   }, 1000);
+  </script>
 
   <script type="module" src="script.js"></script>
 </body>

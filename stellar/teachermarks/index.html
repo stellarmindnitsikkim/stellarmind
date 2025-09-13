@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Portal — Marks Setter</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+<style>
+  body { font-family: system-ui, sans-serif; background: #0b0b12; color: #fff; margin: 0; padding: 0; }
+  .container { max-width: 1200px; margin: 20px auto; padding: 0 16px; }
+  .navbar { display: flex; justify-content: space-between; align-items: center; background: #141426; padding: 10px 20px; }
+  .navbar .logo { color: #57abff; font-weight: bold; }
+  .nav-links button { color: #fff; background: none; border: none; cursor: pointer; font-size: 1rem; }
+  .teacher-header { text-align: center; margin-bottom: 20px; }
+  .teacher-header h1 { font-size: 1.8rem; background: linear-gradient(90deg, #57abff, #cfd8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .controls { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .controls label { display: block; margin-bottom: 5px; color: #cfd8ff; }
+  .controls select, .controls input { padding: 6px 10px; border-radius: 8px; border: 1px solid #2a2a40; background: #141426; color: #fff; }
+  .btn { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; }
+  .btn.primary { background: #57abff; color: #fff; }
+  .btn.success { background: #31c48d; color: #0b0b12; }
+  .grid-wrap { overflow-x: auto; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 10px; border: 1px solid #2a2a40; text-align: center; }
+  th { background: #1e1e35; color: #57abff; }
+  td input { width: 60px; text-align: center; background: #0f0f1f; color: #fff; border: 1px solid #2a2a40; border-radius: 6px; }
+  td input.readonly { background: #1e1e35; cursor: not-allowed; }
+  footer { text-align: center; padding: 20px; color: #6b7280; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="logo"><i class="fa-solid fa-chalkboard-user"></i> Teacher Marks Portal</div>
+  <ul class="nav-links"><li><button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></li></ul>
+</nav>
+
+<main class="container">
+  <section class="teacher-header">
+    <h1 id="teacherName"></h1>
+    <p id="subjectName"></p>
+  </section>
+
+  <section class="controls">
+    <div>
+      <label for="yearSelect">Year</label>
+      <select id="yearSelect">
+        <option value="">— Select Year —</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+      </select>
+    </div>
+    <div>
+      <label for="examSelect">Exam</label>
+      <select id="examSelect">
+        <option value="">— Select Exam —</option>
+        <option value="Mid 1">Mid 1</option>
+        <option value="Mid 2">Mid 2</option>
+        <option value="End Term">End Term</option>
+      </select>
+    </div>
+    <div>
+      <button id="buildGridBtn" class="btn primary" disabled>Build Grid</button>
+    </div>
+  </section>
+
+  <section class="grid-section" style="display:none;">
+    <div class="grid-wrap">
+      <table id="marksTable">
+        <thead>
+          <tr>
+            <th>Roll Number</th>
+            <th>Student Name</th>
+            <th>Marks</th>
+            <th>Max Marks</th>
+          </tr>
+        </thead>
+        <tbody id="marksBody"></tbody>
+      </table>
+    </div>
+    <button id="saveBtn" class="btn success">Save Marks</button>
+    <span id="saveStatus"></span>
+  </section>
+</main>
+
+<footer>© 2025 Stellar Mind | Teacher Portal</footer>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const teacherNameEl = document.getElementById('teacherName');
+const subjectNameEl = document.getElementById('subjectName');
+const yearSelect = document.getElementById('yearSelect');
+const examSelect = document.getElementById('examSelect');
+const buildGridBtn = document.getElementById('buildGridBtn');
+const marksBody = document.getElementById('marksBody');
+const gridSection = document.querySelector('.grid-section');
+const saveBtn = document.getElementById('saveBtn');
+const saveStatus = document.getElementById('saveStatus');
+const logoutBtn = document.getElementById('logoutBtn');
+
+let currentUser = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const userData = localStorage.getItem('user');
+  if (!userData) return redirectToLogin();
+  currentUser = JSON.parse(userData);
+
+  if (currentUser.role !== 'teacher') {
+    alert('Access Denied');
+    return redirectToLogin();
+  }
+
+  teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
+  subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
+});
+
+logoutBtn.addEventListener('click', redirectToLogin);
+
+function redirectToLogin() {
+  localStorage.removeItem('user');
+  window.location.href = '../login/index.html';
+}
+
+// Enable Build button when inputs selected
+[yearSelect, examSelect].forEach(el => el.addEventListener('change', () => {
+  buildGridBtn.disabled = !(yearSelect.value && examSelect.value);
+}));
+
+// Map exam type to database format
+function formatExamType(exam) {
+  switch(exam) {
+    case 'Mid 1': return 'mid1';
+    case 'Mid 2': return 'mid2';
+    case 'End Term': return 'endsem';
+    default: return exam.toLowerCase().replace(/\s/g, '');
+  }
+}
+
+// Set default max marks based on exam
+function getDefaultMaxMarks(exam) {
+  if (exam === 'Mid 1' || exam === 'Mid 2') return 15;
+  if (exam === 'End Term') return 50;
+  return 100;
+}
+
+// Build grid
+buildGridBtn.addEventListener('click', async () => {
+  marksBody.innerHTML = '';
+  gridSection.style.display = 'block';
+  saveStatus.textContent = 'Loading students...';
+
+  const year = yearSelect.value;
+  const exam = examSelect.value;
+
+  const students = Array.from({ length: 64 }, (_, i) => {
+    const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
+    return { roll, name: `Student ${roll}` };
+  });
+
+  // Fetch existing marks
+  const { data: existingMarks, error } = await supabase
+    .from('cse_marks')
+    .select('*')
+    .eq('subject_code', currentUser.subject_code)
+    .eq('exam_type', formatExamType(exam));
+
+  if (error) console.error(error);
+
+  const defaultMax = getDefaultMaxMarks(exam);
+
+  marksBody.innerHTML = students.map(student => {
+    const record = existingMarks?.find(m => m.username.toLowerCase() === student.roll);
+    const marksValue = record ? record.marks : '';
+    const maxMarksValue = record ? record.max_marks : defaultMax;
+    const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
+    return `<tr data-roll="${student.roll}" data-name="${student.name}">
+      <td>${student.roll}</td>
+      <td>${student.name}</td>
+      <td><input type="number" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
+      <td><input type="number" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
+    </tr>`;
+  }).join('');
+
+  saveStatus.textContent = 'Grid ready.';
+});
+
+// Save marks
+saveBtn.addEventListener('click', async () => {
+  const rows = marksBody.querySelectorAll('tr');
+  if (rows.length === 0) return;
+
+  saveStatus.textContent = 'Saving marks...';
+  const exam = examSelect.value;
+
+  const records = Array.from(rows).map(row => ({
+    username: row.dataset.roll.toLowerCase(),
+    student_name: row.dataset.name,
+    exam_type: formatExamType(exam),
+    subject_code: currentUser.subject_code,
+    subject_name: currentUser.subject_name,
+    marks: parseInt(row.querySelector('.marks-input').value) || 0,
+    max_marks: parseInt(row.querySelector('.max-input').value) || getDefaultMaxMarks(exam)
+  }));
+
+  try {
+    const { error } = await supabase
+      .from('cse_marks')
+      .upsert(records, { onConflict: ['username','exam_type','subject_code'] });
+
+    if (error) throw error;
+    saveStatus.textContent = '✅ Marks saved successfully!';
+    setTimeout(() => saveStatus.textContent = '', 3000);
+  } catch (err) {
+    console.error(err);
+    saveStatus.textContent = `⚠️ Error: ${err.message}`;
+  }
+});
+</script>
+</body>
+</html>

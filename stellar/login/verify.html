@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Mind | Verify Account</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0b0b12;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Background animation */
+    .bg-animation {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(130,87,229,0.15), transparent 70%),
+                  radial-gradient(circle, rgba(87,171,255,0.15), transparent 70%);
+      background-size: 400px 400px;
+      animation: moveBG 15s linear infinite;
+      z-index: -1;
+    }
+    @keyframes moveBG {
+      0% { transform: translate(0,0); }
+      50% { transform: translate(-100px,-100px); }
+      100% { transform: translate(0,0); }
+    }
+
+    /* Container styles */
+    .verify-container {
+      background: rgba(17, 17, 34, 0.9);
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(87,171,255,0.4);
+      width: 400px;
+      text-align: center;
+      animation: slideIn 1.2s ease forwards;
+      opacity: 0;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Logo */
+    .logo img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      animation: glowPulse 2s infinite alternate, floaty 4s ease-in-out infinite;
+      box-shadow: 0 0 25px rgba(130,87,229,0.8);
+    }
+    @keyframes glowPulse {
+      from { box-shadow: 0 0 15px rgba(130,87,229,0.5); }
+      to { box-shadow: 0 0 35px rgba(87,171,255,1); }
+    }
+    @keyframes floaty {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Title */
+    .verify-container h1 {
+      margin-bottom: 10px;
+      color: #57abff;
+    }
+    .subtitle {
+      font-size: 14px;
+      margin-bottom: 25px;
+      color: #ccc;
+    }
+
+    /* Input group */
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: #141527;
+      margin: 12px 0;
+      padding: 12px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .input-group:hover {
+      box-shadow: 0 0 12px rgba(87,171,255,0.5);
+    }
+    .input-group i {
+      margin-right: 10px;
+      color: #57abff;
+    }
+    .input-group input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    /* Button */
+    .btn {
+      background: linear-gradient(90deg, #8257e5, #57abff);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(87,171,255,0.6);
+    }
+    .btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Message */
+    #verify-message {
+      margin-top: 15px;
+      font-size: 14px;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation"></div>
+
+  <div class="verify-container">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="/assets/tlogo.png" alt="Stellar Mind Logo" onerror="this.style.display='none'">
+    </div>
+    
+    <h1><i class="fas fa-user-shield"></i> Verify & Update Password</h1>
+    <p class="subtitle" id="subtitle-email">Enter the code sent to your email</p>
+
+    <form id="verify-form">
+      <div class="input-group">
+        <i class="fas fa-hashtag"></i>
+        <input type="text" id="code" placeholder="6-Digit Verification Code" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Create a New Password" required>
+      </div>
+      <div class="input-group">
+        <i class="fas fa-check-circle"></i>
+        <input type="password" id="confirm-password" placeholder="Confirm New Password" required>
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">Update Password</button>
+      <p id="verify-message"></p>
+    </form>
+  </div>
+
+  <!-- Import Supabase Client -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzIJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('verify-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const messageEl = document.getElementById('verify-message');
+    const subtitleEl = document.getElementById('subtitle-email');
+
+    // --- Get user data saved from the previous page ---
+    const verificationDataString = sessionStorage.getItem('verificationData');
+    if (!verificationDataString) {
+      messageEl.textContent = '⚠️ Could not find verification data. Please start again from the sign-up page.';
+      messageEl.style.color = 'orange';
+      submitBtn.disabled = true;
+    }
+    const verificationData = JSON.parse(verificationDataString || '{}');
+    subtitleEl.textContent = `Enter the code sent to ${verificationData.email}`;
+
+    // --- Handle Form Submission ---
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const code = document.getElementById('code').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      // Client-side validation
+      if (password !== confirmPassword) {
+        messageEl.textContent = '❌ Passwords do not match.';
+        messageEl.style.color = 'red';
+        return;
+      }
+      if (password.length < 6) {
+        messageEl.textContent = '❌ Password must be at least 6 characters long.';
+        messageEl.style.color = 'red';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      messageEl.textContent = '⏳ Verifying and updating password...';
+      messageEl.style.color = 'white';
+
+      try {
+        // *** Call the function to verify the code and update the password ***
+        const { data, error } = await supabase.functions.invoke('verify-and-signup', {
+          body: {
+            ...verificationData, // Includes rollno, name, email
+            code,
+            password
+          },
+        });
+
+        if (error) throw error;
+        if (data.error) throw new Error(data.error);
+
+        messageEl.textContent = '✅ Password updated successfully! Redirecting to login...';
+        messageEl.style.color = 'lime';
+
+        // Clear the temporary data and redirect
+        sessionStorage.removeItem('verificationData');
+        setTimeout(() => {
+          window.location.href = 'index.html'; // Redirect to your login page
+        }, 2000);
+
+      } catch (err) {
+        console.error("Error updating password:", err);
+        messageEl.textContent = `⚠️ Error: ${err.message || 'Could not update password.'}`;
+        messageEl.style.color = 'orange';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
