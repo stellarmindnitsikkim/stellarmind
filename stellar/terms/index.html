@@ -1,113 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terms & Conditions | Stellar Mind</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions | Stellar Mind</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* New light theme variables */
+        :root {
+            --primary-bg: #f0f4f8;
+            --secondary-bg: #ffffff;
+            --card-bg: #eaf1f7;
+            --text-color: #1c2b3a;
+            --subtle-text: #6b7a8c;
+            --accent-start: #4299e1;
+            --accent-end: #0087c5;
+            --transition-speed: 0.5s;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+        }
+
+        /* General Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-color);
+            transition: background var(--transition-speed);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(0, 135, 197, 0.1) 0%, transparent 50%);
+            animation: pulseBackground 10s infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes pulseBackground {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--secondary-bg);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background var(--transition-speed), box-shadow var(--transition-speed);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 25px var(--shadow-heavy);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .logo img {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            box-shadow: 0 0 1rem rgba(66, 153, 225, 0.5);
+            transition: box-shadow var(--transition-speed);
+        }
+
+        .animated-logo {
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
+            to { box-shadow: 0 0 2rem rgba(0, 135, 197, 1); }
+        }
+
+        /* Nav links */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links li {
+            position: relative;
+            opacity: 0;
+            transform: translateY(-1rem);
+            animation: fadeInUp 0.8s forwards;
+        }
+
+        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
+        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
+        .nav-links li:nth-child(5) { animation-delay: 1s; }
+        .nav-links li:nth-child(6) { animation-delay: 1.2s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+            transition: color var(--transition-speed);
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.3rem;
+            width: 0%;
+            height: 0.15rem;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            transition: width var(--transition-speed);
+            border-radius: 0.1rem;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-end);
+        }
+        
+        /* Active link glow */
+        .nav-links a.active {
+            color: var(--accent-end);
+            font-weight: bold;
+            text-shadow: 0 0 12px rgba(0, 135, 197, 0.8);
+            pointer-events: none; /* disables clicking */
+            animation: glowLink 1.5s infinite alternate;
+        }
+
+        @keyframes glowLink {
+            0% {
+                text-shadow: 0 0 10px rgba(0, 135, 197, 0.6);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(0, 135, 197, 0.9);
+            }
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: var(--secondary-bg);
+                position: absolute;
+                top: 4.5rem;
+                right: 1rem;
+                width: 14rem;
+                padding: 1.5rem;
+                border-radius: 1rem;
+                box-shadow: 0 4px 20px var(--shadow-light);
+                animation: slideInRight 0.5s forwards;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Terms Section */
+        .terms {
+            padding: 4rem 2rem;
+            background: var(--primary-bg);
+            color: var(--text-color);
+            text-align: left;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 1.5rem;
+            box-shadow: 0 0 2rem var(--shadow-light);
+        }
+
+        .terms-container {
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
+        }
+
+        .terms h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--accent-start);
+        }
+
+        .terms h3 {
+            margin-top: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .terms p {
+            line-height: 1.6;
+            margin: 0.5rem 0;
+            color: var(--subtle-text);
+        }
+
+        .terms a {
+            color: var(--accent-end);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--secondary-bg);
+            color: var(--subtle-text);
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background var(--transition-speed);
+        }
+
+        .footer-content p {
+            margin: 0.3rem 0;
+        }
+
+        .footer-content a {
+            color: var(--subtle-text);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+
+        .footer-content a:hover {
+            color: var(--accent-end);
+        }
+
+        /* Social Icons */
+        .social-icons {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem;
+        }
+
+        .social-icons a {
+            font-size: 1.5rem;
+            color: var(--subtle-text);
+            transition: all var(--transition-speed) ease-in-out;
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-end);
+            transform: scale(1.2) translateY(-0.25rem);
+            text-shadow: 0 0 1rem rgba(0, 135, 197, 0.7);
+        }
+
+    </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">
-      <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
-      <span>Stellar Mind</span>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
+            <span>Stellar Mind</span>
+        </div>
 
-    <div class="menu-toggle" id="mobile-menu">
-      <i class="fas fa-bars"></i>
-    </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
 
-    <ul class="nav-links">
-  <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
-  <li><a href="/attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
-  <li><a href="#"><i class="fas fa-phone-alt"></i> Help</a></li>
-  <li><a class="active disabled"><i class="fas fa-file-contract"></i> Terms & Conditions</a></li>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <li><a href="/ai/index.html"><i class="fas fa-robot"></i> AI HELPER</a></li>
+            <li><a href="#" class="active"><i class="fas fa-file-contract"></i> Terms</a></li>
+            <li><a href="/marks/index.html"><i class="fas fa-clipboard"></i> Marks</a></li>
+            <li id="auth-btn"><a href="/login/index.html"><i class="fas fa-user"></i> Login</a></li>
+        </ul>
+    </nav>
 
-  <li class="dropdown">
-    <a href="#"><i class="fas fa-user"></i> Login <i class="fas fa-caret-down"></i></a>
-    <ul class="dropdown-menu">
-      <li><a href="#"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-    </ul>
-  </li>
-</ul>
+    <!-- Terms Section -->
+    <section class="terms">
+        <div class="terms-container">
+            <h2>Terms & Conditions</h2>
+            <p>Welcome to Stellar Mind! These terms and conditions outline the rules and regulations for the use of Stellar Mind's website.</p>
 
-  </nav>
+            <h3>1. Acceptance of Terms</h3>
+            <p>By accessing this website, you agree to abide by these terms and conditions. If you do not agree, please refrain from using the website.</p>
 
-  <!-- Terms Section -->
-  <section class="terms">
-    <div class="terms-container">
-      <h2>Terms & Conditions</h2>
-      <p>Welcome to Stellar Mind! These terms and conditions outline the rules and regulations for the use of Stellar Mind's website.</p>
+            <h3>2. User Accounts</h3>
+            <p>When you create an account, you must provide accurate and complete information. You are responsible for the security of your account.</p>
 
-      <h3>1. Acceptance of Terms</h3>
-      <p>By accessing this website, you agree to abide by these terms and conditions. If you do not agree, please refrain from using the website.</p>
+            <h3>3. Content Use</h3>
+            <p>All content on this website is for personal and educational use. Unauthorized copying, reproduction, or distribution is prohibited.</p>
 
-      <h3>2. User Accounts</h3>
-      <p>When you create an account, you must provide accurate and complete information. You are responsible for the security of your account.</p>
+            <h3>4. Privacy</h3>
+            <p>Your personal information is handled in accordance with our Privacy Policy. By using the website, you consent to data collection as outlined.</p>
 
-      <h3>3. Content Use</h3>
-      <p>All content on this website is for personal and educational use. Unauthorized copying, reproduction, or distribution is prohibited.</p>
+            <h3>5. Changes to Terms</h3>
+            <p>Stellar Mind reserves the right to update these terms at any time. Continued use of the website indicates acceptance of updated terms.</p>
 
-      <h3>4. Privacy</h3>
-      <p>Your personal information is handled in accordance with our Privacy Policy. By using the website, you consent to data collection as outlined.</p>
+            <h3>6. Limitation of Liability</h3>
+            <p>Stellar Mind is not liable for any damages arising from the use of this website or reliance on its content.</p>
 
-      <h3>5. Changes to Terms</h3>
-      <p>Stellar Mind reserves the right to update these terms at any time. Continued use of the website indicates acceptance of updated terms.</p>
+            <p>For any questions regarding these terms, please contact us at <a href="mailto:info@stellarmind.com">info@stellarmind.com</a>.</p>
+        </div>
+    </section>
 
-      <h3>6. Limitation of Liability</h3>
-      <p>Stellar Mind is not liable for any damages arising from the use of this website or reliance on its content.</p>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Stellar Mind | NIT Sikkim</p>
+            <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
+            <div class="social-icons">
+                <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
 
-      <p>For any questions regarding these terms, please contact us at <a href="mailto:info@stellarmind.com">info@stellarmind.com</a>.</p>
-    </div>
-  </section>
+    <script type="module">
+        // =============================
+        // Supabase Setup
+        // =============================
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p>© 2025 Stellar Mind | NIT Sikkim</p>
-      <p>📞 Contact: <a href="tel:+918769681167">+91 98765 43210</a></p>
-      <div class="social-icons">
-        <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
-      </div>
-    </div>
-  </footer>
+        const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+        const SUPABASE_ANON_KEY =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
 
-  <script>
-  // Disable right click
-  document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-    alert("Inspect is disabled on this site 🚫");
-  });
-</script>
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<script>
-  // Disable some keys (F12, Ctrl+Shift+I, Ctrl+U, etc.)
-  document.addEventListener("keydown", (e) => {
-    if (
-      e.key === "F12" || 
-      (e.ctrlKey && e.shiftKey && e.key === "I") ||
-      (e.ctrlKey && e.shiftKey && e.key === "J") ||
-      (e.ctrlKey && e.key === "U") ||
-      (e.ctrlKey && e.key === "S")
-    ) {
-      e.preventDefault();
-      alert("Developer tools are disabled 🚫");
-    }
-  });
+        // =============================
+        // Navbar Toggle (Mobile)
+        // =============================
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleBtn = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
 
-  // Try to detect DevTools opening
-  setInterval(() => {
-    if (window.devtools && window.devtools.open) {
-      alert("DevTools is open!");
-      window.location.reload();
-    }
-  }, 1000);
-</script>
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", () => {
+                    navLinks.classList.toggle("active");
+                });
+            }
 
-  <script src="terms.js"></script>
+            checkLogin();
+        });
+
+        // =============================
+        // Check Login & Role-Based Links
+        // =============================
+        let currentUser = null;
+
+        async function checkLogin() {
+            try {
+                currentUser = JSON.parse(localStorage.getItem("user"));
+            } catch {}
+
+            const authBtn = document.getElementById("auth-btn");
+            const attendanceLink = document.querySelector('a[href="/attendence/index.html"]');
+
+            let marksLink = document.querySelector('a[href="/marks/index.html"]');
+            if (!marksLink) {
+                const navLinks = document.getElementById("nav-links");
+                const li = document.createElement("li");
+                li.innerHTML = `<a href="/marks/index.html"><i class="fas fa-clipboard"></i> Marks</a>`;
+                navLinks.insertBefore(li, navLinks.children[4]);
+                marksLink = li.querySelector("a");
+            }
+
+            if (currentUser && (currentUser.username || currentUser.studentname) && currentUser.role) {
+                const displayName = currentUser.studentname || currentUser.username;
+
+                authBtn.innerHTML = `<a href="#" id="logout-link"><i class="fas fa-user"></i> ${displayName} (Logout)</a>`;
+
+                if (attendanceLink) {
+                    if (currentUser.role === "admin") attendanceLink.href = "/admin/index.html";
+                    else if (currentUser.role === "teacher") attendanceLink.href = "/teacher/index.html";
+                    else attendanceLink.href = "/attendence/index.html";
+                }
+
+                if (marksLink) {
+                    marksLink.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        if (currentUser.role === "teacher") {
+                            window.location.href = "/teachermarks/index.html";
+                        } else {
+                            window.location.href = "/marks/index.html";
+                        }
+                    });
+                }
+
+                document.getElementById("logout-link").addEventListener("click", (e) => {
+                    e.preventDefault();
+                    logoutUser();
+                });
+            } else {
+                authBtn.innerHTML = `<a href="/login/index.html"><i class="fas fa-user"></i> Login</a>`;
+                if (attendanceLink) attendanceLink.href = "/attendence/index.html";
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem("user");
+            currentUser = null;
+            checkLogin();
+        }
+
+        // =============================
+        // Security JS
+        // =============================
+        document.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            // Using a custom message box instead of alert()
+            createCustomAlert("Inspect is disabled on this site 🚫");
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (
+                e.key === "F12" ||
+                (e.ctrlKey && e.shiftKey && e.key === "I") ||
+                (e.ctrlKey && e.shiftKey && e.key === "J") ||
+                (e.ctrlKey && e.key === "U") ||
+                (e.ctrlKey && e.key === "S")
+            ) {
+                e.preventDefault();
+                // Using a custom message box instead of alert()
+                createCustomAlert("Developer tools are disabled 🚫");
+            }
+        });
+        
+        // This is a placeholder for a real DevTools detection method.
+        // It's not reliable in a production environment.
+        setInterval(() => {
+            const isDevToolsOpen = /devtool/i.test(console.log);
+            if (isDevToolsOpen) {
+                console.log("DevTools is open! Reloading...");
+                window.location.reload();
+            }
+        }, 1000);
+
+        // Custom alert function
+        function createCustomAlert(message) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
+                box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
+                text-align: center; max-width: 80%;
+            `;
+            
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            messageText.style.cssText = `
+                font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
+            `;
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'OK';
+            closeBtn.style.cssText = `
+                background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+                color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
+                cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
+            `;
+            
+            closeBtn.onclick = () => modal.remove();
+            
+            modal.appendChild(messageText);
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+        }
+    </script>
 </body>
 </html>
