@@ -2,7 +2,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTqDgJ1L_bs";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.getElementById("login-form").addEventListener("submit", async (e) => {
@@ -20,37 +20,37 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     let userData = null;
 
     // 1️⃣ Try USERS table (encrypted login via Edge Function)
-    const { data: user, error: userErr } = await supabase.functions.invoke("login-user", {
+    const { data: userLoginData, error: userLoginError } = await supabase.functions.invoke("login-user", {
       body: { username, password },
     });
-
-    if (user && !user.error) {
+    
+    // Check for success from the function itself
+    if (userLoginData && !userLoginData.error) {
       role = "user";
-      userData = user;
+      userData = userLoginData;
     }
 
-    // 2️⃣ If not found in users, try TEACHERPORTAL (plain password)
+    // 2️⃣ If not a user, try TEACHERPORTAL (NEW encrypted login via Edge Function)
     if (!userData) {
-      const { data: teacher, error: teacherErr } = await supabase
-        .from("teacherportal")
-        .select("*")
-        .eq("username", username)
-        .eq("password", password) // plain password check
-        .maybeSingle();
+      // Call the new 'login-teacher' edge function
+      const { data: teacherLoginData, error: teacherLoginError } = await supabase.functions.invoke("login-teacher", {
+        body: { username, password },
+      });
 
-      if (teacher && !teacherErr) {
+      // Check for success from the function
+      if (teacherLoginData && !teacherLoginData.error) {
         role = "teacher";
-        userData = teacher;
+        userData = teacherLoginData;
       }
     }
 
-    // 3️⃣ If still not found, try ADMINS (plain password)
+    // 3️⃣ If still not found, try ADMINS (plain password, as before)
     if (!userData) {
       const { data: admin, error: adminErr } = await supabase
         .from("admins")
         .select("*")
         .eq("username", username)
-        .eq("password", password) // plain password check
+        .eq("password", password) // Assuming admin login remains plain text
         .maybeSingle();
 
       if (admin && !adminErr) {
@@ -59,7 +59,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       }
     }
 
-    // ✅ If found
+    // ✅ If any login attempt succeeded
     if (userData) {
       // Save role + data in localStorage
       localStorage.setItem(
@@ -75,21 +75,22 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
 
       // Redirect based on role
       setTimeout(() => {
+        // Customize your redirects as needed
         if (role === "admin") {
-          window.location.href = "/index.html";
+          window.location.href = "/index.html"; // Or admin dashboard
         } else if (role === "teacher") {
-          window.location.href = "/index.html";
+          window.location.href = "/index.html"; // Or teacher dashboard
         } else {
-          window.location.href = "/index.html";
+          window.location.href = "/index.html"; // Or student dashboard
         }
       }, 1200);
       return;
     }
 
-    // ❌ If no match
+    // ❌ If no match after all attempts
     throw new Error("Invalid credentials");
   } catch (err) {
-    console.error(err);
+    console.error("Login failed:", err.message);
     message.textContent = "❌ Invalid username or password.";
     message.style.color = "red";
   }
