@@ -5,8 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stellar Mind | Verify Account</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Reset */
+    /* Light theme variables from index.html */
+    :root {
+      --primary-bg: #f0f4f8;
+      --secondary-bg: #ffffff;
+      --card-bg: #eaf1f7;
+      --text-color: #1c2b3a;
+      --subtle-text: #6b7a8c;
+      --accent-start: #4299e1;
+      --accent-end: #0087c5;
+      --shadow-light: rgba(0, 0, 0, 0.08);
+      --shadow-heavy: rgba(0, 0, 0, 0.15);
+      --transition-speed: 0.5s;
+    }
+
+    /* Reset and basic styling */
     * {
       margin: 0;
       padding: 0;
@@ -14,125 +31,139 @@
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0b0b12;
-      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #fff;
+      min-height: 100vh;
       overflow: hidden;
+      position: relative;
     }
 
-    /* Background animation */
-    .bg-animation {
+    /* Animated background */
+    body::before {
+      content: '';
       position: absolute;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(130,87,229,0.15), transparent 70%),
-                  radial-gradient(circle, rgba(87,171,255,0.15), transparent 70%);
-      background-size: 400px 400px;
-      animation: moveBG 15s linear infinite;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 10%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(0, 135, 197, 0.1) 0%, transparent 50%);
+      animation: pulseBackground 10s infinite alternate;
       z-index: -1;
     }
-    @keyframes moveBG {
-      0% { transform: translate(0,0); }
-      50% { transform: translate(-100px,-100px); }
-      100% { transform: translate(0,0); }
-    }
 
+    @keyframes pulseBackground {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+    
     /* Container styles */
     .verify-container {
-      background: rgba(17, 17, 34, 0.9);
-      padding: 50px 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(87,171,255,0.4);
-      width: 400px;
+      background: var(--secondary-bg);
+      padding: 2.5rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 30px var(--shadow-heavy);
+      width: 100%;
+      max-width: 26rem; /* Slightly wider for the extra field */
       text-align: center;
-      animation: slideIn 1.2s ease forwards;
-      opacity: 0;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      z-index: 1;
     }
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+     @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Logo */
-    .logo img {
-      width: 90px;
-      height: 90px;
+     .logo img {
+      width: 5rem;
+      height: 5rem;
       border-radius: 50%;
-      margin-bottom: 15px;
-      animation: glowPulse 2s infinite alternate, floaty 4s ease-in-out infinite;
-      box-shadow: 0 0 25px rgba(130,87,229,0.8);
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 1.5rem rgba(66, 153, 225, 0.5);
+      animation: glowPulse 2s infinite alternate;
     }
     @keyframes glowPulse {
-      from { box-shadow: 0 0 15px rgba(130,87,229,0.5); }
-      to { box-shadow: 0 0 35px rgba(87,171,255,1); }
-    }
-    @keyframes floaty {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-      100% { transform: translateY(0); }
+      from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
+      to { box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1); }
     }
 
     /* Title */
     .verify-container h1 {
-      margin-bottom: 10px;
-      color: #57abff;
+        font-size: 1.8rem; /* Adjusted for longer text */
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     .subtitle {
-      font-size: 14px;
-      margin-bottom: 25px;
-      color: #ccc;
+        color: var(--subtle-text);
+        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        word-break: break-all; /* Ensures long emails don't overflow */
     }
 
     /* Input group */
     .input-group {
-      display: flex;
-      align-items: center;
-      background: #141527;
-      margin: 12px 0;
-      padding: 12px;
-      border-radius: 8px;
-      transition: 0.3s;
-    }
-    .input-group:hover {
-      box-shadow: 0 0 12px rgba(87,171,255,0.5);
+        position: relative;
+        margin-bottom: 1.25rem;
     }
     .input-group i {
-      margin-right: 10px;
-      color: #57abff;
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--subtle-text);
+        transition: color 0.3s;
     }
     .input-group input {
-      flex: 1;
-      background: none;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 16px;
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 3rem;
+        border: 1px solid #ddd;
+        border-radius: 2rem;
+        background: var(--primary-bg);
+        outline: none;
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .input-group input:focus {
+        border-color: var(--accent-start);
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    }
+    .input-group input:focus + i {
+        color: var(--accent-start);
     }
 
     /* Button */
     .btn {
-      background: linear-gradient(90deg, #8257e5, #57abff);
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-      width: 100%;
-      font-size: 16px;
-      font-weight: bold;
-      transition: all 0.3s;
+        background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1rem;
+        transition: all var(--transition-speed) ease;
+        box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+        margin-top: 1rem;
     }
     .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(87,171,255,0.6);
+        transform: translateY(-0.25rem) scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
     }
     .btn:disabled {
-      background: #555;
+      background: #ccc;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
@@ -140,50 +171,45 @@
 
     /* Message */
     #verify-message {
-      margin-top: 15px;
-      font-size: 14px;
-      min-height: 20px;
+      margin-top: 1rem;
+      min-height: 1.2rem;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <!-- Animated Background -->
-  <div class="bg-animation"></div>
-
   <div class="verify-container">
-    <!-- Logo -->
     <div class="logo">
       <img src="/assets/tlogo.png" alt="Stellar Mind Logo" onerror="this.style.display='none'">
     </div>
     
-    <h1><i class="fas fa-user-shield"></i> Verify & Update Password</h1>
+    <h1><i class="fas fa-user-shield"></i> Verify & Set Password</h1>
     <p class="subtitle" id="subtitle-email">Enter the code sent to your email</p>
 
     <form id="verify-form">
       <div class="input-group">
-        <i class="fas fa-hashtag"></i>
         <input type="text" id="code" placeholder="6-Digit Verification Code" required>
+        <i class="fas fa-hashtag"></i>
       </div>
       <div class="input-group">
-        <i class="fas fa-lock"></i>
         <input type="password" id="password" placeholder="Create a New Password" required>
+        <i class="fas fa-lock"></i>
       </div>
       <div class="input-group">
-        <i class="fas fa-check-circle"></i>
         <input type="password" id="confirm-password" placeholder="Confirm New Password" required>
+         <i class="fas fa-check-circle"></i>
       </div>
 
-      <button type="submit" class="btn" id="submit-btn">Update Password</button>
+      <button type="submit" class="btn" id="submit-btn">Verify & Create Account</button>
       <p id="verify-message"></p>
     </form>
   </div>
 
-  <!-- Import Supabase Client -->
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
     const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzIJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('verify-form');
@@ -191,17 +217,17 @@
     const messageEl = document.getElementById('verify-message');
     const subtitleEl = document.getElementById('subtitle-email');
 
-    // --- Get user data saved from the previous page ---
     const verificationDataString = sessionStorage.getItem('verificationData');
     if (!verificationDataString) {
-      messageEl.textContent = '⚠️ Could not find verification data. Please start again from the sign-up page.';
-      messageEl.style.color = 'orange';
+      messageEl.textContent = '⚠️ Could not find verification data. Please start again.';
+      messageEl.style.color = '#e67e22';
+      subtitleEl.textContent = 'Please return to the sign-up page.';
       submitBtn.disabled = true;
+    } else {
+        const verificationData = JSON.parse(verificationDataString || '{}');
+        subtitleEl.textContent = `Enter the code sent to ${verificationData.email}`;
     }
-    const verificationData = JSON.parse(verificationDataString || '{}');
-    subtitleEl.textContent = `Enter the code sent to ${verificationData.email}`;
 
-    // --- Handle Form Submission ---
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -209,27 +235,33 @@
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirm-password').value;
 
-      // Client-side validation
       if (password !== confirmPassword) {
         messageEl.textContent = '❌ Passwords do not match.';
-        messageEl.style.color = 'red';
+        messageEl.style.color = '#e74c3c';
         return;
       }
       if (password.length < 6) {
         messageEl.textContent = '❌ Password must be at least 6 characters long.';
-        messageEl.style.color = 'red';
+        messageEl.style.color = '#e74c3c';
         return;
+      }
+      
+      const verificationData = JSON.parse(sessionStorage.getItem('verificationData'));
+      if(!verificationData){
+          messageEl.textContent = 'Session expired. Please sign up again.';
+          messageEl.style.color = '#e74c3c';
+          return;
       }
 
       submitBtn.disabled = true;
-      messageEl.textContent = '⏳ Verifying and updating password...';
-      messageEl.style.color = 'white';
+      submitBtn.textContent = 'Verifying...';
+      messageEl.textContent = '⏳ Verifying and creating account...';
+      messageEl.style.color = 'var(--subtle-text)';
 
       try {
-        // *** Call the function to verify the code and update the password ***
         const { data, error } = await supabase.functions.invoke('verify-and-signup', {
           body: {
-            ...verificationData, // Includes rollno, name, email
+            ...verificationData,
             code,
             password
           },
@@ -238,20 +270,20 @@
         if (error) throw error;
         if (data.error) throw new Error(data.error);
 
-        messageEl.textContent = '✅ Password updated successfully! Redirecting to login...';
-        messageEl.style.color = 'lime';
+        messageEl.textContent = '✅ Account created! Redirecting to login...';
+        messageEl.style.color = '#27ae60';
 
-        // Clear the temporary data and redirect
         sessionStorage.removeItem('verificationData');
         setTimeout(() => {
-          window.location.href = 'index.html'; // Redirect to your login page
+          window.location.href = 'index.html';
         }, 2000);
 
       } catch (err) {
-        console.error("Error updating password:", err);
-        messageEl.textContent = `⚠️ Error: ${err.message || 'Could not update password.'}`;
-        messageEl.style.color = 'orange';
+        console.error("Error creating account:", err);
+        messageEl.textContent = `⚠️ Error: ${err.message || 'Could not verify code.'}`;
+        messageEl.style.color = '#e67e22';
         submitBtn.disabled = false;
+        submitBtn.textContent = 'Verify & Create Account';
       }
     });
   </script>

@@ -8,6 +8,11 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,6 +21,20 @@
     <script src="https://unpkg.com/@supabase/supabase-js"></script>
 
     <style>
+        /* Light theme variables from index.html */
+        :root {
+            --primary-bg: #f0f4f8;
+            --secondary-bg: #ffffff;
+            --card-bg: #eaf1f7;
+            --text-color: #1c2b3a;
+            --subtle-text: #6b7a8c;
+            --accent-start: #4299e1;
+            --accent-end: #0087c5;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+            --transition-speed: 0.5s;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -23,9 +42,9 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0b0b12;
-            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-color);
             line-height: 1.6;
         }
 
@@ -34,9 +53,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #111122;
-            padding: 12px 25px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            background: var(--secondary-bg);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -45,17 +64,16 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 20px;
+            gap: 1rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #fff;
+            color: var(--text-color);
         }
 
         .logo img {
-            width: 45px;
-            height: 45px;
+            width: 3rem;
+            height: 3rem;
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(130, 87, 229, 0.8);
         }
 
         .animated-logo {
@@ -63,56 +81,36 @@
         }
 
         @keyframes glowPulse {
-            from {
-                box-shadow: 0 0 15px rgba(130, 87, 229, 0.5);
-            }
-
-            to {
-                box-shadow: 0 0 35px rgba(87, 171, 255, 1);
-            }
+            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
+            to { box-shadow: 0 0 2rem rgba(0, 135, 197, 1); }
         }
 
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 25px;
+            gap: 1.5rem;
         }
 
         .nav-links a {
-            color: #fff;
+            color: var(--text-color);
             text-decoration: none;
-            font-size: 16px;
-            padding: 8px 5px;
+            font-size: 1rem;
+            padding: 0.5rem 0.3rem;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 0.4rem;
             position: relative;
+            transition: color 0.3s;
         }
-
-        .nav-links a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -5px;
-            width: 0%;
-            height: 2px;
-            background: linear-gradient(90deg, #8257e5, #57abff);
-            transition: width 0.3s;
-            border-radius: 2px;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
+        
         .nav-links a:hover {
-            color: #57abff;
+            color: var(--accent-end);
         }
 
         .menu-toggle {
             display: none;
-            font-size: 24px;
-            color: #fff;
+            font-size: 1.5rem;
+            color: var(--text-color);
             cursor: pointer;
         }
 
@@ -120,14 +118,14 @@
             .nav-links {
                 display: none;
                 flex-direction: column;
-                background: #111122;
+                background: var(--secondary-bg);
                 position: absolute;
-                top: 70px;
-                right: 0;
-                width: 220px;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+                top: 4.5rem;
+                right: 1rem;
+                width: 14rem;
+                padding: 1.5rem;
+                border-radius: 1rem;
+                box-shadow: 0 4px 20px var(--shadow-light);
             }
 
             .nav-links.active {
@@ -141,22 +139,22 @@
 
         .hero {
             text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(90deg, #0b0b12, #141426);
+            padding: 3rem 1rem;
         }
 
         .hero-text h1 {
-            font-size: 2rem;
-            color: #57abff;
+            font-size: 2.2rem;
+            font-weight: 700;
         }
 
         .hero-text p {
-            margin-top: 10px;
-            color: #bbb;
+            margin-top: 0.5rem;
+            color: var(--subtle-text);
+            font-size: 1.1rem;
         }
 
         #studentName {
-            background: linear-gradient(90deg, #57abff, #8a2be2, #57abff);
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: bold;
@@ -165,149 +163,151 @@
         }
 
         @keyframes gradientFlow {
-            0% {
-                background-position: 0% center;
-            }
-
-            100% {
-                background-position: 200% center;
-            }
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
 
         .attendance-section {
-            padding: 30px 20px;
+            padding: 1rem 1rem 3rem;
             text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .attendance-section h2 {
-            padding-bottom: 2rem;
-        }
-
-        .month-changer {
-            margin-bottom: 20px;
-            margin-top: 4rem;
-        }
-
-        .month-changer button {
-            background: #57abff;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .month-changer button:hover {
-            background: #3d8adb;
-        }
-
-        .toggle-btn {
-            margin: 15px 0;
-            background: #57abff;
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .toggle-btn:hover {
-            background: #3d8adb;
-            transform: scale(1.05);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
         }
 
         .chart-container {
-            background: #141426;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 0 auto;
-            max-width: 600px;
-            box-shadow: 0 0 20px rgba(87, 171, 255, 0.3);
+            background: var(--secondary-bg);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin: 0 auto 2rem;
+            max-width: 800px;
+            box-shadow: 0 8px 30px var(--shadow-light);
+        }
+
+        .month-changer {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .month-changer button {
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid #ddd;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .month-changer button:hover {
+            background: var(--card-bg);
+            border-color: #ccc;
+        }
+        
+        #currentMonth {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
 
         .attendance-grid {
+            margin-top: 2rem;
             overflow-x: auto;
+            background: var(--secondary-bg);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: 0 8px 30px var(--shadow-light);
         }
 
         .attendance-table {
             border-collapse: collapse;
-            min-width: 600px;
-            background: #141426;
-            box-shadow: 0 0 20px rgba(87, 171, 255, 0.3);
-            border-radius: 10px;
-            overflow: hidden;
-            animation: fadeIn 0.8s ease;
             width: 100%;
+            min-width: 600px;
         }
 
         .attendance-table th,
         .attendance-table td {
-            border: 1px solid #2a2a40;
-            padding: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 0.75rem;
             text-align: center;
-            font-size: 14px;
+            font-size: 0.9rem;
         }
 
         .attendance-table th {
-            background: #1e1e35;
-            color: #57abff;
-            text-shadow: 0 0 6px rgba(87, 171, 255, 0.6);
+            background: var(--card-bg);
+            font-weight: 600;
+        }
+        
+        .attendance-table td {
+            background: var(--secondary-bg);
         }
 
         .attendance-table td.present span.status {
-            color: #4caf50;
+            color: #27ae60;
             font-weight: bold;
-            font-family: fangsong;
         }
 
         .attendance-table td.absent span.status {
-            color: #f44336;
+            color: #e74c3c;
             font-weight: bold;
         }
 
-        .attendance-table td.holiday span.status {
-            color: #00eeff;
-            font-weight: bold;
-        }
-
+        /* Footer */
         .footer {
-            background: #111122;
-            color: #aaa;
+            background: var(--secondary-bg);
+            color: var(--subtle-text);
             text-align: center;
-            padding: 30px 15px;
-            margin-top: 50px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
-
+        .footer-content p { margin: 0.3rem 0; }
         .footer-content a {
-            color: #aaa;
+            color: var(--subtle-text);
             text-decoration: none;
+            transition: color 0.3s;
         }
-
-        .footer-content a:hover {
-            color: #57abff;
-        }
-
+        .footer-content a:hover { color: var(--accent-end); }
         .social-icons {
-            margin-top: 15px;
+            margin-top: 1rem;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 1.25rem;
         }
-
         .social-icons a {
-            font-size: 22px;
-            color: #aaa;
+            font-size: 1.5rem;
+            color: var(--subtle-text);
             transition: all 0.3s ease-in-out;
         }
-
         .social-icons a:hover {
-            color: #57abff;
-            transform: scale(1.2);
-            text-shadow: 0 0 15px rgba(87, 171, 255, 0.7);
+            color: var(--accent-end);
+            transform: scale(1.2) translateY(-0.25rem);
         }
     </style>
 </head>
@@ -332,7 +332,7 @@
     <section class="hero">
         <div class="hero-text">
             <h1>Welcome, <span id="studentName">Loading...</span></h1>
-            <p>Be Proud. You are in NIT</p>
+            <p>Your Academic Progress at a Glance</p>
         </div>
     </section>
 
@@ -375,7 +375,7 @@
 
     <script>
         const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs"; // replace with your anon/public key
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const studentNameEl = document.getElementById("studentName");
@@ -395,20 +395,9 @@
 
         async function getUser() {
             const user = JSON.parse(localStorage.getItem("user"));
-            if (user) {
-                const { data, error } = await supabaseClient
-                    .from("users")
-                    .select("studentname")
-                    .eq("username", user.username)
-                    .single();
-
-                if (error) {
-                    studentNameEl.textContent = user.username || user.email;
-                } else {
-                    studentNameEl.textContent = data.studentname || user.username || user.email;
-                }
-
-                loadAttendance(user.username || user.email);
+            if (user && user.username) {
+                studentNameEl.textContent = user.studentname || user.username;
+                loadAttendance(user.username);
             } else {
                 window.location.href = "../login/index.html";
             }
@@ -430,20 +419,28 @@
         }
 
         async function loadAttendance(username) {
-            const { data, error } = await supabaseClient
+            const {
+                data,
+                error
+            } = await supabaseClient
                 .from("attendance")
-                .select("subject_name, subject, status, total_classes")
+                .select("subject_name, subject_code, status, total_classes")
                 .eq("username", username);
 
             if (error) return;
 
             const subjectData = {};
             data.forEach(record => {
-                if (!subjectData[record.subject]) {
-                    subjectData[record.subject] = { name: record.subject_name, attended: 0, total: 0 };
+                const subjectIdentifier = record.subject_code || record.subject_name;
+                if (!subjectData[subjectIdentifier]) {
+                    subjectData[subjectIdentifier] = {
+                        name: record.subject_name,
+                        attended: 0,
+                        total: 0
+                    };
                 }
-                subjectData[record.subject].attended += record.status;
-                subjectData[record.subject].total += record.total_classes;
+                subjectData[subjectIdentifier].attended += record.status;
+                subjectData[subjectIdentifier].total += record.total_classes;
             });
 
             renderBarChart(subjectData);
@@ -451,68 +448,110 @@
         }
 
         let myChart;
+
         function renderBarChart(subjectData) {
-            const subjects = Object.keys(subjectData);
-            const subjectNames = subjects.map(sub => subjectData[sub].name);
+            const subjects = Object.values(subjectData);
+            const subjectNames = subjects.map(sub => sub.name);
             const percentages = subjects.map(sub => {
-                const attended = subjectData[sub].attended;
-                const total = subjectData[sub].total;
+                const attended = sub.attended;
+                const total = sub.total;
                 return total > 0 ? ((attended / total) * 100).toFixed(1) : 0;
             });
-            const colors = percentages.map(p => p >= 75 ? "#4caf50" : "#f44336");
+            const colors = percentages.map(p => p >= 75 ? "rgba(39, 174, 96, 0.8)" : "rgba(231, 76, 60, 0.8)");
             if (myChart) myChart.destroy();
 
             myChart = new Chart(attendanceChartCanvas, {
                 type: 'bar',
-                data: { labels: subjectNames, datasets: [{ label: 'Attendance %', data: percentages, backgroundColor: colors, borderRadius: 8 }] },
-                options: { responsive: true, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { display: false } } }
+                data: {
+                    labels: subjectNames,
+                    datasets: [{
+                        label: 'Attendance %',
+                        data: percentages,
+                        backgroundColor: colors,
+                        borderColor: percentages.map(p => p >= 75 ? "rgba(39, 174, 96, 1)" : "rgba(231, 76, 60, 1)"),
+                        borderWidth: 1,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                             ticks: { color: '#6b7a8c' },
+                             grid: { color: '#e0e0e0' }
+                        },
+                        x: {
+                             ticks: { color: '#6b7a8c' },
+                             grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return `Attendance: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
             });
         }
 
         async function loadAttendanceTable(month) {
             const user = JSON.parse(localStorage.getItem("user"));
             if (!user) return;
-            const username = user.username || user.email;
+            const username = user.username;
 
             const start = new Date(month.getFullYear(), month.getMonth(), 1).toISOString().split("T")[0];
             const end = new Date(month.getFullYear(), month.getMonth() + 1, 0).toISOString().split("T")[0];
 
-            const { data: monthData, error } = await supabaseClient
+            const {
+                data: monthData,
+                error
+            } = await supabaseClient
                 .from("attendance")
                 .select("*")
                 .eq("username", username)
                 .gte("date", start)
                 .lte("date", end)
-                .order("date", { ascending: true });
+                .order("date", {
+                    ascending: true
+                });
 
             updateMonthLabel();
 
             if (error) {
                 attendanceBody.innerHTML = `<tr><td colspan="10">⚠️ Error loading data</td></tr>`;
             } else if (!monthData || monthData.length === 0) {
-                attendanceBody.innerHTML = `<tr><td colspan="10">No records found</td></tr>`;
+                attendanceHead.innerHTML = '<tr><th>Date</th><th>Status</th></tr>';
+                attendanceBody.innerHTML = `<tr><td colspan="2">No records found for this month.</td></tr>`;
             } else {
-                const subjects = [...new Set(monthData.map(r => r.subject))];
-                const dates = [...new Set(monthData.map(r => r.date))];
+                const subjects = [...new Set(monthData.map(r => r.subject_name))];
+                const dates = [...new Set(monthData.map(r => r.date))].sort();
 
                 attendanceHead.innerHTML = `<tr><th>Date</th>${subjects.map(sub => `<th>${sub}</th>`).join("")}</tr>`;
 
                 attendanceBody.innerHTML = dates.map(date => {
                     const rowCells = subjects.map(sub => {
-                        const records = monthData.filter(r => r.date === date && r.subject === sub);
-                        if (records.length === 0) return `<td>-</td>`;
+                        const record = monthData.find(r => r.date === date && r.subject_name === sub);
+                        
+                        if (!record) return `<td>-</td>`;
 
-                        const totalStatus = records.reduce((sum, r) => sum + r.status, 0);
-                        const totalClasses = records.reduce((sum, r) => sum + r.total_classes, 0);
-
-                        const statusChar = totalStatus > 0 ? "P" : "A";
-                        const statusText = `${statusChar} ${totalStatus}/${totalClasses}`;
-                        const statusClass = totalStatus > 0 ? "present" : "absent";
+                        const statusChar = record.status > 0 ? "P" : "A";
+                        const statusText = `${statusChar} (${record.status}/${record.total_classes})`;
+                        const statusClass = record.status > 0 ? "present" : "absent";
 
                         return `<td class="${statusClass}"><span class="status">${statusText}</span></td>`;
                     }).join("");
 
-                    return `<tr><td>${date}</td>${rowCells}</tr>`;
+                    return `<tr><td>${new Date(date + 'T00:00:00').toLocaleDateString('en-GB')}</td>${rowCells}</tr>`;
                 }).join("");
             }
         }
@@ -523,7 +562,8 @@
             toggleBtn.textContent = tableVisible ? "Hide Daily Attendance" : "See Attendance by Day";
         });
 
-        logoutBtn.addEventListener("click", () => {
+        logoutBtn.addEventListener("click", (e) => {
+            e.preventDefault();
             localStorage.removeItem("user");
             window.location.href = "../login/index.html";
         });

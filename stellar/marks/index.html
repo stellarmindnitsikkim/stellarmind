@@ -1,12 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stellar Mind | Marks</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Light theme variables from index.html */
+    :root {
+      --primary-bg: #f0f4f8;
+      --secondary-bg: #ffffff;
+      --card-bg: #eaf1f7;
+      --text-color: #1c2b3a;
+      --subtle-text: #6b7a8c;
+      --accent-start: #4299e1;
+      --accent-end: #0087c5;
+      --shadow-light: rgba(0, 0, 0, 0.08);
+      --shadow-heavy: rgba(0, 0, 0, 0.15);
+      --transition-speed: 0.5s;
+    }
+
+    /* Reset and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
+      transition: background var(--transition-speed);
+      position: relative;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--secondary-bg);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 20px var(--shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .logo img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+
+    .animated-logo {
+      animation: glowPulse 2s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from {
+        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+      }
+
+      to {
+        box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
+      }
+    }
+
+    /* Nav links */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      transition: color var(--transition-speed);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0%;
+      height: 0.15rem;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      transition: width var(--transition-speed);
+      border-radius: 0.1rem;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links li.active a::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover,
+    .nav-links li.active a {
+      color: var(--accent-end);
+    }
+
+    /* Mobile Menu */
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--secondary-bg);
+        position: absolute;
+        top: 4.5rem;
+        right: 1rem;
+        width: 14rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px var(--shadow-light);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* Main Content Styling */
+    .marks-page {
+      padding: 4rem 10%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .marks-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .marks-hero .sub {
+      font-size: 1.1rem;
+      color: var(--subtle-text);
+      margin-bottom: 2rem;
+    }
+
+    /* Gradient Welcome Text */
+    .gradient-text {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+
+    /* Tabs Styling */
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: var(--card-bg);
+      border: 1px solid transparent;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-color);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .tab-btn:hover {
+        background: #dbe8f3;
+        transform: translateY(-2px);
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(66, 153, 225, 0.3);
+    }
+
+    /* Marks Table Styling */
+    #marks-area {
+        min-height: 200px;
+    }
+
+    .marks-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: var(--secondary-bg);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow-light);
+    }
+
+    .marks-table thead th {
+      text-align: left;
+      padding: 1rem 1.25rem;
+      background: var(--card-bg);
+      font-weight: 700;
+      color: var(--text-color);
+      border-bottom: 2px solid #dde8f0;
+    }
+
+    .marks-table tbody td {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid #eaf1f7;
+      color: var(--subtle-text);
+      font-weight: 500;
+    }
+    .marks-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+     .marks-table tbody td:first-child {
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+
+    /* Uploading Soon / Loading state */
+    .uploading-soon {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 2rem;
+      border-radius: 1rem;
+      background: var(--card-bg);
+      color: var(--subtle-text);
+      box-shadow: 0 4px 15px var(--shadow-light);
+    }
+     .uploading-soon a {
+      color: var(--accent-start);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+
+    /* Footer */
+    .footer {
+      background: var(--secondary-bg);
+      color: var(--subtle-text);
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 4rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Responsive Table */
+    @media (max-width: 720px) {
+        .marks-page {
+            padding: 2rem 5%;
+        }
+        .marks-hero h1, .gradient-text {
+            font-size: 1.8rem;
+        }
+        .marks-table thead {
+            display: none;
+        }
+        .marks-table tbody, .marks-table tr, .marks-table td {
+            display: block;
+            width: 100%;
+        }
+        .marks-table tr {
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 2px 10px var(--shadow-light);
+        }
+        .marks-table td {
+            padding-left: 50%;
+            position: relative;
+            text-align: right;
+            border: none;
+            border-bottom: 1px solid #eaf1f7;
+        }
+        .marks-table td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 1.25rem;
+            width: 45%;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+    }
+  </style>
 </head>
+
 <body>
   <!-- Navbar -->
   <nav class="navbar">
@@ -22,33 +340,29 @@
       <li><a href="/attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
       <li><a href="/terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
       <li class="active"><a href="#"><i class="fas fa-graduation-cap"></i> Marks</a></li>
-      <!-- Auth button -->
       <li id="auth-btn"><a href="../login/index.html"><i class="fas fa-user"></i> Login</a></li>
-      <!-- Welcome message -->
-      <li id="welcome-msg" style="color:#fff; font-weight:600;"></li>
     </ul>
   </nav>
 
-  <main class="marks-page" style="padding:60px 10%;">
-  <section class="marks-hero">
-    <h1 id="welcome-student" class="gradient-text"></h1> <!-- 👈 new welcome -->
-    <h1>📊 Your Marks</h1>
-    <p class="sub">View Mid Term 1, Mid Term 2 and End Semester marks for CSE subjects.</p>
-  </section>
+  <main class="marks-page">
+    <section class="marks-hero">
+      <h1 id="welcome-student" class="gradient-text"></h1>
+      <h1>📊 Your Marks</h1>
+      <p class="sub">View Mid Term 1, Mid Term 2 and End Semester marks for your subjects.</p>
+    </section>
 
-  <section class="marks-controls">
-    <div class="tabs">
-      <button class="tab-btn" data-exam="mid1">Mid Term 1</button>
-      <button class="tab-btn" data-exam="mid2">Mid Term 2</button>
-      <button class="tab-btn" data-exam="endsem">End Semester</button>
-    </div>
-  </section>
+    <section class="marks-controls">
+      <div class="tabs">
+        <button class="tab-btn" data-exam="mid1">Mid Term 1</button>
+        <button class="tab-btn" data-exam="mid2">Mid Term 2</button>
+        <button class="tab-btn" data-exam="endsem">End Semester</button>
+      </div>
+    </section>
 
-  <section id="marks-area">
-    <div id="marks-loading" class="uploading-soon">Loading marks...</div>
-  </section>
-</main>
-
+    <section id="marks-area">
+      <div id="marks-loading" class="uploading-soon">Loading marks...</div>
+    </section>
+  </main>
 
   <footer class="footer">
     <div class="footer-content">
@@ -56,6 +370,130 @@
     </div>
   </footer>
 
-  <script type="module" src="script.js"></script>
+  <script type="module">
+    import {
+      createClient
+    } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUser = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleBtn = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+      if (toggleBtn) toggleBtn.addEventListener("click", () => navLinks.classList.toggle("active"));
+
+      try {
+        currentUser = JSON.parse(localStorage.getItem("user"));
+      } catch (e) {
+        console.error("Could not parse user from localStorage", e);
+      }
+      
+      updateNavbarAuth();
+      setupTabs();
+      loadMarks("mid1"); // Load initial marks
+    });
+
+    function updateNavbarAuth() {
+      const authBtn = document.getElementById("auth-btn");
+      const welcomeStudent = document.getElementById("welcome-student");
+
+      if (currentUser && (currentUser.username || currentUser.studentname)) {
+        const name = currentUser.studentname || currentUser.username;
+        authBtn.innerHTML = `<a href="#" id="logout-link"><i class="fas fa-sign-out-alt"></i> ${name} (Logout)</a>`;
+        if (welcomeStudent) {
+          welcomeStudent.textContent = `Welcome, ${name}`;
+        }
+
+        const logoutLink = document.getElementById("logout-link");
+        if (logoutLink) {
+          logoutLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem("user");
+            window.location.href = "../login/index.html";
+          });
+        }
+      } else {
+         if (welcomeStudent) welcomeStudent.textContent = "Welcome, Guest";
+      }
+    }
+
+    function setupTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          loadMarks(btn.dataset.exam);
+        });
+      });
+      // Set the first tab as active by default
+      document.querySelector('.tab-btn[data-exam="mid1"]')?.classList.add('active');
+    }
+
+    async function loadMarks(examType) {
+      const area = document.getElementById('marks-area');
+      area.innerHTML = '<div class="uploading-soon">Loading marks...</div>';
+
+      if (!currentUser || !(currentUser.username || currentUser.studentname)) {
+        area.innerHTML = `<div class="uploading-soon">Please <a href="../login/index.html">login</a> to view your marks.</div>`;
+        return;
+      }
+
+      const username = (currentUser.username || currentUser.studentname).toLowerCase();
+
+      const { data, error } = await supabase
+        .from('cse_marks')
+        .select('*')
+        .eq('username', username)
+        .eq('exam_type', examType)
+        .order('subject_code', {
+          ascending: true
+        });
+
+      if (error) {
+        console.error(error);
+        area.innerHTML = `<div class="uploading-soon">⚠️ Error loading marks. Please try again later.</div>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        area.innerHTML = `<div class="uploading-soon">No marks found for <strong>${examType.replace('endsem', 'End Semester')}</strong>.</div>`;
+        return;
+      }
+
+      const table = document.createElement('table');
+      table.className = 'marks-table';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+            <th>Marks</th>
+            <th>Max Marks</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+
+      const tbody = table.querySelector('tbody');
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Code">${row.subject_code}</td>
+          <td data-label="Subject">${row.subject_name}</td>
+          <td data-label="Marks">${row.marks ?? '-'}</td>
+          <td data-label="Max Marks">${row.max_marks ?? '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      area.innerHTML = '';
+      area.appendChild(table);
+    }
+  </script>
 </body>
+
 </html>

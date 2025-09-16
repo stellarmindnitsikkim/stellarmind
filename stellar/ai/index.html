@@ -1,12 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stellar Mind | StellarChatBot</title>
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Light theme variables from index.html */
+    :root {
+      --primary-bg: #f0f4f8;
+      --secondary-bg: #ffffff;
+      --card-bg: #eaf1f7;
+      --text-color: #1c2b3a;
+      --subtle-text: #6b7a8c;
+      --accent-start: #4299e1;
+      --accent-end: #0087c5;
+      --shadow-light: rgba(0, 0, 0, 0.08);
+      --shadow-heavy: rgba(0, 0, 0, 0.15);
+      --transition-speed: 0.5s;
+    }
+
+    /* Global styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
+    }
+
+    /* Loader Overlay */
+    #custom-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #custom-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-logo {
+      width: 8rem;
+      height: 8rem;
+      border-radius: 50%;
+      margin-bottom: 2rem;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    .spinner {
+      border: 6px solid rgba(0, 135, 197, 0.15);
+      border-top: 6px solid var(--accent-end);
+      border-radius: 50%;
+      width: 5rem;
+      height: 5rem;
+      animation: spin 1.2s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    .loading-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      animation: fadeBlink 2s infinite;
+    }
+
+    /* Animations */
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
+      to { box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1); }
+    }
+
+    @keyframes fadeBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--secondary-bg);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 20px var(--shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .logo img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+    
+    .animated-logo {
+        animation: glowPulse 2s infinite alternate;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      transition: color var(--transition-speed);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0%;
+      height: 0.15rem;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      transition: width var(--transition-speed);
+      border-radius: 0.1rem;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-end);
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    @media(max-width:768px){
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--secondary-bg);
+        position: absolute;
+        top: 4.5rem;
+        right: 1rem;
+        width: 14rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px var(--shadow-light);
+      }
+      .nav-links.active { display: flex; }
+      .menu-toggle { display: block; }
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--subtle-text);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Chat Section */
+    .chat-container {
+      padding: 0 2rem 4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    #stellar-chat {
+      width: 100%;
+      height: 70vh;
+      min-height: 500px;
+      border-radius: 1.5rem;
+      display: none;
+      box-shadow: 0 8px 30px var(--shadow-heavy);
+      border: 1px solid #e0e0e0;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--secondary-bg);
+      color: var(--subtle-text);
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .footer-content p {
+      margin: 0.3rem 0;
+    }
+
+    .footer-content a {
+      color: var(--subtle-text);
+      text-decoration: none;
+      transition: color var(--transition-speed);
+    }
+
+    .footer-content a:hover {
+      color: var(--accent-end);
+    }
+
+    .social-icons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+    }
+
+    .social-icons a {
+      font-size: 1.5rem;
+      color: var(--subtle-text);
+      transition: all var(--transition-speed) ease-in-out;
+    }
+
+    .social-icons a:hover {
+      color: var(--accent-end);
+      transform: scale(1.2) translateY(-0.25rem);
+    }
+  </style>
 </head>
+
 <body>
 
   <!-- Loader Overlay -->
@@ -42,11 +314,7 @@
 
   <!-- Chat Section -->
   <section class="chat-container">
-    <iframe 
-      id="stellar-chat"
-      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json"
-      frameborder="0"
-    ></iframe>
+    <iframe id="stellar-chat" src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json" frameborder="0"></iframe>
   </section>
 
   <!-- Footer -->
@@ -62,6 +330,32 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const iframe = document.getElementById("stellar-chat");
+    const loader = document.getElementById("custom-loader");
+
+    function showChatbox() {
+      loader.classList.add("hidden"); // fade out loader
+      iframe.style.display = "block"; // show chatbox
+    }
+
+    // Wait for iframe to load completely
+    iframe.onload = () => {
+      setTimeout(showChatbox, 2000); // delay 2s to bypass botpress splash
+    }
+
+    // Fallback: force show chat if onload fails
+    setTimeout(showChatbox, 6000);
+
+    // Mobile nav toggle
+    const menuToggle = document.getElementById("mobile-menu");
+    const navLinks = document.getElementById("nav-links");
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+    }
+  </script>
 </body>
+
 </html>
