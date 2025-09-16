@@ -1,163 +1,459 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stellar Mind | Student Profile</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                },
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Light theme variables from index.html */
+        :root {
+            --primary-bg: #f0f4f8;
+            --secondary-bg: #ffffff;
+            --card-bg: #eaf1f7;
+            --text-color: #1c2b3a;
+            --subtle-text: #6b7a8c;
+            --accent-start: #4299e1;
+            --accent-end: #0087c5;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+            --transition-speed: 0.5s;
+        }
+
+        /* Reset and basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-color);
+            transition: background var(--transition-speed);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--secondary-bg);
+            padding: 0.75rem 2rem; /* Reduced height */
+            box-shadow: 0 4px 20px var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem; /* Slightly smaller */
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .logo img {
+            width: 2.5rem; /* Slightly smaller */
+            height: 2.5rem; /* Slightly smaller */
+            border-radius: 50%;
+        }
+
+        .animated-logo {
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
+            to { box-shadow: 0 0 1.5rem rgba(0, 135, 197, 1); }
+        }
+
+        /* Nav links */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links li {
+            position: relative;
+            opacity: 0;
+            transform: translateY(-1rem);
+            animation: fadeInUp 0.8s forwards;
+        }
+        
+        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
+        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-    </script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+            transition: color var(--transition-speed);
         }
 
-        /* Custom styles for the marks section */
-        .marks-page .sub { color: #cfcfe8; margin-bottom: 18px; }
-        .tabs { display: flex; gap: 12px; margin-bottom: 18px; }
-        .tab-btn {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 8px 14px;
-            border-radius: 999px;
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.3rem;
+            width: 0%;
+            height: 0.15rem;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            transition: width var(--transition-speed);
+            border-radius: 0.1rem;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-end);
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
             cursor: pointer;
-            font-weight: 600;
-            color: #4a5568;
-            transition: all 0.2s ease-in-out;
         }
-        .tab-btn.active {
-            background: linear-gradient(90deg, #57abff, #8257e5);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(130, 87, 229, 0.18);
+        
+        .main-container {
+            background: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px var(--shadow-heavy);
+            width: 100%;
+            max-width: 48rem;
+            margin: 3rem auto;
+        }
+        
+        .main-container h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .main-container .subtitle {
+            text-align: center;
+            color: var(--subtle-text);
+            margin-bottom: 2rem;
         }
 
-        .marks-table {
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        #usernameInput {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid #ddd;
+            background: var(--primary-bg);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        #usernameInput:focus {
+            outline: none;
+            border-color: var(--accent-start);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
+        }
+
+        .profile-header {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 2rem;
+        }
+        
+        .gradient-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .loading-indicator .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid var(--accent-start);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loading-indicator span {
+            margin-left: 1rem;
+            color: var(--subtle-text);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .message-area {
+            text-align: center;
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .results-container h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Tables */
+        .results-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-            background: #f7fafc;
-            border-radius: 12px;
+            background: var(--secondary-bg);
+            border-radius: 1rem;
             overflow: hidden;
+            border: 1px solid #e0e0e0;
         }
-        .marks-table thead th {
+        .results-table thead th {
             text-align: left;
-            padding: 12px 14px;
-            background: #e2e8f0;
-            font-weight: 700;
-            color: #2d3748;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            font-weight: 600;
+            color: var(--text-color);
         }
-        .marks-table tbody td {
-            padding: 12px 14px;
-            border-top: 1px solid #e2e8f0;
-            color: #4a5568;
+        .results-table tbody td {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid #e0e0e0;
+            color: var(--subtle-text);
+        }
+        .results-table tbody tr:hover {
+            background-color: var(--card-bg);
+        }
+
+        /* Tabs for Marks */
+        .tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--subtle-text);
+            transition: all 0.3s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+            border-color: transparent;
         }
         
         .uploading-soon {
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 15px;
-            background: #f7fafc;
-            color: #4a5568;
+             padding: 1rem;
+             text-align: center;
+             color: var(--subtle-text);
+        }
+        
+        .marks-summary {
             text-align: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
 
-        .gradient-text {
-            font-size: 2.2rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #8257e5, #57abff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Footer */
+        .footer {
+            background: var(--secondary-bg);
+            color: var(--subtle-text);
             text-align: center;
-            margin-bottom: 15px;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .footer-content p { margin: 0.3rem 0; }
+        .footer-content a { color: var(--subtle-text); text-decoration: none; transition: color 0.3s; }
+        .footer-content a:hover { color: var(--accent-end); }
+        
+        .hidden { display: none; }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: var(--secondary-bg);
+                position: absolute;
+                top: 4.5rem;
+                right: 1rem;
+                width: 14rem;
+                padding: 1.5rem;
+                border-radius: 1rem;
+                box-shadow: 0 4px 20px var(--shadow-light);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .search-container {
+                flex-direction: row;
+            }
         }
 
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
+            <span>Stellar Mind</span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/marks/index.html"><i class="fas fa-clipboard"></i> Marks</a></li>
+            <li><a href="/attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
 
     <!-- Main Container -->
-    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl mx-auto">
-        <div class="text-center mb-6">
-            <h1 class="text-3xl font-extrabold text-gray-800 mb-2">Student Profile Lookup</h1>
-            <p class="text-center text-gray-500">Enter a student's username to view their profile, attendance, and marks.</p>
+    <div class="main-container">
+        <div class="header-text">
+            <h1>Student Profile Lookup</h1>
+            <p class="subtitle">Enter a student's username to view their profile, attendance, and marks.</p>
         </div>
 
         <!-- Input and Button -->
-        <div class="flex flex-col md:flex-row gap-4 mb-6">
-            <input type="text" id="usernameInput" placeholder="Enter username (e.g., b240001)"
-                    class="flex-grow p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
-            <button id="fetchButton"
-                    class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300">
-                Search
-            </button>
+        <div class="search-container">
+            <input type="text" id="usernameInput" placeholder="Enter username (e.g., b240001)">
+            <button id="fetchButton" class="btn">Search</button>
         </div>
 
         <!-- Profile Header -->
-        <div id="profileHeader" class="hidden text-center bg-gray-50 p-6 rounded-xl border border-gray-200 mb-6 transition duration-500 ease-in-out">
-            <h2 class="text-2xl font-bold text-gray-700 mb-1">
-                <span id="studentName" class="gradient-text"></span>
-            </h2>
-            <p class="text-gray-500 text-sm">Username: <span id="studentUsername" class="font-mono"></span></p>
+        <div id="profileHeader" class="profile-header hidden">
+            <h2 id="studentName" class="gradient-text"></h2>
+            <p>Username: <span id="studentUsername" style="font-family: monospace;"></span></p>
         </div>
-        
+
         <!-- Loading Indicator -->
-        <div id="loadingIndicator" class="hidden flex justify-center items-center py-4">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <span class="ml-3 text-gray-600">Fetching data...</span>
+        <div id="loadingIndicator" class="loading-indicator hidden">
+            <div class="spinner"></div>
+            <span>Fetching data...</span>
         </div>
 
         <!-- Message Area -->
-        <div id="messageArea" class="text-center py-4 text-red-500 font-medium hidden"></div>
+        <div id="messageArea" class="message-area hidden"></div>
 
         <!-- Attendance Table -->
-        <div id="attendanceContainer" class="hidden overflow-x-auto mb-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">Attendance Summary</h2>
-            <table class="min-w-full bg-white rounded-lg shadow-md border border-gray-200">
-                <thead class="bg-blue-500 text-white">
-                    <tr>
-                        <th class="p-3 text-left font-semibold">Subject Name</th>
-                        <th class="p-3 text-left font-semibold">Subject Code</th>
-                        <th class="p-3 text-left font-semibold">Attendance %</th>
-                    </tr>
-                </thead>
-                <tbody id="attendanceTableBody" class="divide-y divide-gray-200">
-                    <!-- Data will be inserted here by JavaScript -->
-                </tbody>
-            </table>
+        <div id="attendanceContainer" class="results-container hidden">
+            <h2>Attendance Summary</h2>
+            <div class="overflow-x-auto">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Subject Name</th>
+                            <th>Subject Code</th>
+                            <th>Attendance %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Marks Section -->
-        <div id="marksSection" class="hidden mt-8">
-            <h2 class="text-xl font-bold text-gray-800 mb-4 text-center">Marks Summary</h2>
-            <div id="marksControls" class="flex justify-center gap-4 mb-6">
+        <div id="marksSection" class="results-container hidden" style="margin-top: 2rem;">
+            <h2>Marks Summary</h2>
+            <div id="marksControls" class="tabs">
                 <button class="tab-btn active" data-exam="mid1">Mid Term 1</button>
                 <button class="tab-btn" data-exam="mid2">Mid Term 2</button>
                 <button class="tab-btn" data-exam="endsem">End Semester</button>
             </div>
-            <div id="marksArea" class="py-4">
+            <div id="marksArea">
                 <div id="marks-loading" class="uploading-soon">Select an exam to view marks.</div>
             </div>
         </div>
     </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Stellar Mind | NIT Sikkim</p>
+        </div>
+    </footer>
 
     <!-- Supabase JavaScript SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
-        // Supabase client initialization with your provided URL and key
+        // Supabase client initialization
         const supabaseUrl = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -174,25 +470,25 @@
         const attendanceContainer = document.getElementById('attendanceContainer');
         const marksSection = document.getElementById('marksSection');
         const marksArea = document.getElementById('marksArea');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+        const logoutBtn = document.getElementById('logoutBtn');
 
         // Function to display messages
         function showMessage(message, isError = true) {
             messageArea.textContent = message;
             messageArea.classList.remove('hidden');
-            messageArea.classList.toggle('text-red-500', isError);
-            messageArea.classList.toggle('text-green-500', !isError);
+            messageArea.style.color = isError ? '#e74c3c' : '#27ae60';
         }
 
         // Function to toggle loading state
         function setLoading(isLoading) {
-            if (isLoading) {
-                loadingIndicator.classList.remove('hidden');
+            loadingIndicator.classList.toggle('hidden', !isLoading);
+            if(isLoading) {
                 attendanceContainer.classList.add('hidden');
                 marksSection.classList.add('hidden');
                 profileHeaderEl.classList.add('hidden');
                 messageArea.classList.add('hidden');
-            } else {
-                loadingIndicator.classList.add('hidden');
             }
         }
 
@@ -209,7 +505,7 @@
 
             if (error) {
                 console.error(error);
-                marksArea.innerHTML = `<div class="uploading-soon text-red-500">⚠️ Error loading marks. Try again later.</div>`;
+                marksArea.innerHTML = `<div class="uploading-soon" style="color: #e74c3c;">⚠️ Error loading marks.</div>`;
                 return;
             }
 
@@ -217,9 +513,9 @@
                 marksArea.innerHTML = `<div class="uploading-soon">No records found for <strong>${examType}</strong>.</div>`;
                 return;
             }
-            
+
             const table = document.createElement('table');
-            table.className = 'marks-table';
+            table.className = 'results-table';
             table.innerHTML = `
                 <thead>
                     <tr>
@@ -233,7 +529,6 @@
             `;
 
             const tbody = table.querySelector('tbody');
-            // Calculate total marks and total max marks
             let totalGainedMarks = 0;
             let totalMaxMarks = 0;
             data.forEach(row => {
@@ -249,27 +544,23 @@
                 totalMaxMarks += Number(row.max_marks) || 0;
             });
 
-            // Create a summary element
             const summaryDiv = document.createElement('div');
-            summaryDiv.className = 'text-center text-lg font-bold mt-4 p-4 rounded-lg bg-blue-50 text-blue-800';
-            summaryDiv.innerHTML = `Total Marks: <span class="text-xl font-extrabold">${totalGainedMarks} / ${totalMaxMarks}</span>`;
+            summaryDiv.className = 'marks-summary';
+            summaryDiv.innerHTML = `Total Marks: <span>${totalGainedMarks} / ${totalMaxMarks}</span>`;
 
             marksArea.innerHTML = '';
-            marksArea.appendChild(table); // Add the table first
-            marksArea.appendChild(summaryDiv); // Then add the summary
+            marksArea.appendChild(table);
+            marksArea.appendChild(summaryDiv);
         }
 
         // Event listener for the "Search" button
         fetchButton.addEventListener('click', async () => {
             const username = usernameInput.value.trim().toLowerCase();
-
-            // Input validation
             if (!username) {
                 showMessage('Please enter a username.');
                 return;
             }
 
-            // Start loading state
             setLoading(true);
             attendanceTableBody.innerHTML = '';
 
@@ -281,31 +572,27 @@
                     .eq('username', username)
                     .single();
                 
-                // If user is not found in the 'users' table, throw an error
                 if (userError || !userData) {
-                    throw new Error("User not found in the users table.");
+                    throw new Error("User not found.");
                 }
 
                 studentNameEl.textContent = userData.studentname;
                 studentUsernameEl.textContent = username;
                 profileHeaderEl.classList.remove('hidden');
 
-                // Fetch and aggregate attendance data from the 'attendance' table
+                // Fetch and aggregate attendance data
                 const { data: attendanceData, error: attendanceError } = await supabaseClient
                     .from('attendance')
                     .select('subject_name, subject_code, status, total_classes')
                     .eq('username', username);
 
-                // Handle Supabase errors
                 if (attendanceError) {
                     throw new Error(attendanceError.message);
                 }
 
-                // If no attendance data is returned for the user
                 if (!attendanceData || attendanceData.length === 0) {
                     showMessage('No attendance records found for this user.', false);
                 } else {
-                    // Aggregate data by subject and display
                     const attendanceBySubject = {};
                     attendanceData.forEach(record => {
                         const subjectKey = record.subject_code;
@@ -325,13 +612,12 @@
                     if (subjects.length > 0) {
                         attendanceContainer.classList.remove('hidden');
                         subjects.forEach(subject => {
-                            const attendancePercentage = (subject.attended / subject.total) * 100;
+                            const attendancePercentage = subject.total > 0 ? (subject.attended / subject.total) * 100 : 0;
                             const row = document.createElement('tr');
-                            row.classList.add('hover:bg-gray-50');
                             row.innerHTML = `
-                                <td class="p-3 whitespace-nowrap">${subject.subject_name}</td>
-                                <td class="p-3 whitespace-nowrap font-mono">${subject.subject_code}</td>
-                                <td class="p-3 whitespace-nowrap font-bold">${attendancePercentage.toFixed(2)}%</td>
+                                <td>${subject.subject_name}</td>
+                                <td style="font-family: monospace;">${subject.subject_code}</td>
+                                <td style="font-weight: 600;">${attendancePercentage.toFixed(2)}%</td>
                             `;
                             attendanceTableBody.appendChild(row);
                         });
@@ -365,7 +651,20 @@
                 }
             });
         });
+        
+        // Mobile menu toggle
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            window.location.href = '/login/index.html';
+        });
 
     </script>
 </body>
 </html>
+
