@@ -4,9 +4,746 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stellar Mind</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Stellar Mind - Redesigned</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* New light theme variables */
+    :root {
+      --primary-bg: #f0f4f8;
+      --secondary-bg: #ffffff;
+      --card-bg: #eaf1f7;
+      --text-color: #1c2b3a;
+      --subtle-text: #6b7a8c;
+      --accent-start: #4299e1;
+      --accent-end: #0087c5;
+      --shadow-light: rgba(0, 0, 0, 0.08);
+      --shadow-heavy: rgba(0, 0, 0, 0.15);
+      --transition-speed: 0.5s;
+    }
+
+    /* Reset and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
+      transition: background var(--transition-speed);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 10%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(0, 135, 197, 0.1) 0%, transparent 50%);
+      animation: pulseBackground 10s infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes pulseBackground {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--secondary-bg);
+      padding: 1rem 2rem;
+      box-shadow: 0 4px 20px var(--shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background var(--transition-speed), box-shadow var(--transition-speed);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar.scrolled {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 25px var(--shadow-heavy);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .logo img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      box-shadow: 0 0 1rem rgba(66, 153, 225, 0.5);
+      transition: box-shadow var(--transition-speed);
+    }
+
+    .animated-logo {
+      animation: glowPulse 2s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from {
+        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+      }
+
+      to {
+        box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
+      }
+    }
+
+    /* Nav links */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li {
+      position: relative;
+      opacity: 0;
+      transform: translateY(-1rem);
+      animation: fadeInUp 0.8s forwards;
+    }
+
+    .nav-links li:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .nav-links li:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .nav-links li:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .nav-links li:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+
+    .nav-links li:nth-child(5) {
+      animation-delay: 1s;
+    }
+
+    .nav-links li:nth-child(6) {
+      animation-delay: 1.2s;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .nav-links a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      transition: color var(--transition-speed);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0%;
+      height: 0.15rem;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      transition: width var(--transition-speed);
+      border-radius: 0.1rem;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-end);
+    }
+
+    /* Mobile Menu */
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--secondary-bg);
+        position: absolute;
+        top: 4.5rem;
+        right: 1rem;
+        width: 14rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px var(--shadow-light);
+        animation: slideInRight 0.5s forwards;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Hero Section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+      padding: 4rem 10%;
+    }
+
+    .hero-text h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+    }
+
+    .hero-text h1 span {
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      color: var(--subtle-text);
+    }
+
+    .btn {
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all var(--transition-speed) ease;
+      box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-0.25rem) scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
+    }
+
+    /* Spline Card */
+    .spline-card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .spline-frame {
+      width: 100%;
+      max-width: 30rem;
+      height: 25rem;
+      background: var(--secondary-bg);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 0 2rem var(--shadow-light);
+      padding: 0.6rem;
+      border: 1px solid #e0e0e0;
+    }
+
+    .blocker {
+      display: flex;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      height: 3.4rem;
+      width: 11.6rem;
+      position: relative;
+      bottom: -9rem;
+      left: -10.5rem;
+      z-index: 99;
+      border-radius: 0.8rem;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(66, 153, 225, 0.4);
+      position: relative;
+      align-items: center;
+    }
+
+    .blocker::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 2px;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end), var(--accent-start));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: borderFlow 3s linear infinite;
+    }
+
+    @keyframes borderFlow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+
+    .blocker p {
+      margin: 0;
+      line-height: 2.5rem;
+      text-align: center;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 2rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s infinite linear;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200px 0;
+      }
+
+      100% {
+        background-position: 200px 0;
+      }
+    }
+
+    spline-viewer {
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+    }
+
+    /* Responsive hero */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .blocker {
+        display: none;
+      }
+
+      .spline-card {
+        margin-top: 2rem;
+      }
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--secondary-bg);
+      color: var(--subtle-text);
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      transition: background var(--transition-speed);
+    }
+
+    .footer-content p {
+      margin: 0.3rem 0;
+    }
+
+    .footer-content a {
+      color: var(--subtle-text);
+      text-decoration: none;
+      transition: color var(--transition-speed);
+    }
+
+    .footer-content a:hover {
+      color: var(--accent-end);
+    }
+
+    /* Social Icons */
+    .social-icons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+    }
+
+    .social-icons a {
+      font-size: 1.5rem;
+      color: var(--subtle-text);
+      transition: all var(--transition-speed) ease-in-out;
+    }
+
+    .social-icons a:hover {
+      color: var(--accent-end);
+      transform: scale(1.2) translateY(-0.25rem);
+      text-shadow: 0 0 1rem rgba(0, 135, 197, 0.7);
+    }
+
+    /* Events Section */
+    .events {
+      padding: 4rem 2rem;
+      background: var(--primary-bg);
+      text-align: center;
+      color: var(--text-color);
+      transition: background var(--transition-speed);
+    }
+
+    .events h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 0.75rem rgba(0, 135, 197, 0.6);
+      color: var(--text-color);
+    }
+
+    .events-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .event-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 1.25rem var(--shadow-light);
+      transition: all var(--transition-speed) ease;
+      width: 17.5rem;
+      text-align: left;
+      border: 1px solid rgba(0, 135, 197, 0.1);
+    }
+
+    .event-card:hover {
+      transform: translateY(-0.5rem) scale(1.02);
+      box-shadow: 0 0 2rem rgba(0, 135, 197, 0.2);
+    }
+
+    .event-card h3 {
+      margin-bottom: 0.5rem;
+      color: var(--accent-start);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .event-card p {
+      margin: 0.3rem 0;
+      color: var(--subtle-text);
+    }
+
+    /* Mobile Logo */
+    .mobile-only {
+      display: none;
+    }
+
+    .desktop-only {
+      display: block;
+    }
+
+    .glow-logo {
+      width: 12.5rem;
+      height: 12.5rem;
+      border-radius: 50%;
+      animation: glowPulse 2s infinite alternate, floaty 4s ease-in-out infinite;
+      box-shadow: 0 0 2rem rgba(66, 153, 225, 0.8);
+    }
+
+    @keyframes floaty {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-0.75rem);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .desktop-only {
+        display: none;
+      }
+
+      .mobile-only {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    /* Today's Classes Section */
+    .todays-classes {
+      padding: 4rem 2rem;
+      background: var(--primary-bg);
+      text-align: center;
+      color: var(--text-color);
+      transition: background var(--transition-speed);
+    }
+
+    .todays-classes h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 0.75rem rgba(0, 135, 197, 0.6);
+    }
+
+    .classes-list {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 1.25rem;
+      padding: 0.6rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-end) var(--secondary-bg);
+    }
+
+    .class-card {
+      background: var(--secondary-bg);
+      padding: 1rem 1.25rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 1.25rem var(--shadow-light);
+      min-width: 15rem;
+      transition: all var(--transition-speed) ease;
+      border: 1px solid rgba(0, 135, 197, 0.1);
+    }
+
+    .class-card:hover {
+      transform: translateY(-0.5rem);
+      box-shadow: 0 0 1.5rem rgba(0, 135, 197, 0.2);
+    }
+
+    .class-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: var(--accent-start);
+    }
+
+    .class-card p {
+      font-size: 0.9rem;
+      color: var(--subtle-text);
+    }
+
+    /* Holiday Styling */
+    .holiday {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin: 2.5rem auto;
+      padding: 1.25rem 2.5rem;
+      border-radius: 1.25rem;
+      background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #2e86de);
+      background-size: 300% 300%;
+      color: #fff;
+      width: fit-content;
+      animation: gradientShift 5s infinite linear, bounceWave 2s infinite ease-in-out;
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    }
+
+    /* Gradient shifting animation */
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Smooth bounce + wave effect */
+    @keyframes bounceWave {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+
+      25% {
+        transform: translateY(-0.5rem) scale(1.02);
+      }
+
+      50% {
+        transform: translateY(0) scale(1.05);
+      }
+
+      75% {
+        transform: translateY(0.5rem) scale(1.02);
+      }
+    }
+
+    /* Gradient Username Effect */
+    .gradient-username {
+      display: inline-block;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end), var(--accent-start));
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 5s infinite linear;
+      margin-top: 0.5rem;
+    }
+
+    /* Smooth flowing gradient */
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .footer2 {
+      display: block;
+      text-align: center;
+      background: var(--secondary-bg);
+      padding: 2rem 1rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      margin-top: 2.5rem;
+      transition: background var(--transition-speed);
+    }
+
+    .content2 {
+      display: inline-block;
+      text-align: left;
+    }
+
+    .justify {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+    }
+
+    .content2 h3 {
+      margin-bottom: 1rem;
+      color: var(--accent-start);
+    }
+
+    .content2 ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: block;
+    }
+
+    .content2 ul li {
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .content2 ul li a {
+      text-decoration: none;
+      color: var(--subtle-text);
+      font-size: 1rem;
+      transition: color var(--transition-speed) ease;
+    }
+
+    .content2 ul li a:hover {
+      color: var(--accent-end);
+    }
+
+    /* Fade-in effect for timetable cards */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(1rem);
+      animation: fadeInUp 0.6s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Uploading soon animation */
+    .uploading-soon {
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 1.25rem;
+      border-radius: 1rem;
+      background: linear-gradient(90deg, #6a82fb, #d3d9ff, #ff6b6b, #feca57);
+      background-size: 300% 300%;
+      color: #fff;
+      animation: gradientFlow 5s infinite linear, pulse 2s infinite ease-in-out;
+      box-shadow: 0 0.35rem 1.25rem var(--shadow-heavy);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -28,7 +765,6 @@
       <li id="marks-link"><a href="#"><i class="fas fa-clipboard"></i> Marks</a></li>
       <li id="auth-btn"><a href="login/index.html"><i class="fas fa-user"></i> Login</a></li>
     </ul>
-
   </nav>
 
   <!-- Hero Section -->
@@ -107,7 +843,231 @@
     </div>
   </footer>
 
-  <script type="module" src="script.js"></script>
+  <script type="module">
+    // =============================
+    // Supabase Setup
+    // =============================
+    import {
+      createClient
+    } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // =============================
+    // Navbar Toggle (Mobile)
+    // =============================
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleBtn = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
+        });
+      }
+
+      checkLogin();
+      loadEvents();
+      loadClasses();
+    });
+
+    // =============================
+    // Check Login & Role-Based Links
+    // =============================
+    let currentUser = null;
+
+    async function checkLogin() {
+      try {
+        currentUser = JSON.parse(localStorage.getItem("user"));
+      } catch { }
+
+      const authBtn = document.getElementById("auth-btn");
+      const welcomeUser = document.getElementById("welcome-user");
+      const attendanceLink = document.getElementById("attendance-link");
+
+      let marksLink = document.getElementById("marks-link");
+      if (!marksLink) {
+        const navLinks = document.getElementById("nav-links");
+        const li = document.createElement("li");
+        li.id = "marks-link";
+        li.innerHTML = `<a href="#"><i class="fas fa-clipboard"></i> Marks</a>`;
+        navLinks.insertBefore(li, navLinks.children[4]);
+        marksLink = li;
+      }
+
+      if (currentUser && (currentUser.username || currentUser.studentname) && currentUser.role) {
+        const displayName = currentUser.studentname || currentUser.username;
+
+        authBtn.innerHTML = `<a href="#" id="logout-link"><i class="fas fa-user"></i> ${displayName} (Logout)</a>`;
+        if (welcomeUser) welcomeUser.textContent = `Hi, ${displayName} 👋`;
+
+        if (attendanceLink) {
+          if (currentUser.role === "admin") attendanceLink.href = "admin/index.html";
+          else if (currentUser.role === "teacher") attendanceLink.href = "teacher/index.html";
+          else attendanceLink.href = "attendence/index.html";
+        }
+
+        marksLink.querySelector("a").addEventListener("click", (e) => {
+          e.preventDefault();
+          if (currentUser.role === "teacher") {
+            window.location.href = "teachermarks/index.html";
+          } else {
+            window.location.href = "marks/index.html";
+          }
+        });
+
+        document.getElementById("logout-link").addEventListener("click", (e) => {
+          e.preventDefault();
+          logoutUser();
+        });
+      } else {
+        authBtn.innerHTML = `<a href="login/index.html"><i class="fas fa-user"></i> Login</a>`;
+        if (welcomeUser) welcomeUser.textContent = "";
+        if (attendanceLink) attendanceLink.href = "attendence/index.html";
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem("user");
+      currentUser = null;
+      checkLogin();
+    }
+
+    // =============================
+    // Master Timetable Data
+    // =============================
+    const timetable = {
+      MON: [
+        "08:30 - 09:30 → AI13103 (ECE Faculty) Shed III",
+        "09:30 - 10:30 → AI13105 (RS) Shed III",
+        "10:30 - 11:30 → AI13101 (LA) Shed III",
+        "11:30 - 12:30 → BREAK",
+        "12:30 - 01:30 → AI13203 (ECE Faculty) ECE Lab",
+        "02:00 - 03:00 → AI13201 (LA/AKT/BBS) CL-4",
+      ],
+      TUE: [
+        "08:30 - 09:30 → AI13102 (ALM) Shed III",
+        "09:30 - 10:30 → AI13101 (LA) Shed III",
+        "10:30 - 11:30 → AI13201 (LA/AKT/BBS) CL-4",
+        "11:30 - 12:30 → BREAK",
+        "12:30 - 01:30 → AI13103 (ECE Faculty) Shed III",
+        "02:00 - 03:00 → AI13203 (ECE Faculty) ECE Lab",
+      ],
+      WED: [
+        "08:30 - 09:30 → AI13102 (ALM) Shed III",
+        "09:30 - 10:30 → AI13106 (BBS) Shed III",
+        "10:30 - 11:30 → AI13105 (RS) Shed III",
+        "11:30 - 12:30 → BREAK",
+        "12:30 - 01:30 → AI13104 (PKK) Shed III",
+        "02:00 - 03:00 → AI13103 (ECE Faculty) Shed III",
+        "03:00 - 04:00 → AI13203 (ECE Faculty) ECE Lab",
+      ],
+      THU: [
+        "08:30 - 09:30 → ZZ13201 (BBS) Shed III",
+        "09:30 - 10:30 → AI13105 (RS) Shed III",
+        "10:30 - 11:30 → AI13102 (ALM) Shed III",
+        "11:30 - 12:30 → AI13202 (ALM) CL-4",
+        "12:30 - 01:30 → BREAK",
+        "01:30 - 02:30 → AI13104 (PKK) Shed III",
+        "02:30 - 03:30 → AI13203 (ECE Faculty) ECE Lab",
+      ],
+      FRI: [
+        "08:30 - 09:30 → ZZ13201 (BBS) Shed III",
+        "09:30 - 10:30 → AI13102 (ALM) Shed III",
+        "10:30 - 11:30 → AI13106 (BBS) Shed III",
+        "11:30 - 12:30 → AI13106 (BBS) Shed III",
+        "12:30 - 01:30 → BREAK",
+        "01:30 - 02:30 → AI13104 (PKK) Shed III",
+        "02:30 - 03:30 → AI13101 (LA) Shed III",
+        "03:30 - 04:30 → AI13204 (PKK) CL-3",
+      ],
+    };
+
+    // =============================
+    // Load Classes Based on User
+    // =============================
+    function loadClasses() {
+      const classList = document.getElementById("classes-list");
+      if (!classList) return;
+
+      const today = new Date().toLocaleDateString("en-US", {
+        weekday: "short"
+      }).toUpperCase();
+
+      if (today === "SAT" || today === "SUN") {
+        classList.innerHTML = `<div class="holiday">🎉 Today is a Holiday 🎉</div>`;
+        return;
+      }
+
+      if (currentUser && /^b2400\d{2}$/i.test(currentUser.username)) {
+        const todaySchedule = timetable[today] || [];
+        classList.innerHTML = "";
+
+        todaySchedule.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "class-card fade-in";
+          card.innerHTML = `<p>${item}</p>`;
+          classList.appendChild(card);
+        });
+      } else {
+        classList.innerHTML = `
+          <div class="uploading-soon">
+            <span>📡 Your schedule is uploading soon...</span>
+          </div>
+        `;
+      }
+    }
+
+    // =============================
+    // Load Events from Supabase
+    // =============================
+    async function loadEvents() {
+      const eventsList = document.getElementById("events-list");
+      if (!eventsList) return;
+
+      try {
+        const {
+          data,
+          error
+        } = await supabase
+          .from("events")
+          .select("*")
+          .order("date", {
+            ascending: true
+          });
+
+        eventsList.innerHTML = "";
+
+        if (error) {
+          eventsList.innerHTML = `<p class="error">⚠️ Failed to load events</p>`;
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          eventsList.innerHTML = "<p>No upcoming events 🎉</p>";
+          return;
+        }
+
+        data.forEach((event) => {
+          const card = document.createElement("div");
+          card.className = "event-card";
+          card.innerHTML = `
+              <h3><i class="fas fa-star"></i> ${event.name}</h3>
+              <p><i class="fas fa-calendar-alt"></i> ${event.date}</p>
+              <p><i class="fas fa-clock"></i> ${event.time}</p>
+            `;
+          eventsList.appendChild(card);
+        });
+      } catch (err) {
+        console.error("🔥 Error loading events:", err);
+        eventsList.innerHTML = `<p class="error">⚠️ Could not load events</p>`;
+      }
+    }
+  </script>
 </body>
 
 </html>

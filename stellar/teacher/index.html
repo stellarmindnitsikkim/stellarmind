@@ -24,7 +24,7 @@
     .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; align-items: flex-end; }
     .controls .row { margin-bottom: 18px; }
     .controls label { display: block; margin-bottom: 8px; color: #cfd8ff; }
-    .controls input[type="date"], .controls select { width: 100%; background: #141426; border: 1px solid #2a2a40; border-radius: 8px; color: #fff; padding: 8px 10px; font-size: 1rem; }
+    .controls input[type="date"], .controls select, .controls input[type="number"] { width: 100%; background: #141426; border: 1px solid #2a2a40; border-radius: 8px; color: #fff; padding: 8px 10px; font-size: 1rem; }
     .actions { display: flex; gap: 10px; }
     .btn { border: 0; border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: all 0.2s; }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
@@ -37,7 +37,7 @@
     .att-table { width: 100%; border-collapse: collapse; min-width: 600px; background: #141426; }
     .att-table th, .att-table td { border: 1px solid #2a2a40; padding: 12px; text-align: center; }
     .att-table th { background: #1e1e35; color: #57abff; }
-    .att-table td .status-select { background: #0f0f1f; border: 1px solid #2a2a40; border-radius: 6px; color: #fff; padding: 6px 8px; font-size: 0.9rem; }
+    .att-table td input.status-input { background: #0f0f1f; border: 1px solid #2a2a40; border-radius: 6px; color: #fff; padding: 6px 8px; font-size: 0.9rem; width: 60px; text-align: center; }
     .roll { font-weight: 700; }
     .student-name { text-align: left; }
     .save-bar { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
@@ -71,6 +71,10 @@
         <label for="attDate"><i class="fa-regular fa-calendar-days"></i> Date</label>
         <input type="date" id="attDate"/>
       </div>
+      <div class="row">
+        <label for="totalClasses"><i class="fa-solid fa-list-ol"></i> Today’s Total Classes</label>
+        <input type="number" id="totalClasses" min="1" value="1"/>
+      </div>
       <div class="row actions">
         <button id="buildGridBtn" class="btn primary" disabled><i class="fa-solid fa-table-list"></i> Build Grid</button>
         <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
@@ -80,7 +84,7 @@
     <section id="gridSection" class="grid-section" style="display:none;">
       <div class="grid-wrap">
         <table id="attTable" class="att-table">
-          <thead><tr><th>Roll Number</th><th>Student Name</th><th>Status</th></tr></thead>
+          <thead><tr><th>Roll Number</th><th>Student Name</th><th>Attendance Count</th></tr></thead>
           <tbody id="attBody"></tbody>
         </table>
       </div>
@@ -105,6 +109,7 @@
           subjectNameEl = document.getElementById('subjectName'),
           yearSelect = document.getElementById('yearSelect'),
           attDate = document.getElementById('attDate'),
+          totalClassesInput = document.getElementById('totalClasses'),
           buildGridBtn = document.getElementById('buildGridBtn'),
           clearGridBtn = document.getElementById('clearGridBtn'),
           gridSection = document.getElementById('gridSection'),
@@ -150,29 +155,25 @@
       attBody.innerHTML = '';
       yearSelect.value = '';
       attDate.value = new Date().toISOString().split('T')[0];
+      totalClassesInput.value = 1;
       validateInputs();
     });
 
     buildGridBtn.addEventListener('click', async () => {
       saveStatus.textContent = 'Building grid...';
       try {
-        // ✅ lowercase roll numbers
         const students = Array.from({ length: 64 }, (_, i) => {
           const rollNumber = `b2400${(i + 1).toString().padStart(2, '0')}`;
           return { roll_no: rollNumber, student_name: `Student ${rollNumber}` };
         });
 
+        const totalClasses = totalClassesInput.value;
+
         attBody.innerHTML = students.map(student => {
           return `<tr data-roll="${student.roll_no}" data-name="${student.student_name}">
                     <td class="roll">${student.roll_no}</td>
                     <td class="student-name">${student.student_name}</td>
-                    <td>
-                      <select class="status-select">
-                        <option value="Present" selected>Present</option>
-                        <option value="Absent">Absent</option>
-                        <option value="Late">Late</option>
-                      </select>
-                    </td>
+                    <td><input type="number" class="status-input" min="0" value="${totalClasses}"/></td>
                   </tr>`;
         }).join('');
 
@@ -181,18 +182,19 @@
 
         const { data: existingAtt, error } = await supabase
           .from('attendance')
-          .select('username, status')
+          .select('username, status, total_classes')
           .eq('date', attDate.value)
           .eq('subject_code', currentUser.subject_code);
 
         if (error) throw error;
 
         if (existingAtt && existingAtt.length > 0) {
+          totalClassesInput.value = existingAtt[0].total_classes || 1;
           existingAtt.forEach(record => {
             const row = attBody.querySelector(`tr[data-roll="${record.username.toLowerCase()}"]`);
             if (row) {
-              const select = row.querySelector('.status-select');
-              if (select) select.value = record.status;
+              const input = row.querySelector('.status-input');
+              if (input) input.value = record.status;
             }
           });
         }
@@ -209,6 +211,7 @@
       if (rows.length === 0) return alert('Nothing to save.');
       saveStatus.textContent = '⏳ Saving attendance...';
       const date = attDate.value;
+      const totalClasses = parseInt(totalClassesInput.value, 10) || 1;
 
       try {
         const { data: existingRecords, error: fetchError } = await supabase
@@ -224,13 +227,14 @@
         const recordsToUpdate = [];
 
         rows.forEach(row => {
-          const roll = row.dataset.roll.toLowerCase(); // ✅ lowercase enforced
+          const roll = row.dataset.roll.toLowerCase();
           const record = {
             username: roll,
             student_name: row.dataset.name,
             branch: 'CSE',
             date: date,
-            status: row.querySelector('.status-select').value,
+            status: parseInt(row.querySelector('.status-input').value, 10) || 0,
+            total_classes: totalClasses,
             subject: currentUser.subject_code,
             subject_code: currentUser.subject_code,
             subject_name: currentUser.subject_name
@@ -246,7 +250,7 @@
         recordsToUpdate.forEach(record => {
           promises.push(
             supabase.from('attendance')
-              .update({ status: record.status, student_name: record.student_name })
+              .update({ status: record.status, total_classes: record.total_classes, student_name: record.student_name })
               .match({ username: record.username, date: record.date, subject_code: record.subject_code })
           );
         });

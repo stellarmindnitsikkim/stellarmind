@@ -1,94 +1,922 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+   
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin — Mark Attendance</title>
-  <link rel="stylesheet" href="style.css"/>
+   
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Mark Attendance</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <!-- Font Awesome -->
+   
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
-  <!-- Supabase -->
+    <!-- Supabase -->
+   
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
+   
+    <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
 
-  <!-- Our script -->
-  <script type="module" src="script.js"></script>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+      background: #0b0b12;
+      color: #fff
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background: #111122;
+      padding: 12px 25px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .logo img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+    }
+
+    .animated-logo {
+      animation: glowPulse 2s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      from {
+        box-shadow: 0 0 15px rgba(130, 87, 229, 0.5);
+      }
+
+      to {
+        box-shadow: 0 0 35px rgba(87, 171, 255, 1);
+      }
+    }
+
+    /* Nav links */
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      margin-left: auto;
+    }
+
+    .nav-links li {
+      position: relative;
+      opacity: 0;
+      transform: translateY(-15px);
+      animation: fadeInUp 0.8s forwards;
+    }
+
+    .nav-links li:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .nav-links li:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .nav-links li:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .nav-links li:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+
+    .nav-links li:nth-child(5) {
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 8px 5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    /* Premium hover underline animation */
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, #8257e5, #57abff);
+      transition: width 0.3s;
+      border-radius: 2px;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      color: #57abff;
+    }
+
+    /* Mobile Menu */
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: #111122;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 220px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* Existing CSS below */
+    .container {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 16px
+    }
+
+    .controls .row {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .controls .row>div {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .controls .row:last-of-type {
+      margin-top: 18px;
+    }
+
+    .controls label {
+      display: block;
+      margin-bottom: 8px;
+      color: #cfd8ff
+    }
+
+    .controls input[type="date"],
+    .controls select {
+      background: #141426;
+      border: 1px solid #2a2a40;
+      border-radius: 8px;
+      color: #fff;
+      padding: 8px 10px;
+      width: 100%;
+    }
+
+    .subjects-box {
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .subject-check {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+      background: #141426;
+      border: 1px solid #2a2a40;
+      border-radius: 10px;
+      padding: 6px 8px;
+      transition: background 0.2s ease;
+      flex-shrink: 0;
+      min-width: 200px;
+    }
+
+    .subject-check:hover {
+      background: #1a1a30;
+    }
+
+    .subject-check label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .subject-check input[type="checkbox"] {
+      transform: scale(1.1)
+    }
+
+    .subject-check .total-classes-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 0.8em;
+    }
+
+    .subject-check .total-classes-row label {
+      margin-bottom: 0;
+    }
+
+    .subject-check .total-classes-row input[type="number"] {
+      width: 50px;
+      text-align: center;
+      font-size: 0.9em;
+      padding: 4px 6px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700
+    }
+
+    .btn.primary {
+      background: #57abff;
+      color: #fff
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: #cfd8ff;
+      border: 1px solid #2a2a40
+    }
+
+    .btn.success {
+      background: #31c48d;
+      color: #0b0b12
+    }
+
+    .btn.xs {
+      padding: 6px 10px;
+      border-radius: 8px
+    }
+
+    /* Grid */
+    .grid-section {
+      margin-top: 26px
+    }
+
+    .grid-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px
+    }
+
+    .bulk {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #141426;
+      border: 1px solid #2a2a40;
+      border-radius: 10px;
+      padding: 8px
+    }
+
+    .chip {
+      background: #1e1e35;
+      color: #57abff;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 12px
+    }
+
+    .grid-wrap {
+      overflow: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(87, 171, 255, .3)
+    }
+
+    .att-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+      background: #141426
+    }
+
+    .att-table th,
+    .att-table td {
+      border: 1px solid #2a2a40;
+      padding: 8px;
+      text-align: center
+    }
+
+    .att-table th {
+      background: #1e1e35;
+      color: #57abff
+    }
+
+    .att-table td input {
+      background: #0f0f1f;
+      border: 1px solid #2a2a40;
+      border-radius: 6px;
+      color: #fff;
+      padding: 6px 8px;
+      width: 60px;
+      text-align: center;
+    }
+
+    .roll {
+      font-weight: 700
+    }
+
+    .save-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px
+    }
+
+    .status {
+      color: #cfd8ff
+    }
+
+    .nav-links button {
+      background: transparent;
+      border: 1px solid #2a2a40;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #cfd8ff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-links button:hover {
+      background: #57abff;
+      color: #fff;
+    }
+
+    /* New Footer Styles */
+    .footer-container {
+      background: #111122;
+      padding: 30px 15px;
+      margin-top: 50px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .footer-section {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer-section h3 {
+      color: goldenrod;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section a {
+      text-decoration: none;
+      color: #aaa;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .footer-section a:hover {
+      color: #57abff;
+    }
+
+    .social-icons {
+      margin-top: 15px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-icons a {
+      font-size: 22px;
+      color: #aaa;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .social-icons a:hover {
+      color: #57abff;
+      transform: scale(1.2);
+      text-shadow: 0 0 15px rgba(87, 171, 255, 0.7);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-section {
+        min-width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <!-- <nav class="navbar">
-    <div class="logo">
-      <i class="fa-solid fa-user-shield"></i>
-      <span>Admin • Attendance</span>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="/assets/tlogo.png" alt="Admin Logo" class="animated-logo">
+            <span>Admin • Attendance</span>
+          </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+          </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="../attendance/index.html"><i class="fas fa-user-check"></i> Student View</a></li>
+            <li><button id="logoutBtn" class="btn ghost"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+          </ul>
+      </nav>
+
+
+    <main class="container">
+        <section class="controls">
+            <!-- ✅ Branch Dropdown -->
+            <div class="row">
+                <div>
+                    <label><i class="fa-solid fa-code-branch"></i> Branch</label>
+                    <select id="branchSelect">
+                        <option value="">— Select Branch —</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ECE">ECE</option>
+                        <option value="EEE">EEE</option>
+                        <option value="ME">Mechanical</option>
+                        <option value="CE">Civil</option>
+                      </select>
+                  </div>
+                <div>
+                    <label for="attDate"><i class="fa-regular fa-calendar-days"></i> Date</label>
+                    <input type="date" id="attDate" />
+                  </div>
+              </div>
+
+            <div class="row">
+        <!--         <label><i class="fa-solid fa-book"></i> Subjects with class on this date</label> -->
+                <div id="subjectsBox" class="subjects-box"><!-- checkboxes rendered here --></div>
+              </div>
+
+            <div class="row actions">
+                <button id="buildGridBtn" class="btn primary"><i class="fa-solid fa-table-list"></i> Build Grid</button>
+                <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
+              </div>
+          </section>
+
+        <section id="gridSection" class="grid-section" style="display:none;">
+            <div class="grid-toolbar" id="bulkToolbar"><!-- per-subject bulk controls --></div>
+            <div class="grid-wrap">
+                <table id="attTable" class="att-table">
+                    <thead id="attHead"></thead>
+                    <tbody id="attBody"></tbody>
+                  </table>
+              </div>
+
+            <div class="save-bar">
+                <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save
+          Attendance</button>
+                <span id="saveStatus" class="status"></span>
+              </div>
+          </section>
+      </main>
+
+    <!-- New Footer -->
+    <footer class="footer-container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Admin Portal</h3>
+                <p>Manage student attendance efficiently and accurately with this powerful and user-friendly portal.
+          Designed for administrators to streamline daily tasks.</p>
+              </div>
+            <div class="footer-section">
+                <h3>Contact & Social</h3>
+                <p>Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
+                <div class="social-icons">
+                    <a href="https://wa.me/" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                  </div>
+              </div>
+          </div>
+        <div class="footer-bottom">
+           
+      <hr>
+            <p>© 2025 Stellar Mind | All Rights Reserved.</p>
+         
     </div>
-    <ul class="nav-links">
-      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="../attendance/index.html"><i class="fas fa-user-check"></i> Student View</a></li>
-    </ul>
-  </nav> -->
+      </footer>
 
-  <nav class="navbar">
-  <div class="logo">
-    <i class="fa-solid fa-user-shield"></i>
-    <span>Admin • Attendance</span>
-  </div>
-  <ul class="nav-links">
-    <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
-    <li><a href="../attendance/index.html"><i class="fas fa-user-check"></i> Student View</a></li>
-    <li><button id="logoutBtn" class="btn ghost"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
-  </ul>
-</nav>
+  <script type="module">
+    // ---- Supabase ----
+    const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+    const SUPABASE_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // ---- Branch Data ----
+    const BRANCHES = {
+      CSE: {
+        subjects: [
+          { code: "CS13111", name: "Data Structure and Algorithms" },
+          { code: "CS13112", name: "Computer Networks" },
+          { code: "CS13113", name: "Digital Logic Design" },
+          { code: "CS13114", name: "Object Oriented System Design" },
+          { code: "CS13115", name: "Computational Mathematics" },
+          { code: "CS13116", name: "Foundation of Machine Learning" },
+          { code: "CS13211", name: "DSA Laboratory" },
+          { code: "CS13212", name: "Computer Networks Laboratory" },
+          { code: "CS13213", name: "Digital Logic Design Laboratory" },
+          { code: "CS13214", name: "System Design Lab using Python" }
+        ],
+        rollRange: [1, 64],
+        exclude: [],
+        extra: ["b240086", "b240091", "b240158"]
+      },
+      ECE: {
+        subjects: [
+          { code: "EC13101_2", name: "Mathematics III" },
+          { code: "EC13102_2", name: "Analog Electronic Circuits" },
+          { code: "EC13103_2", name: "Signals and Systems" },
+          { code: "EC13104_2", name: "Electromagnetic Theory" },
+          { code: "EC13105_2", name: "Communication Systems" },
+          { code: "EC13201_2", name: "Analog Electronic Circuits Lab" },
+          { code: "EC13202_2", name: "Signals and Systems Lab" },
+          { code: "EC13203_2", name: "Communication Systems Lab" }
+        ],
+        rollRange: [65, 92],
+        exclude: [86, 91],
+        extra: []
+      },
+      EEE: {
+        subjects: [
+          { code: "EE13101_2", name: "Mathematics III" },
+          { code: "EE13102_2", name: "Electrical Machines I" },
+          { code: "EE13103_2", name: "Power Systems I" },
+          { code: "EE13104_2", name: "Control Systems" },
+          { code: "EE13105_2", name: "Electromagnetic Theory" },
+          { code: "EE13201_2", name: "Electrical Machines I Lab" },
+          { code: "EE13202_2", name: "Control Systems Lab" }
+        ],
+        rollRange: [93, 119],
+        exclude: [],
+        extra: []
+      },
+      CE: {
+        subjects: [
+          { code: "CE13112_2", name: "Mathematics III" },
+          { code: "ZZ13201_2", name: "Professional Practice I" },
+          { code: "CE13108_2", name: "Structural Analysis I" },
+          { code: "CE13111_2", name: "Transportation Engineering I" },
+          { code: "CE13206_2", name: "Transportation Engineering Lab" },
+          { code: "CE13110", name: "Surveying And Remote Sensing" },
+          { code: "CE13107", name: "Building Material and Construction" },
+          { code: "CE13205_2", name: "Applied Engineering Geology & Material Testing" },
+          { code: "CE13207_2", name: "Building Drawing" },
+          { code: "CE13207_2", name: "Building Drawing" }
+        ],
+        rollRange: [120, 142],
+        exclude: [138],
+        extra: []
+      },
+      ME: {
+        subjects: [
+          { code: "ME13101_2", name: "Mathematics III" },
+          { code: "ME13102_2", name: "Fluid Mechanics" },
+          { code: "ME13104_2", name: "Thermodynamics" },
+          { code: "ME13105_2", name: "Materials Science and Metallurgy" },
+          { code: "ME13106_2", name: "Metrology and Measurements" },
+          { code: "ME13107_2", name: "Kinematics of Machinery" },
+          { code: "ME13201_2", name: "Fluid Mechanics Lab" },
+          { code: "ME13203_2", name: "Metrology Lab" },
+          { code: "ME13204_2", name: "Machine Drawing" },
+          { code: "ME13205_2", name: "Kinematics Lab" }
+        ],
+        rollRange: [143, 167],
+        exclude: [158],
+        extra: []
+      }
+    };
 
-  <main class="container">
-    <section class="controls">
-      <!-- ✅ Branch Dropdown -->
-      <div class="row">
-        <label><i class="fa-solid fa-code-branch"></i> Branch</label>
-        <select id="branchSelect">
-          <option value="">— Select Branch —</option>
-          <option value="CSE">CSE</option>
-          <option value="ECE">ECE</option>
-          <option value="EEE">EEE</option>
-          <option value="ME">Mechanical</option>
-          <option value="CE">Civil</option>
-        </select>
-      </div>
+    // ---- Elements ----
+    const attDate = document.getElementById("attDate");
+    const subjectsBox = document.getElementById("subjectsBox");
+    const branchSelect = document.getElementById("branchSelect");
+    const buildGridBtn = document.getElementById("buildGridBtn");
+    const clearGridBtn = document.getElementById("clearGridBtn");
+    const gridSection = document.getElementById("gridSection");
+    const attHead = document.getElementById("attHead");
+    const attBody = document.getElementById("attBody");
+    const bulkToolbar = document.getElementById("bulkToolbar");
+    const saveBtn = document.getElementById("saveBtn");
+    const saveStatus = document.getElementById("saveStatus");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-      <div class="row">
-        <label for="attDate"><i class="fa-regular fa-calendar-days"></i> Date</label>
-        <input type="date" id="attDate"/>
-      </div>
+    let currentBranch = null;
 
-      <div class="row">
-        <label><i class="fa-solid fa-book"></i> Subjects with class on this date</label>
-        <div id="subjectsBox" class="subjects-box"><!-- checkboxes rendered here --></div>
-      </div>
+    // Default date to today
+    attDate.valueAsDate = new Date();
 
-      <div class="row actions">
-        <button id="buildGridBtn" class="btn primary"><i class="fa-solid fa-table-list"></i> Build Grid</button>
-        <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
-      </div>
-    </section>
+    // Render subjects when branch changes
+    branchSelect.addEventListener("change", () => {
+      currentBranch = branchSelect.value;
+      if (!currentBranch) {
+        subjectsBox.innerHTML = "";
+        return;
+      }
+      const branch = BRANCHES[currentBranch];
+      subjectsBox.innerHTML = branch.subjects
+        .map(
+          (s) => `
+    <div class="subject-check">
+      <label>
+        <input type="checkbox" value="${s.code}" data-name="${s.name}"/>
+        <span>${s.code} — ${s.name}</span>
+      </label>
+      <div class="total-classes-row">
+        <label>Total classes today:</label>
+        <input type="number" class="total-classes-input" value="1" min="1" data-code="${s.code}">
+      </div>
+    </div>
+  `
+        )
+        .join("");
+    });
 
-    <section id="gridSection" class="grid-section" style="display:none;">
-      <div class="grid-toolbar" id="bulkToolbar"><!-- per-subject bulk controls --></div>
-      <div class="grid-wrap">
-        <table id="attTable" class="att-table">
-          <thead id="attHead"></thead>
-          <tbody id="attBody"></tbody>
-        </table>
-      </div>
+    // Generate roll numbers and placeholder names
+    function getStudents(branchKey) {
+      const b = BRANCHES[branchKey];
+      if (!b) return [];
+      const students = [];
+      for (let i = b.rollRange[0]; i <= b.rollRange[1]; i++) {
+        if (!b.exclude.includes(i)) {
+          students.push({
+            roll: "b240" + String(i).padStart(3, "0"),
+            name: `Student ${String(i).padStart(3, "0")}`
+          });
+        }
+      }
+      return [...students, ...b.extra.map(roll => ({ roll, name: `Student ${roll.slice(-3)}` }))].sort((a, b) => a.roll.localeCompare(b.roll));
+    }
 
-      <div class="save-bar">
-        <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
-        <span id="saveStatus" class="status"></span>
-      </div>
-    </section>
-  </main>
+    function selectedSubjectData() {
+      const subjects = [];
+      subjectsBox.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
+        const code = checkbox.value;
+        const name = checkbox.dataset.name;
+        const totalClassesInput = subjectsBox.querySelector(`.total-classes-input[data-code="${code}"]`);
+        const totalClasses = totalClassesInput ? parseInt(totalClassesInput.value, 10) : 1;
+        subjects.push({ code, name, totalClasses });
+      });
+      return subjects;
+    }
 
-  <footer class="footer">
-    <p>© 2025 Stellar Mind | Admin</p>
-  </footer>
+    // Build Grid
+    async function buildGrid() {
+      const when = attDate.value;
+      if (!currentBranch) {
+        alert("Pick a branch first.");
+        return;
+      }
+      const activeSubjects = selectedSubjectData();
+      if (!when || activeSubjects.length === 0) {
+        alert("Pick a date and select at least one subject.");
+        return;
+      }
+
+      const currentStudents = getStudents(currentBranch);
+
+      attHead.innerHTML = `
+    <tr>
+      <th>Roll No.</th>
+      <th>Name</th>
+      ${activeSubjects.map((s) => `<th data-code="${s.code}">${s.code}<br><small>(Total: ${s.totalClasses})</small></th>`).join("")}
+    </tr>
+  `;
+
+      // Fetch existing data to pre-fill the grid
+      const { data: existingData, error } = await supabaseClient
+        .from('attendance')
+        .select('username, subject_code, status')
+        .eq('date', when)
+        .eq('branch', currentBranch)
+        .in('subject_code', activeSubjects.map(s => s.code));
+
+      if (error) console.error("Error fetching existing data:", error);
+
+      attBody.innerHTML = currentStudents
+        .map(
+          (student) => `
+    <tr data-roll="${student.roll}" data-name="${student.name}">
+      <td class="roll">${student.roll}</td>
+      <td>${student.name}</td>
+      ${activeSubjects
+              .map(
+                (subject) => {
+                  const record = existingData?.find(r => r.username === student.roll && r.subject_code === subject.code);
+                  const status = record ? record.status : subject.totalClasses; // Default to present
+                  return `
+        <td data-code="${subject.code}">
+          <input type="number" class="status-input" value="${status}" min="0" max="${subject.totalClasses}">
+        </td>
+      `
+                }
+              )
+              .join("")}
+    </tr>
+  `
+        )
+        .join("");
+
+      bulkToolbar.innerHTML = activeSubjects
+        .map(
+          (s) => `
+    <div class="bulk">
+      <span class="chip">${s.code}</span>
+      <button class="btn xs" data-bulk-absent="${s.code}">Mark All Absent (0)</button>
+    </div>
+  `
+        )
+        .join("");
+
+      bulkToolbar.querySelectorAll("button[data-bulk-absent]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const code = btn.dataset.bulkAbsent;
+          attBody
+            .querySelectorAll(`td[data-code="${code}"] .status-input`)
+            .forEach((s) => {
+              s.value = "0";
+            });
+        });
+      });
+
+      gridSection.style.display = "block";
+      saveStatus.textContent = "";
+    }
+
+    buildGridBtn.addEventListener("click", buildGrid);
+    clearGridBtn.addEventListener("click", () => {
+      subjectsBox.querySelectorAll('input[type="checkbox"]').forEach(
+        (c) => (c.checked = false)
+      );
+      gridSection.style.display = "none";
+      attHead.innerHTML = "";
+      attBody.innerHTML = "";
+      bulkToolbar.innerHTML = "";
+    });
+
+    // Save Attendance
+    saveBtn.addEventListener("click", async () => {
+      const when = attDate.value;
+      const activeSubjects = selectedSubjectData();
+      const allRollsInGrid = [...attBody.querySelectorAll("tr")].map(
+        (tr) => tr.dataset.roll
+      );
+
+      if (!when || activeSubjects.length === 0 || !currentBranch || allRollsInGrid.length === 0) {
+        alert("Please build the grid first.");
+        return;
+      }
+
+      const rowsToUpsert = [];
+      attBody.querySelectorAll("tr").forEach((tr) => {
+        const roll = tr.dataset.roll;
+        const name = tr.dataset.name;
+        tr.querySelectorAll("td[data-code]").forEach((td) => {
+          const code = td.dataset.code;
+          const status = parseInt(td.querySelector(".status-input").value, 10);
+          const subjectData = activeSubjects.find(s => s.code === code);
+          if (subjectData) {
+            rowsToUpsert.push({
+              username: roll,
+              student_name: name,
+              branch: currentBranch,
+              date: when,
+              subject: subjectData.name,
+              subject_code: subjectData.code,
+              subject_name: subjectData.name,
+              status: status,
+              total_classes: subjectData.totalClasses,
+            });
+          }
+        });
+      });
+
+      saveBtn.disabled = true;
+      saveStatus.textContent = "Saving…";
+
+      try {
+        const { error: upsertErr } = await supabaseClient
+          .from("attendance")
+          .upsert(rowsToUpsert, { onConflict: ['username', 'date', 'subject_code'] });
+        if (upsertErr) throw upsertErr;
+
+        saveStatus.textContent = `✅ Saved attendance for ${rowsToUpsert.length} entries.`;
+      } catch (e) {
+        console.error(e);
+        saveStatus.textContent = "❌ Error while saving. Check console.";
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    // ---- Logout ----
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await supabaseClient.auth.signOut();
+        window.location.href = "../index.html";
+      } catch (err) {
+        console.error("Logout error:", err);
+        alert("Error logging out. Please try again.");
+      }
+    });
+    // ---- Mobile Menu Toggle ----
+    document.addEventListener("DOMContentLoaded", () => {
+      const toggleBtn = document.querySelector(".menu-toggle");
+      const navLinks = document.querySelector(".nav-links");
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          navLinks.classList.toggle("active");
+        });
+      }
+    });
+  </script>
 </body>
+
 </html>

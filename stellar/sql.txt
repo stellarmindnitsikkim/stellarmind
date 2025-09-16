@@ -1,0 +1,37 @@
+-- Drop old table if exists
+DROP TABLE IF EXISTS attendance;
+
+-- Create attendance table
+CREATE TABLE attendance (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    username TEXT NOT NULL,              -- student roll no (e.g., b240001)
+    student_name TEXT NOT NULL,          -- student full name
+    branch TEXT NOT NULL,                -- branch like CSE
+    date DATE NOT NULL,                  -- date of attendance
+    status INT NOT NULL DEFAULT 0,       -- number of classes attended that day (0,1,2,3...)
+    total_classes INT NOT NULL DEFAULT 1,-- total classes conducted that day (default 1)
+    subject TEXT NOT NULL,               -- subject code (short form)
+    subject_code TEXT NOT NULL,          -- subject unique identifier
+    subject_name TEXT NOT NULL,          -- subject full name
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- ✅ Ensure one record per student per subject per day
+CREATE UNIQUE INDEX unique_attendance_record 
+ON attendance (username, date, subject_code);
+
+-- ✅ Trigger function to auto-update `updated_at` column
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = NOW();
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- ✅ Trigger on attendance table
+CREATE TRIGGER update_attendance_updated_at
+BEFORE UPDATE ON attendance
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
