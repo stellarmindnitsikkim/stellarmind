@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Credentials - Stellar Mind</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* CSS uses the same theme as teacher.html for consistency */
+        :root { --primary-bg: #f0f4f8; --secondary-bg: #ffffff; --text-color: #1c2b3a; --subtle-text: #6b7a8c; --accent-start: #4299e1; --accent-end: #0087c5; --error-color: #e53e3e; --success-color: #38a169; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: var(--primary-bg); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        .form-container { background: var(--secondary-bg); padding: 2.5rem 3rem; border-radius: 1.5rem; box-shadow: 0 8px 30px rgba(0,0,0,0.15); width: 100%; max-width: 32rem; text-align: center; }
+        .form-header h1 { font-size: 2rem; margin-bottom: 0.5rem; } .form-header p { color: var(--subtle-text); } .form-header p strong { color: var(--text-color); }
+        .form-group { margin: 1rem 0; text-align: left; } .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input { width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; border: 1px solid #ccc; font-size: 1rem; }
+        .otp-input-group { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.5rem; }
+        .otp-input { width: 100%; height: 3.5rem; font-size: 1.75rem; text-align: center; border-radius: 0.5rem; border: 1px solid #ccc; }
+        .btn { background: linear-gradient(90deg, var(--accent-start), var(--accent-end)); color: #fff; padding: 0.75rem 1.5rem; border-radius: 2rem; border: none; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 1.5rem; }
+        .btn:disabled { background: var(--subtle-text); cursor: not-allowed; }
+        .message { padding: 0.75rem; margin-top: 1.5rem; border-radius: 0.5rem; color: white; }
+        .message.error { background-color: var(--error-color); } .message.success { background-color: var(--success-color); }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>Final Step: Secure Your Account</h1>
+            <p>Enter the code sent to <strong id="user-email"></strong> and create your credentials.</p>
+        </div>
+        <form id="credentials-form">
+            <div class="form-group">
+                <label>Verification Code</label>
+                <div class="otp-input-group">
+                    <input type="text" class="otp-input" maxlength="1" required> <input type="text" class="otp-input" maxlength="1" required> <input type="text" class="otp-input" maxlength="1" required>
+                    <input type="text" class="otp-input" maxlength="1" required> <input type="text" class="otp-input" maxlength="1" required> <input type="text" class="otp-input" maxlength="1" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Create Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Create New Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" required>
+            </div>
+            <button type="submit" class="btn" id="submit-btn">Complete Setup</button>
+        </form>
+        <div id="message-container"></div>
+    </div>
+
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+        const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const form = document.getElementById("credentials-form");
+        const messageContainer = document.getElementById("message-container");
+        const submitBtn = document.getElementById("submit-btn");
+        const emailDisplay = document.getElementById('user-email');
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const email = sessionStorage.getItem('verificationEmail');
+        
+        if (!email) {
+            alert("Session expired. Please start over.");
+            window.location.href = 'teacher.html';
+        }
+        emailDisplay.textContent = email;
+        
+        // Auto-focus logic for OTP inputs
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < otpInputs.length - 1) otpInputs[index + 1].focus();
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value.length === 0 && index > 0) otpInputs[index - 1].focus();
+            });
+        });
+
+        const showMessage = (text, type) => {
+            messageContainer.innerHTML = `<div class="message ${type}">${text}</div>`;
+        };
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Processing...";
+            
+            const code = Array.from(otpInputs).map(i => i.value).join('');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // --- Client-side validation ---
+            if (password !== confirmPassword) {
+                showMessage("Passwords do not match.", "error");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Complete Setup";
+                return;
+            }
+            if (password.length < 8) {
+                showMessage("Password must be at least 8 characters long.", "error");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Complete Setup";
+                return;
+            }
+            console.log("Data being sent to Edge Function:", { email, code, username, password });
+
+            try {
+                // Call the Edge Function with all the required data
+                const { data, error } = await supabase.functions.invoke('set-teacher-credentials', {
+                    body: {
+                        email: email,
+                        code: code,
+                        username: username,
+                        password: password
+                    },
+                });
+
+                if (error) throw error; // Handle network/function errors
+                if (data.error) throw new Error(data.error); // Handle errors from within the function
+
+                showMessage("✅ Account setup complete! You can now log in.", "success");
+                sessionStorage.removeItem('verificationEmail'); // Clean up session
+                
+                setTimeout(() => {
+                    window.location.href = '../login/index.html'; // Redirect to login page
+                }, 2500);
+
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred.";
+                showMessage(`🔥 ${errorMessage}`, "error");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Complete Setup";
+            }
+        });
+    </script>
+</body>
+</html>
