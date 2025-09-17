@@ -495,8 +495,8 @@
                         <tr>
                             <th>Roll Number</th>
                             <th>Student Name</th>
-                            <th>Marks</th>
                             <th>Max Marks</th>
+                            <th>Marks</th>
                         </tr>
                     </thead>
                     <tbody id="marksBody"></tbody>
@@ -612,36 +612,66 @@
 
             const year = yearSelect.value;
             const exam = examSelect.value;
-            const students = Array.from({ length: 64 }, (_, i) => {
-                const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
-                return { roll, name: `Student ${roll}` };
-            });
 
-            // Fetch existing marks
-            const { data: existingMarks, error } = await supabase
-                .from('cse_marks')
-                .select('*')
-                .eq('subject_code', currentUser.subject_code)
-                .eq('exam_type', formatExamType(exam));
+            try {
+                // Fetch student data from the 'users' table
+                const { data: usersData, error: usersError } = await supabase
+                    .from('users')
+                    .select('username, studentname');
 
-            if (error) console.error(error);
+                if (usersError) throw usersError;
 
-            const defaultMax = getDefaultMaxMarks(exam);
+                const studentsMap = new Map(usersData.map(user => [user.username.toLowerCase(), user.studentname]));
 
-            marksBody.innerHTML = students.map(student => {
-                const record = existingMarks?.find(m => m.username.toLowerCase() === student.roll);
-                const marksValue = record ? record.marks : '';
-                const maxMarksValue = record ? record.max_marks : defaultMax;
-                const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
-                return `<tr data-roll="${student.roll}" data-name="${student.name}">
-            <td>${student.roll}</td>
-            <td>${student.name}</td>
-            <td><input type="number" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
-            <td><input type="number" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
-        </tr>`;
-            }).join('');
+                // Create student list based on a fixed number of rolls, but use names from the fetched data
+                const students = Array.from({ length: 64 }, (_, i) => {
+                    const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
+                    return { roll, student_name: studentsMap.get(roll.toLowerCase()) || `Student ${roll}` };
+                });
 
-            saveStatus.textContent = 'Grid ready.';
+                // Fetch existing marks
+                const { data: existingMarks, error } = await supabase
+                    .from('cse_marks')
+                    .select('*')
+                    .eq('subject_code', currentUser.subject_code)
+                    .eq('exam_type', formatExamType(exam));
+
+                if (error) throw error;
+
+                const defaultMax = getDefaultMaxMarks(exam);
+
+                marksBody.innerHTML = students.map(student => {
+                    const record = existingMarks?.find(m => m.username.toLowerCase() === student.roll.toLowerCase());
+                    const marksValue = record ? record.marks : '';
+                    const maxMarksValue = record ? record.max_marks : defaultMax;
+                    const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
+                    return `<tr data-roll="${student.roll}" data-name="${student.student_name}">
+                        <td>${student.roll}</td>
+                        <td>${student.student_name}</td>
+                        <td><input type="number" step="0.5" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
+                        <td><input type="number" step="0.5" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
+                    </tr>`;
+                }).join('');
+
+                // Add event listeners for "Enter" key to move to the next input field
+                const marksInputs = marksBody.querySelectorAll('.marks-input');
+                marksInputs.forEach((input, index) => {
+                    input.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            const nextInput = marksInputs[index + 1];
+                            if (nextInput) {
+                                nextInput.focus();
+                            }
+                        }
+                    });
+                });
+
+                saveStatus.textContent = 'Grid ready.';
+            } catch (error) {
+                console.error('Error building grid:', error);
+                saveStatus.textContent = `⚠️ Error: ${error.message}`;
+            }
         });
 
         // Save marks
@@ -658,8 +688,8 @@
                 exam_type: formatExamType(exam),
                 subject_code: currentUser.subject_code,
                 subject_name: currentUser.subject_name,
-                marks: parseInt(row.querySelector('.marks-input').value) || 0,
-                max_marks: parseInt(row.querySelector('.max-input').value) || getDefaultMaxMarks(exam)
+                marks: parseFloat(row.querySelector('.marks-input').value) || 0,
+                max_marks: parseFloat(row.querySelector('.max-input').value) || getDefaultMaxMarks(exam)
             }));
 
             try {
@@ -680,25 +710,25 @@
         function createCustomAlert(message) {
             const modal = document.createElement('div');
             modal.style.cssText = `
-        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
-        box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
-        text-align: center; max-width: 80%;
-    `;
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
+                box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
+                text-align: center; max-width: 80%;
+            `;
 
             const messageText = document.createElement('p');
             messageText.textContent = message;
             messageText.style.cssText = `
-        font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
-    `;
+                font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
+            `;
 
             const closeBtn = document.createElement('button');
             closeBtn.textContent = 'OK';
             closeBtn.style.cssText = `
-        background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-        color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
-        cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
-    `;
+                background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+                color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
+                cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
+            `;
 
             closeBtn.onclick = () => modal.remove();
 
