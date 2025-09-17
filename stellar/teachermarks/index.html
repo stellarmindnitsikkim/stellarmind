@@ -2,10 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teacher Portal — Marks Setter</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* New light theme variables */
         :root {
@@ -51,13 +54,8 @@
         }
 
         @keyframes pulseBackground {
-            from {
-                transform: scale(1);
-            }
-
-            to {
-                transform: scale(1.1);
-            }
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
 
         /* Navbar */
@@ -66,92 +64,56 @@
             justify-content: space-between;
             align-items: center;
             background: var(--secondary-bg);
-            padding: 1rem 2rem;
+            padding: 0.75rem 2rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
-            transition: background var(--transition-speed), box-shadow var(--transition-speed);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
-
         .logo {
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: bold;
             color: var(--text-color);
         }
-
         .logo img {
-            width: 3rem;
-            height: 3rem;
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
-            box-shadow: 0 0 1rem rgba(66, 153, 225, 0.5);
-            transition: box-shadow var(--transition-speed);
         }
-
         .animated-logo {
             animation: glowPulse 2s infinite alternate;
         }
-
         @keyframes glowPulse {
-            from {
-                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
-            }
-
-            to {
-                box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
-            }
+            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
+            to { box-shadow: 0 0 1.5rem rgba(0, 135, 197, 1); }
         }
-
         /* Nav links */
         .nav-links {
             list-style: none;
             display: flex;
             gap: 1.5rem;
+            align-items: center;
         }
-
         .nav-links li {
             position: relative;
             opacity: 0;
             transform: translateY(-1rem);
             animation: fadeInUp 0.8s forwards;
         }
-
-        .nav-links li:nth-child(1) {
-            animation-delay: 0.2s;
-        }
-
-        .nav-links li:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-
-        .nav-links li:nth-child(3) {
-            animation-delay: 0.6s;
-        }
-
-        .nav-links li:nth-child(4) {
-            animation-delay: 0.8s;
-        }
-
-        .nav-links li:nth-child(5) {
-            animation-delay: 1s;
-        }
-
-        .nav-links li:nth-child(6) {
-            animation-delay: 1.2s;
-        }
-
+        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
+        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        .nav-links a {
+        .nav-links a, .nav-links button {
             color: var(--text-color);
             text-decoration: none;
             font-size: 1rem;
@@ -161,8 +123,11 @@
             gap: 0.4rem;
             position: relative;
             transition: color var(--transition-speed);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
         }
-
         .nav-links a::after {
             content: "";
             position: absolute;
@@ -174,15 +139,12 @@
             transition: width var(--transition-speed);
             border-radius: 0.1rem;
         }
-
         .nav-links a:hover::after {
             width: 100%;
         }
-
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links button:hover {
             color: var(--accent-end);
         }
-
         /* Mobile Menu */
         .menu-toggle {
             display: none;
@@ -190,11 +152,9 @@
             color: var(--text-color);
             cursor: pointer;
         }
-
         .nav-links.active {
             display: flex;
         }
-
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -207,35 +167,20 @@
                 padding: 1.5rem;
                 border-radius: 1rem;
                 box-shadow: 0 4px 20px var(--shadow-light);
-                animation: slideInRight 0.5s forwards;
             }
-
             .menu-toggle {
                 display: block;
             }
         }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
+        
         /* Main content styling */
         .container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 2rem;
-            background: var(--card-bg);
-            border-radius: 1rem;
-            box-shadow: 0 0 2rem var(--shadow-light);
-            transition: background var(--transition-speed);
+            background: var(--secondary-bg);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px var(--shadow-light);
         }
 
         .teacher-header {
@@ -244,7 +189,7 @@
         }
 
         .teacher-header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -272,23 +217,26 @@
             display: block;
             margin-bottom: 0.5rem;
             color: var(--subtle-text);
+            font-weight: 600;
         }
 
         .controls select,
         .controls input {
             width: 100%;
             padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--subtle-text);
-            background: var(--secondary-bg);
+            border-radius: 0.75rem;
+            border: 1px solid #ddd;
+            background: var(--primary-bg);
             color: var(--text-color);
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 1rem;
         }
 
         .controls select:focus,
         .controls input:focus {
             outline: none;
             border-color: var(--accent-end);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
         }
 
         .btn {
@@ -305,60 +253,41 @@
             color: #fff;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
         }
-
         .btn.primary:hover {
             transform: translateY(-0.25rem);
             box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
-
+        
         .btn.success {
-            background: #31c48d;
-            color: #0b0b12;
+            background: #27ae60;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
-
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
-        .grid-section {
-            display: none;
-            animation: fadeIn 1s forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
+        .grid-section { display: none; }
         .grid-wrap {
             overflow-x: auto;
             margin-bottom: 20px;
             border-radius: 1rem;
-            box-shadow: 0 0 1.25rem var(--shadow-light);
+            border: 1px solid #e0e0e0;
         }
 
         table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+            border-collapse: collapse;
             background: var(--secondary-bg);
-            border-radius: 1rem;
-            overflow: hidden;
         }
-
-        th,
-        td {
+        th, td {
             padding: 1rem;
             border-bottom: 1px solid var(--card-bg);
             text-align: center;
         }
-
         th {
             background: var(--card-bg);
             color: var(--accent-end);
@@ -366,41 +295,27 @@
             position: sticky;
             top: 0;
         }
-
-        th:first-child {
-            border-top-left-radius: 1rem;
-        }
-
-        th:last-child {
-            border-top-right-radius: 1rem;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
         td input {
-            width: 60px;
+            width: 80px;
             text-align: center;
-            background: var(--card-bg);
+            background: var(--primary-bg);
             color: var(--text-color);
-            border: 1px solid var(--subtle-text);
-            border-radius: 6px;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
             padding: 0.5rem;
+            font-size: 1rem;
         }
-
         td input.readonly {
             background: #e0e6ed;
             cursor: not-allowed;
         }
-
         .save-status {
             font-weight: bold;
             margin-left: 1rem;
             transition: color 0.3s;
         }
 
-        /* Footer styling */
+        /* Footer */
         .footer {
             background: var(--secondary-bg);
             color: var(--subtle-text);
@@ -408,41 +323,6 @@
             padding: 2rem 1rem;
             margin-top: 3rem;
             border-top: 1px solid rgba(0, 0, 0, 0.05);
-            transition: background var(--transition-speed);
-        }
-
-        .footer-content p {
-            margin: 0.3rem 0;
-        }
-
-        .footer-content a {
-            color: var(--subtle-text);
-            text-decoration: none;
-            transition: color var(--transition-speed);
-        }
-
-        .footer-content a:hover {
-            color: var(--accent-end);
-        }
-
-        /* Social Icons */
-        .social-icons {
-            margin-top: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 1.25rem;
-        }
-
-        .social-icons a {
-            font-size: 1.5rem;
-            color: var(--subtle-text);
-            transition: all var(--transition-speed) ease-in-out;
-        }
-
-        .social-icons a:hover {
-            color: var(--accent-end);
-            transform: scale(1.2) translateY(-0.25rem);
-            text-shadow: 0 0 1rem rgba(0, 135, 197, 0.7);
         }
     </style>
 </head>
@@ -451,10 +331,18 @@
     <nav class="navbar">
         <div class="logo">
             <img src="https://placehold.co/128x128/eaf1f7/0087c5?text=SM" alt="Stellar Mind Logo" class="animated-logo">
-            <span>Stellar Mind</span>
+            <span>Teacher Portal</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/teachermarks/index.html"><i class="fas fa-clipboard"></i> Marks</a></li>
+            <li><a href="/teacher/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <li>
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </li>
         </ul>
     </nav>
 
@@ -484,11 +372,12 @@
                 </select>
             </div>
             <div>
+                 <label>&nbsp;</label> <!-- Spacer for alignment -->
                 <button id="buildGridBtn" class="btn primary" disabled>Build Grid</button>
             </div>
         </section>
 
-        <section class="grid-section" style="display:none;">
+        <section class="grid-section">
             <div class="grid-wrap">
                 <table id="marksTable">
                     <thead>
@@ -502,21 +391,13 @@
                     <tbody id="marksBody"></tbody>
                 </table>
             </div>
-            <button id="saveBtn" class="btn primary">Save Marks</button>
+            <button id="saveBtn" class="btn success">Save Marks</button>
             <span id="saveStatus" class="save-status"></span>
         </section>
     </main>
 
     <footer class="footer">
-        <div class="footer-content">
-            <p>© 2025 Stellar Mind | NIT Sikkim</p>
-            <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
-            <div class="social-icons">
-                <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
-            </div>
-        </div>
+         <p>© 2025 Stellar Mind | NIT Sikkim</p>
     </footer>
 
     <script type="module">
@@ -536,26 +417,24 @@
         const saveBtn = document.getElementById('saveBtn');
         const saveStatus = document.getElementById('saveStatus');
         const logoutBtn = document.getElementById('logoutBtn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
 
         let currentUser = null;
 
-        // Function to redirect to the login page
         function redirectToLogin() {
             localStorage.removeItem('user');
             window.location.href = '../login/index.html';
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Check for user in local storage
             const userData = localStorage.getItem('user');
             if (!userData) {
-                createCustomAlert('Access Denied. Please log in.');
                 return redirectToLogin();
             }
 
             const tempUser = JSON.parse(userData);
 
-            // Fetch full teacher profile from Supabase
             const { data, error } = await supabase
                 .from('teacherportal')
                 .select('id, teacher_name, subject_code, subject_name, password')
@@ -564,30 +443,30 @@
 
             if (error || !data) {
                 console.error('Error fetching teacher data:', error);
-                createCustomAlert('Teacher data not found. Please log in again.');
                 return redirectToLogin();
             }
 
             currentUser = data;
 
-            // Check if the user is a teacher
             if (currentUser.subject_code === null) {
-                createCustomAlert('Access Denied. Only teachers can access this portal.');
+                alert('Access Denied. Only teachers with assigned subjects can access this portal.');
                 return redirectToLogin();
             }
 
             teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
             subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
+            
+            mobileMenu.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
         });
 
         logoutBtn.addEventListener('click', redirectToLogin);
 
-        // Enable Build button when inputs selected
         [yearSelect, examSelect].forEach(el => el.addEventListener('change', () => {
             buildGridBtn.disabled = !(yearSelect.value && examSelect.value);
         }));
 
-        // Map exam type to database format
         function formatExamType(exam) {
             switch (exam) {
                 case 'Mid 1': return 'mid1';
@@ -597,14 +476,12 @@
             }
         }
 
-        // Set default max marks based on exam
         function getDefaultMaxMarks(exam) {
             if (exam === 'Mid 1' || exam === 'Mid 2') return 15;
             if (exam === 'End Term') return 50;
             return 100;
         }
 
-        // Build grid
         buildGridBtn.addEventListener('click', async () => {
             marksBody.innerHTML = '';
             gridSection.style.display = 'block';
@@ -614,7 +491,6 @@
             const exam = examSelect.value;
 
             try {
-                // Fetch student data from the 'users' table
                 const { data: usersData, error: usersError } = await supabase
                     .from('users')
                     .select('username, studentname');
@@ -623,13 +499,11 @@
 
                 const studentsMap = new Map(usersData.map(user => [user.username.toLowerCase(), user.studentname]));
 
-                // Create student list based on a fixed number of rolls, but use names from the fetched data
                 const students = Array.from({ length: 64 }, (_, i) => {
                     const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
                     return { roll, student_name: studentsMap.get(roll.toLowerCase()) || `Student ${roll}` };
                 });
 
-                // Fetch existing marks
                 const { data: existingMarks, error } = await supabase
                     .from('cse_marks')
                     .select('*')
@@ -646,14 +520,13 @@
                     const maxMarksValue = record ? record.max_marks : defaultMax;
                     const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
                     return `<tr data-roll="${student.roll}" data-name="${student.student_name}">
-                        <td>${student.roll}</td>
-                        <td>${student.student_name}</td>
-                        <td><input type="number" step="0.5" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
-                        <td><input type="number" step="0.5" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
-                    </tr>`;
+                                <td>${student.roll.toUpperCase()}</td>
+                                <td>${student.student_name}</td>
+                                <td><input type="number" step="0.5" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
+                                <td><input type="number" step="0.5" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
+                            </tr>`;
                 }).join('');
 
-                // Add event listeners for "Enter" key to move to the next input field
                 const marksInputs = marksBody.querySelectorAll('.marks-input');
                 marksInputs.forEach((input, index) => {
                     input.addEventListener('keydown', (event) => {
@@ -674,7 +547,6 @@
             }
         });
 
-        // Save marks
         saveBtn.addEventListener('click', async () => {
             const rows = marksBody.querySelectorAll('tr');
             if (rows.length === 0) return;
@@ -705,37 +577,6 @@
                 saveStatus.textContent = `⚠️ Error: ${err.message}`;
             }
         });
-
-        // Custom alert function to replace window.alert
-        function createCustomAlert(message) {
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
-                box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
-                text-align: center; max-width: 80%;
-            `;
-
-            const messageText = document.createElement('p');
-            messageText.textContent = message;
-            messageText.style.cssText = `
-                font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
-            `;
-
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = 'OK';
-            closeBtn.style.cssText = `
-                background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-                color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
-                cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
-            `;
-
-            closeBtn.onclick = () => modal.remove();
-
-            modal.appendChild(messageText);
-            modal.appendChild(closeBtn);
-            document.body.appendChild(modal);
-        }
     </script>
 </body>
 
