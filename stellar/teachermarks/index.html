@@ -54,8 +54,13 @@
         }
 
         @keyframes pulseBackground {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
         }
 
         /* Navbar */
@@ -70,6 +75,7 @@
             top: 0;
             z-index: 1000;
         }
+
         .logo {
             display: flex;
             align-items: center;
@@ -78,18 +84,27 @@
             font-weight: bold;
             color: var(--text-color);
         }
+
         .logo img {
             width: 2.5rem;
             height: 2.5rem;
             border-radius: 50%;
         }
+
         .animated-logo {
             animation: glowPulse 2s infinite alternate;
         }
+
         @keyframes glowPulse {
-            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
-            to { box-shadow: 0 0 1.5rem rgba(0, 135, 197, 1); }
+            from {
+                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+            }
+
+            to {
+                box-shadow: 0 0 1.5rem rgba(0, 135, 197, 1);
+            }
         }
+
         /* Nav links */
         .nav-links {
             list-style: none;
@@ -97,23 +112,39 @@
             gap: 1.5rem;
             align-items: center;
         }
+
         .nav-links li {
             position: relative;
             opacity: 0;
             transform: translateY(-1rem);
             animation: fadeInUp 0.8s forwards;
         }
-        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
-        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
-        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
-        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
+
+        .nav-links li:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-links li:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-links li:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .nav-links li:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        .nav-links a, .nav-links button {
+
+        .nav-links a,
+        .nav-links button {
             color: var(--text-color);
             text-decoration: none;
             font-size: 1rem;
@@ -128,6 +159,7 @@
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
         }
+
         .nav-links a::after {
             content: "";
             position: absolute;
@@ -139,12 +171,16 @@
             transition: width var(--transition-speed);
             border-radius: 0.1rem;
         }
+
         .nav-links a:hover::after {
             width: 100%;
         }
-        .nav-links a:hover, .nav-links button:hover {
+
+        .nav-links a:hover,
+        .nav-links button:hover {
             color: var(--accent-end);
         }
+
         /* Mobile Menu */
         .menu-toggle {
             display: none;
@@ -152,9 +188,11 @@
             color: var(--text-color);
             cursor: pointer;
         }
+
         .nav-links.active {
             display: flex;
         }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -168,11 +206,12 @@
                 border-radius: 1rem;
                 box-shadow: 0 4px 20px var(--shadow-light);
             }
+
             .menu-toggle {
                 display: block;
             }
         }
-        
+
         /* Main content styling */
         .container {
             max-width: 1200px;
@@ -253,16 +292,18 @@
             color: #fff;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
         }
+
         .btn.primary:hover {
             transform: translateY(-0.25rem);
             box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
-        
+
         .btn.success {
             background: #27ae60;
             color: #fff;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
+
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -270,7 +311,10 @@
             box-shadow: none;
         }
 
-        .grid-section { display: none; }
+        .grid-section {
+            display: none;
+        }
+
         .grid-wrap {
             overflow-x: auto;
             margin-bottom: 20px;
@@ -283,11 +327,14 @@
             border-collapse: collapse;
             background: var(--secondary-bg);
         }
-        th, td {
+
+        th,
+        td {
             padding: 1rem;
             border-bottom: 1px solid var(--card-bg);
             text-align: center;
         }
+
         th {
             background: var(--card-bg);
             color: var(--accent-end);
@@ -295,6 +342,7 @@
             position: sticky;
             top: 0;
         }
+
         td input {
             width: 80px;
             text-align: center;
@@ -305,10 +353,12 @@
             padding: 0.5rem;
             font-size: 1rem;
         }
+
         td input.readonly {
             background: #e0e6ed;
             cursor: not-allowed;
         }
+
         .save-status {
             font-weight: bold;
             margin-left: 1rem;
@@ -372,7 +422,7 @@
                 </select>
             </div>
             <div>
-                 <label>&nbsp;</label> <!-- Spacer for alignment -->
+                <label>&nbsp;</label> <!-- Spacer for alignment -->
                 <button id="buildGridBtn" class="btn primary" disabled>Build Grid</button>
             </div>
         </section>
@@ -397,7 +447,7 @@
     </main>
 
     <footer class="footer">
-         <p>© 2025 Stellar Mind | NIT Sikkim</p>
+        <p>© 2025 Stellar Mind | NIT Sikkim</p>
     </footer>
 
     <script type="module">
@@ -455,7 +505,7 @@
 
             teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
             subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
-            
+
             mobileMenu.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
             });

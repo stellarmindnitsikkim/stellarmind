@@ -37,6 +37,31 @@
       color: var(--text-color);
       transition: background var(--transition-speed);
       position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background animation from index.html */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 10%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(0, 135, 197, 0.1) 0%, transparent 50%);
+      animation: pulseBackground 10s infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes pulseBackground {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.1);
+      }
     }
 
     /* Navbar */
@@ -51,6 +76,14 @@
       top: 0;
       z-index: 1000;
       border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: background var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    /* Navbar scrolled effect */
+    .navbar.scrolled {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 25px var(--shadow-heavy);
     }
 
     .logo {
@@ -88,6 +121,40 @@
       display: flex;
       align-items: center;
       gap: 1.5rem;
+    }
+
+    /* Add the fade-in animation for desktop links */
+    .nav-links li {
+      opacity: 0;
+      transform: translateY(-1rem);
+      animation: fadeInUp 0.8s forwards;
+    }
+
+    .nav-links li:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .nav-links li:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .nav-links li:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .nav-links li:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+
+    .nav-links li:nth-child(5) {
+      animation-delay: 1s;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .nav-links a {
@@ -130,12 +197,22 @@
       font-size: 1.5rem;
       color: var(--text-color);
       cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .menu-toggle:hover {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
     }
 
     @media (max-width: 768px) {
       .nav-links {
         display: none;
         flex-direction: column;
+        align-items: flex-start;
         background: var(--secondary-bg);
         position: absolute;
         top: 4.5rem;
@@ -146,12 +223,27 @@
         box-shadow: 0 4px 20px var(--shadow-light);
       }
 
+      /* Add the smooth slide-in animation from index.html */
       .nav-links.active {
         display: flex;
+        animation: slideInRight 0.5s forwards;
       }
 
       .menu-toggle {
         display: block;
+      }
+    }
+
+    /* New keyframe for mobile menu slide-in */
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
       }
     }
 
@@ -206,10 +298,10 @@
     }
 
     .tab-btn:hover {
-        background: #dbe8f3;
-        transform: translateY(-2px);
+      background: #dbe8f3;
+      transform: translateY(-2px);
     }
-    
+
     .tab-btn.active {
       background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
       color: #fff;
@@ -219,7 +311,7 @@
 
     /* Marks Table Styling */
     #marks-area {
-        min-height: 200px;
+      min-height: 200px;
     }
 
     .marks-table {
@@ -247,12 +339,14 @@
       color: var(--subtle-text);
       font-weight: 500;
     }
+
     .marks-table tbody tr:hover {
-        background-color: #f8fafc;
+      background-color: #f8fafc;
     }
-     .marks-table tbody td:first-child {
-        color: var(--text-color);
-        font-weight: 600;
+
+    .marks-table tbody td:first-child {
+      color: var(--text-color);
+      font-weight: 600;
     }
 
 
@@ -267,7 +361,8 @@
       color: var(--subtle-text);
       box-shadow: 0 4px 15px var(--shadow-light);
     }
-     .uploading-soon a {
+
+    .uploading-soon a {
       color: var(--accent-start);
       text-decoration: none;
       font-weight: 700;
@@ -283,44 +378,56 @@
       margin-top: 4rem;
       border-top: 1px solid rgba(0, 0, 0, 0.05);
     }
-    
+
     /* Responsive Table */
     @media (max-width: 720px) {
-        .marks-page {
-            padding: 2rem 5%;
-        }
-        .marks-hero h1, .gradient-text {
-            font-size: 1.8rem;
-        }
-        .marks-table thead {
-            display: none;
-        }
-        .marks-table tbody, .marks-table tr, .marks-table td {
-            display: block;
-            width: 100%;
-        }
-        .marks-table tr {
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            box-shadow: 0 2px 10px var(--shadow-light);
-        }
-        .marks-table td {
-            padding-left: 50%;
-            position: relative;
-            text-align: right;
-            border: none;
-            border-bottom: 1px solid #eaf1f7;
-        }
-        .marks-table td::before {
-            content: attr(data-label);
-            position: absolute;
-            left: 1.25rem;
-            width: 45%;
-            text-align: left;
-            font-weight: 700;
-            color: var(--text-color);
-        }
+      .marks-page {
+        padding: 2rem 5%;
+      }
+
+      .marks-hero h1,
+      .gradient-text {
+        font-size: 1.8rem;
+      }
+
+      .marks-table thead {
+        display: none;
+      }
+
+      .marks-table tbody,
+      .marks-table tr,
+      .marks-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .marks-table tr {
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 2px 10px var(--shadow-light);
+      }
+
+      .marks-table td {
+        /* Use flexbox for a cleaner, more reliable alignment */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        border: none;
+        border-bottom: 1px solid #eaf1f7;
+      }
+
+      .marks-table td::before {
+        content: attr(data-label);
+        /* Ensure the label has a consistent visual position and size */
+        flex-shrink: 0;
+        font-weight: 700;
+        color: var(--text-color);
+        /* Set a min-width to prevent collision on very small screens */
+        min-width: 45%; 
+        padding-right: 1rem;
+      }
     }
   </style>
 </head>
@@ -391,10 +498,20 @@
       } catch (e) {
         console.error("Could not parse user from localStorage", e);
       }
-      
+
       updateNavbarAuth();
       setupTabs();
       loadMarks("mid1"); // Load initial marks
+    });
+
+    // Add a scroll listener to the navbar for the blur effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
     });
 
     function updateNavbarAuth() {
@@ -417,7 +534,7 @@
           });
         }
       } else {
-         if (welcomeStudent) welcomeStudent.textContent = "Welcome, Guest";
+        if (welcomeStudent) welcomeStudent.textContent = "Welcome, Guest";
       }
     }
 
@@ -444,7 +561,10 @@
 
       const username = (currentUser.username || currentUser.studentname).toLowerCase();
 
-      const { data, error } = await supabase
+      const {
+        data,
+        error
+      } = await supabase
         .from('cse_marks')
         .select('*')
         .eq('username', username)
