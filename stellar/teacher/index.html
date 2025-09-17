@@ -8,7 +8,7 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,7 @@
             background: var(--primary-bg);
             color: var(--text-color);
         }
-        
+
         /* Navbar */
         .navbar {
             display: flex;
@@ -86,6 +86,7 @@
             color: var(--text-color);
             border-color: #ccc;
         }
+
         .nav-links button i {
             margin-right: 0.5rem;
         }
@@ -131,17 +132,19 @@
 
         /* Controls Section */
         .controls-wrapper {
-             background: var(--secondary-bg);
-             padding: 1.5rem;
-             border-radius: 1.5rem;
-             box-shadow: 0 8px 30px var(--shadow-light);
+            background: var(--secondary-bg);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 30px var(--shadow-light);
         }
+
         .controls {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             align-items: flex-end;
         }
+
         .controls .row {
             min-width: 200px;
         }
@@ -151,11 +154,12 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
-         .controls label i {
+
+        .controls label i {
             margin-right: 0.5rem;
             color: var(--accent-start);
-         }
-        
+        }
+
         .controls input,
         .controls select {
             width: 100%;
@@ -167,7 +171,8 @@
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
         }
-         .controls input:focus,
+
+        .controls input:focus,
         .controls select:focus {
             outline: none;
             border-color: var(--accent-start);
@@ -189,7 +194,11 @@
             transition: all 0.3s;
             font-family: 'Poppins', sans-serif;
         }
-        .btn i { margin-right: 0.5rem; }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
         }
@@ -199,15 +208,17 @@
             color: #fff;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
         }
-         .btn.primary:hover {
+
+        .btn.primary:hover {
             box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
-        
+
         .btn.ghost {
-             background: transparent;
-             color: var(--subtle-text);
-             border: 1px solid #ccc;
+            background: transparent;
+            color: var(--subtle-text);
+            border: 1px solid #ccc;
         }
+
         .btn.ghost:hover {
             background: var(--card-bg);
             color: var(--text-color);
@@ -219,9 +230,10 @@
             color: #fff;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
-         .btn.success:hover {
-             box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
-         }
+
+        .btn.success:hover {
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
 
         .btn:disabled {
             background: #e0e0e0;
@@ -274,13 +286,19 @@
             width: 5rem;
             text-align: center;
         }
+
         .att-table td input.status-input:focus {
             outline: none;
             border-color: var(--accent-start);
         }
 
-        .roll { font-weight: 700; }
-        .student-name { text-align: left; }
+        .roll {
+            font-weight: 700;
+        }
+
+        .student-name {
+            text-align: left;
+        }
 
         .save-bar {
             display: flex;
@@ -289,8 +307,11 @@
             margin-top: 1.5rem;
         }
 
-        .status { color: var(--subtle-text); font-weight: 500; }
-        
+        .status {
+            color: var(--subtle-text);
+            font-weight: 500;
+        }
+
         /* Footer */
         .footer {
             text-align: center;
@@ -317,7 +338,7 @@
 
         <section class="controls-wrapper">
             <div class="controls">
-                 <div class="row">
+                <div class="row">
                     <label for="yearSelect"><i class="fa-solid fa-graduation-cap"></i> Year</label>
                     <select id="yearSelect">
                         <option value="">— Select Year —</option>
@@ -335,7 +356,8 @@
                     <input type="number" id="totalClasses" min="1" value="1" />
                 </div>
                 <div class="row actions">
-                    <button id="buildGridBtn" class="btn primary" disabled><i class="fa-solid fa-table-list"></i> Build Grid</button>
+                    <button id="buildGridBtn" class="btn primary" disabled><i class="fa-solid fa-table-list"></i> Build
+                        Grid</button>
                     <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
                 </div>
             </div>
@@ -356,7 +378,8 @@
                 </table>
             </div>
             <div class="save-bar">
-                <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
+                <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save
+                    Attendance</button>
                 <span id="saveStatus" class="status"></span>
             </div>
         </section>
@@ -390,13 +413,69 @@
 
         let currentUser = null;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const userData = localStorage.getItem('user');
-            if (!userData) return redirectToLogin();
-            currentUser = JSON.parse(userData);
+        // Function to redirect to the login page
+        function redirectToLogin() {
+            localStorage.removeItem('user');
+            // FIX: Changed from relative path to absolute path
+            window.location.href = '/login/index.html';
+        }
 
-            if (currentUser.role !== 'teacher') {
-                alert('Access Denied.');
+        // Custom alert function to replace window.alert
+        function createCustomAlert(message) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
+                box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
+                text-align: center; max-width: 80%;
+            `;
+
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            messageText.style.cssText = `
+                font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
+            `;
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'OK';
+            closeBtn.style.cssText = `
+                background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+                color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
+                cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
+            `;
+
+            closeBtn.onclick = () => modal.remove();
+
+            modal.appendChild(messageText);
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userData = localStorage.getItem('user');
+            if (!userData) {
+                createCustomAlert('Access Denied. Please log in.');
+                return redirectToLogin();
+            }
+            const tempUser = JSON.parse(userData);
+
+            // Fetch full teacher profile from Supabase
+            const { data, error } = await supabase
+                .from('teacherportal')
+                .select('id, teacher_name, subject_code, subject_name, password')
+                .eq('username', tempUser.username)
+                .single();
+
+            if (error || !data) {
+                console.error('Error fetching teacher data:', error);
+                createCustomAlert('Teacher data not found. Please log in again.');
+                return redirectToLogin();
+            }
+
+            currentUser = data;
+
+            if (currentUser.subject_code === null) {
+                createCustomAlert('Access Denied. Only teachers with a subject can access this portal.');
                 return redirectToLogin();
             }
 
@@ -406,12 +485,6 @@
             attDate.value = new Date().toISOString().split('T')[0];
             validateInputs();
         });
-
-        function redirectToLogin() {
-            localStorage.removeItem('user');
-            // FIX: Changed from relative path to absolute path
-            window.location.href = '/login/index.html';
-        }
 
         logoutBtn.addEventListener('click', redirectToLogin);
         yearSelect.addEventListener('change', validateInputs);
@@ -433,13 +506,23 @@
         buildGridBtn.addEventListener('click', async () => {
             saveStatus.textContent = 'Building grid...';
             try {
+                // Fetch student data from the 'users' table
+                const { data: usersData, error: usersError } = await supabase
+                    .from('users')
+                    .select('username, studentname'); // Updated column name to `studentname`
+
+                if (usersError) throw usersError;
+
+                const studentsMap = new Map(usersData.map(user => [user.username, user.studentname]));
+
                 const students = Array.from({
                     length: 64
                 }, (_, i) => {
                     const rollNumber = `b2400${(i + 1).toString().padStart(2, '0')}`;
+                    const studentName = studentsMap.get(rollNumber) || `Student ${rollNumber}`;
                     return {
                         roll_no: rollNumber,
-                        student_name: `Student ${rollNumber}`
+                        student_name: studentName
                     };
                 });
 
@@ -447,9 +530,9 @@
 
                 attBody.innerHTML = students.map(student => {
                     return `<tr data-roll="${student.roll_no}" data-name="${student.student_name}">
-                                  <td class="roll">${student.roll_no.toUpperCase()}</td>
-                                  <td class="student-name">${student.student_name}</td>
-                                  <td><input type="number" class="status-input" min="0" max="${totalClasses}" value="${totalClasses}"/></td>
+                                    <td class="roll">${student.roll_no}</td>
+                                    <td class="student-name">${student.student_name}</td>
+                                    <td><input type="number" class="status-input" min="0" max="${totalClasses}" value="${totalClasses}"/></td>
                                 </tr>`;
                 }).join('');
 
@@ -487,7 +570,7 @@
                 saveStatus.textContent = `Error: ${error.message}`;
             }
         });
-        
+
         totalClassesInput.addEventListener('change', () => {
             const newMax = totalClassesInput.value;
             attBody.querySelectorAll('.status-input').forEach(input => {
@@ -500,8 +583,8 @@
 
         saveBtn.addEventListener('click', async () => {
             const rows = attBody.querySelectorAll('tr');
-            if (rows.length === 0) return alert('Nothing to save.');
-            
+            if (rows.length === 0) return createCustomAlert('Nothing to save.');
+
             saveBtn.disabled = true;
             saveStatus.textContent = '⏳ Saving attendance...';
             const date = attDate.value;
@@ -511,8 +594,8 @@
                 const recordsToUpsert = [];
                 rows.forEach(row => {
                     const status = parseInt(row.querySelector('.status-input').value, 10);
-                     if (status > totalClasses) {
-                        alert(`Attendance for ${row.dataset.roll} cannot exceed total classes.`);
+                    if (status > totalClasses) {
+                        createCustomAlert(`Attendance for ${row.dataset.roll} cannot exceed total classes.`);
                         throw new Error("Invalid attendance count.");
                     }
                     recordsToUpsert.push({
@@ -548,4 +631,3 @@
 </body>
 
 </html>
-

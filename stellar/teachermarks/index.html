@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Portal — Marks Setter</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <style>
         /* New light theme variables */
         :root {
@@ -53,11 +54,12 @@
             from {
                 transform: scale(1);
             }
+
             to {
                 transform: scale(1.1);
             }
         }
-        
+
         /* Navbar */
         .navbar {
             display: flex;
@@ -95,8 +97,13 @@
         }
 
         @keyframes glowPulse {
-            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
-            to { box-shadow: 0 0 2rem rgba(0, 135, 197, 1); }
+            from {
+                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+            }
+
+            to {
+                box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
+            }
         }
 
         /* Nav links */
@@ -113,12 +120,29 @@
             animation: fadeInUp 0.8s forwards;
         }
 
-        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
-        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
-        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
-        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
-        .nav-links li:nth-child(5) { animation-delay: 1s; }
-        .nav-links li:nth-child(6) { animation-delay: 1.2s; }
+        .nav-links li:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-links li:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-links li:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .nav-links li:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .nav-links li:nth-child(5) {
+            animation-delay: 1s;
+        }
+
+        .nav-links li:nth-child(6) {
+            animation-delay: 1.2s;
+        }
 
         @keyframes fadeInUp {
             to {
@@ -185,16 +209,18 @@
                 box-shadow: 0 4px 20px var(--shadow-light);
                 animation: slideInRight 0.5s forwards;
             }
+
             .menu-toggle {
                 display: block;
             }
         }
-        
+
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -203,91 +229,91 @@
 
         /* Main content styling */
         .container {
-            max-width: 1200px; 
-            margin: 2rem auto; 
+            max-width: 1200px;
+            margin: 2rem auto;
             padding: 2rem;
             background: var(--card-bg);
             border-radius: 1rem;
             box-shadow: 0 0 2rem var(--shadow-light);
             transition: background var(--transition-speed);
         }
-        
-        .teacher-header { 
-            text-align: center; 
-            margin-bottom: 2rem; 
+
+        .teacher-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        
-        .teacher-header h1 { 
-            font-size: 2.5rem; 
-            background: linear-gradient(90deg, var(--accent-start), var(--accent-end)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
+
+        .teacher-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
+
         .teacher-header p {
             color: var(--subtle-text);
             margin-top: 0.5rem;
         }
-        
-        .controls { 
-            display: flex; 
-            gap: 1.5rem; 
-            flex-wrap: wrap; 
-            margin-bottom: 2rem; 
+
+        .controls {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
             align-items: flex-end;
         }
-        
-        .controls > div {
+
+        .controls>div {
             flex: 1;
             min-width: 150px;
         }
 
-        .controls label { 
-            display: block; 
-            margin-bottom: 0.5rem; 
-            color: var(--subtle-text); 
+        .controls label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--subtle-text);
         }
-        
-        .controls select, 
-        .controls input { 
+
+        .controls select,
+        .controls input {
             width: 100%;
-            padding: 0.75rem 1rem; 
-            border-radius: 0.5rem; 
-            border: 1px solid var(--subtle-text); 
-            background: var(--secondary-bg); 
-            color: var(--text-color); 
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--subtle-text);
+            background: var(--secondary-bg);
+            color: var(--text-color);
             transition: border-color 0.3s;
         }
 
-        .controls select:focus, 
+        .controls select:focus,
         .controls input:focus {
             outline: none;
             border-color: var(--accent-end);
         }
 
-        .btn { 
-            padding: 0.75rem 1.5rem; 
-            border: none; 
-            border-radius: 2rem; 
-            cursor: pointer; 
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 2rem;
+            cursor: pointer;
             font-weight: 700;
             transition: all 0.3s ease;
         }
-        
-        .btn.primary { 
+
+        .btn.primary {
             background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             color: #fff;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
         }
-        
+
         .btn.primary:hover {
             transform: translateY(-0.25rem);
             box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
-        
-        .btn.success { 
-            background: #31c48d; 
-            color: #0b0b12; 
+
+        .btn.success {
+            background: #31c48d;
+            color: #0b0b12;
         }
 
         .btn:disabled {
@@ -299,59 +325,73 @@
             display: none;
             animation: fadeIn 1s forwards;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
-        .grid-wrap { 
-            overflow-x: auto; 
-            margin-bottom: 20px; 
+        .grid-wrap {
+            overflow-x: auto;
+            margin-bottom: 20px;
             border-radius: 1rem;
             box-shadow: 0 0 1.25rem var(--shadow-light);
         }
-        
-        table { 
-            width: 100%; 
-            border-collapse: separate; 
+
+        table {
+            width: 100%;
+            border-collapse: separate;
             border-spacing: 0;
             background: var(--secondary-bg);
             border-radius: 1rem;
             overflow: hidden;
         }
-        
-        th, td { 
-            padding: 1rem; 
-            border-bottom: 1px solid var(--card-bg); 
+
+        th,
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--card-bg);
             text-align: center;
         }
-        
-        th { 
-            background: var(--card-bg); 
-            color: var(--accent-end); 
+
+        th {
+            background: var(--card-bg);
+            color: var(--accent-end);
             font-weight: bold;
             position: sticky;
             top: 0;
         }
 
-        th:first-child { border-top-left-radius: 1rem; }
-        th:last-child { border-top-right-radius: 1rem; }
-        tr:last-child td { border-bottom: none; }
-        
-        td input { 
-            width: 60px; 
-            text-align: center; 
-            background: var(--card-bg); 
-            color: var(--text-color); 
-            border: 1px solid var(--subtle-text); 
-            border-radius: 6px; 
+        th:first-child {
+            border-top-left-radius: 1rem;
+        }
+
+        th:last-child {
+            border-top-right-radius: 1rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td input {
+            width: 60px;
+            text-align: center;
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--subtle-text);
+            border-radius: 6px;
             padding: 0.5rem;
         }
-        
-        td input.readonly { 
-            background: #e0e6ed; 
-            cursor: not-allowed; 
+
+        td input.readonly {
+            background: #e0e6ed;
+            cursor: not-allowed;
         }
 
         .save-status {
@@ -359,7 +399,7 @@
             margin-left: 1rem;
             transition: color 0.3s;
         }
-        
+
         /* Footer styling */
         .footer {
             background: var(--secondary-bg);
@@ -406,247 +446,267 @@
         }
     </style>
 </head>
+
 <body>
-<nav class="navbar">
-    <div class="logo">
-        <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
-        <span>Stellar Mind</span>
-    </div>
-    <ul class="nav-links">
-        <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-    </ul>
-</nav>
-
-<main class="container">
-    <section class="teacher-header">
-        <h1 id="teacherName"></h1>
-        <p id="subjectName"></p>
-    </section>
-
-    <section class="controls">
-        <div>
-            <label for="yearSelect">Year</label>
-            <select id="yearSelect">
-                <option value="">— Select Year —</option>
-                <option value="2">2nd Year</option>
-                <option value="3">3rd Year</option>
-                <option value="4">4th Year</option>
-            </select>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://placehold.co/128x128/eaf1f7/0087c5?text=SM" alt="Stellar Mind Logo" class="animated-logo">
+            <span>Stellar Mind</span>
         </div>
-        <div>
-            <label for="examSelect">Exam</label>
-            <select id="examSelect">
-                <option value="">— Select Exam —</option>
-                <option value="Mid 1">Mid 1</option>
-                <option value="Mid 2">Mid 2</option>
-                <option value="End Term">End Term</option>
-            </select>
+        <ul class="nav-links">
+            <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="teacher-header">
+            <h1 id="teacherName"></h1>
+            <p id="subjectName"></p>
+        </section>
+
+        <section class="controls">
+            <div>
+                <label for="yearSelect">Year</label>
+                <select id="yearSelect">
+                    <option value="">— Select Year —</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                </select>
+            </div>
+            <div>
+                <label for="examSelect">Exam</label>
+                <select id="examSelect">
+                    <option value="">— Select Exam —</option>
+                    <option value="Mid 1">Mid 1</option>
+                    <option value="Mid 2">Mid 2</option>
+                    <option value="End Term">End Term</option>
+                </select>
+            </div>
+            <div>
+                <button id="buildGridBtn" class="btn primary" disabled>Build Grid</button>
+            </div>
+        </section>
+
+        <section class="grid-section" style="display:none;">
+            <div class="grid-wrap">
+                <table id="marksTable">
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Student Name</th>
+                            <th>Marks</th>
+                            <th>Max Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marksBody"></tbody>
+                </table>
+            </div>
+            <button id="saveBtn" class="btn primary">Save Marks</button>
+            <span id="saveStatus" class="save-status"></span>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Stellar Mind | NIT Sikkim</p>
+            <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
+            <div class="social-icons">
+                <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
         </div>
-        <div>
-            <button id="buildGridBtn" class="btn primary" disabled>Build Grid</button>
-        </div>
-    </section>
+    </footer>
 
-    <section class="grid-section" style="display:none;">
-        <div class="grid-wrap">
-            <table id="marksTable">
-                <thead>
-                    <tr>
-                        <th>Roll Number</th>
-                        <th>Student Name</th>
-                        <th>Marks</th>
-                        <th>Max Marks</th>
-                    </tr>
-                </thead>
-                <tbody id="marksBody"></tbody>
-            </table>
-        </div>
-        <button id="saveBtn" class="btn primary">Save Marks</button>
-        <span id="saveStatus" class="save-status"></span>
-    </section>
-</main>
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-<footer class="footer">
-    <div class="footer-content">
-        <p>© 2025 Stellar Mind | NIT Sikkim</p>
-        <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
-        <div class="social-icons">
-            <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
-        </div>
-    </div>
-</footer>
+        const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+        const teacherNameEl = document.getElementById('teacherName');
+        const subjectNameEl = document.getElementById('subjectName');
+        const yearSelect = document.getElementById('yearSelect');
+        const examSelect = document.getElementById('examSelect');
+        const buildGridBtn = document.getElementById('buildGridBtn');
+        const marksBody = document.getElementById('marksBody');
+        const gridSection = document.querySelector('.grid-section');
+        const saveBtn = document.getElementById('saveBtn');
+        const saveStatus = document.getElementById('saveStatus');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let currentUser = null;
 
-const teacherNameEl = document.getElementById('teacherName');
-const subjectNameEl = document.getElementById('subjectName');
-const yearSelect = document.getElementById('yearSelect');
-const examSelect = document.getElementById('examSelect');
-const buildGridBtn = document.getElementById('buildGridBtn');
-const marksBody = document.getElementById('marksBody');
-const gridSection = document.querySelector('.grid-section');
-const saveBtn = document.getElementById('saveBtn');
-const saveStatus = document.getElementById('saveStatus');
-const logoutBtn = document.getElementById('logoutBtn');
+        // Function to redirect to the login page
+        function redirectToLogin() {
+            localStorage.removeItem('user');
+            window.location.href = '../login/index.html';
+        }
 
-let currentUser = null;
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check for user in local storage
+            const userData = localStorage.getItem('user');
+            if (!userData) {
+                createCustomAlert('Access Denied. Please log in.');
+                return redirectToLogin();
+            }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const userData = localStorage.getItem('user');
-    if (!userData) return redirectToLogin();
-    currentUser = JSON.parse(userData);
+            const tempUser = JSON.parse(userData);
 
-    if (currentUser.role !== 'teacher') {
-        createCustomAlert('Access Denied');
-        return redirectToLogin();
-    }
+            // Fetch full teacher profile from Supabase
+            const { data, error } = await supabase
+                .from('teacherportal')
+                .select('id, teacher_name, subject_code, subject_name, password')
+                .eq('username', tempUser.username)
+                .single();
 
-    teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
-    subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
-});
+            if (error || !data) {
+                console.error('Error fetching teacher data:', error);
+                createCustomAlert('Teacher data not found. Please log in again.');
+                return redirectToLogin();
+            }
 
-logoutBtn.addEventListener('click', redirectToLogin);
+            currentUser = data;
 
-function redirectToLogin() {
-    localStorage.removeItem('user');
-    window.location.href = '../login/index.html';
-}
+            // Check if the user is a teacher
+            if (currentUser.subject_code === null) {
+                createCustomAlert('Access Denied. Only teachers can access this portal.');
+                return redirectToLogin();
+            }
 
-// Enable Build button when inputs selected
-[yearSelect, examSelect].forEach(el => el.addEventListener('change', () => {
-    buildGridBtn.disabled = !(yearSelect.value && examSelect.value);
-}));
+            teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
+            subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
+        });
 
-// Map exam type to database format
-function formatExamType(exam) {
-    switch(exam) {
-        case 'Mid 1': return 'mid1';
-        case 'Mid 2': return 'mid2';
-        case 'End Term': return 'endsem';
-        default: return exam.toLowerCase().replace(/\s/g, '');
-    }
-}
+        logoutBtn.addEventListener('click', redirectToLogin);
 
-// Set default max marks based on exam
-function getDefaultMaxMarks(exam) {
-    if (exam === 'Mid 1' || exam === 'Mid 2') return 15;
-    if (exam === 'End Term') return 50;
-    return 100;
-}
+        // Enable Build button when inputs selected
+        [yearSelect, examSelect].forEach(el => el.addEventListener('change', () => {
+            buildGridBtn.disabled = !(yearSelect.value && examSelect.value);
+        }));
 
-// Build grid
-buildGridBtn.addEventListener('click', async () => {
-    marksBody.innerHTML = '';
-    gridSection.style.display = 'block';
-    saveStatus.textContent = 'Loading students...';
+        // Map exam type to database format
+        function formatExamType(exam) {
+            switch (exam) {
+                case 'Mid 1': return 'mid1';
+                case 'Mid 2': return 'mid2';
+                case 'End Term': return 'endsem';
+                default: return exam.toLowerCase().replace(/\s/g, '');
+            }
+        }
 
-    const year = yearSelect.value;
-    const exam = examSelect.value;
+        // Set default max marks based on exam
+        function getDefaultMaxMarks(exam) {
+            if (exam === 'Mid 1' || exam === 'Mid 2') return 15;
+            if (exam === 'End Term') return 50;
+            return 100;
+        }
 
-    const students = Array.from({ length: 64 }, (_, i) => {
-        const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
-        return { roll, name: `Student ${roll}` };
-    });
+        // Build grid
+        buildGridBtn.addEventListener('click', async () => {
+            marksBody.innerHTML = '';
+            gridSection.style.display = 'block';
+            saveStatus.textContent = 'Loading students...';
 
-    // Fetch existing marks
-    const { data: existingMarks, error } = await supabase
-        .from('cse_marks')
-        .select('*')
-        .eq('subject_code', currentUser.subject_code)
-        .eq('exam_type', formatExamType(exam));
+            const year = yearSelect.value;
+            const exam = examSelect.value;
+            const students = Array.from({ length: 64 }, (_, i) => {
+                const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
+                return { roll, name: `Student ${roll}` };
+            });
 
-    if (error) console.error(error);
+            // Fetch existing marks
+            const { data: existingMarks, error } = await supabase
+                .from('cse_marks')
+                .select('*')
+                .eq('subject_code', currentUser.subject_code)
+                .eq('exam_type', formatExamType(exam));
 
-    const defaultMax = getDefaultMaxMarks(exam);
+            if (error) console.error(error);
 
-    marksBody.innerHTML = students.map(student => {
-        const record = existingMarks?.find(m => m.username.toLowerCase() === student.roll);
-        const marksValue = record ? record.marks : '';
-        const maxMarksValue = record ? record.max_marks : defaultMax;
-        const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
-        return `<tr data-roll="${student.roll}" data-name="${student.name}">
+            const defaultMax = getDefaultMaxMarks(exam);
+
+            marksBody.innerHTML = students.map(student => {
+                const record = existingMarks?.find(m => m.username.toLowerCase() === student.roll);
+                const marksValue = record ? record.marks : '';
+                const maxMarksValue = record ? record.max_marks : defaultMax;
+                const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
+                return `<tr data-roll="${student.roll}" data-name="${student.name}">
             <td>${student.roll}</td>
             <td>${student.name}</td>
             <td><input type="number" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
             <td><input type="number" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
         </tr>`;
-    }).join('');
+            }).join('');
 
-    saveStatus.textContent = 'Grid ready.';
-});
+            saveStatus.textContent = 'Grid ready.';
+        });
 
-// Save marks
-saveBtn.addEventListener('click', async () => {
-    const rows = marksBody.querySelectorAll('tr');
-    if (rows.length === 0) return;
+        // Save marks
+        saveBtn.addEventListener('click', async () => {
+            const rows = marksBody.querySelectorAll('tr');
+            if (rows.length === 0) return;
 
-    saveStatus.textContent = 'Saving marks...';
-    const exam = examSelect.value;
+            saveStatus.textContent = 'Saving marks...';
+            const exam = examSelect.value;
 
-    const records = Array.from(rows).map(row => ({
-        username: row.dataset.roll.toLowerCase(),
-        student_name: row.dataset.name,
-        exam_type: formatExamType(exam),
-        subject_code: currentUser.subject_code,
-        subject_name: currentUser.subject_name,
-        marks: parseInt(row.querySelector('.marks-input').value) || 0,
-        max_marks: parseInt(row.querySelector('.max-input').value) || getDefaultMaxMarks(exam)
-    }));
+            const records = Array.from(rows).map(row => ({
+                username: row.dataset.roll.toLowerCase(),
+                student_name: row.dataset.name,
+                exam_type: formatExamType(exam),
+                subject_code: currentUser.subject_code,
+                subject_name: currentUser.subject_name,
+                marks: parseInt(row.querySelector('.marks-input').value) || 0,
+                max_marks: parseInt(row.querySelector('.max-input').value) || getDefaultMaxMarks(exam)
+            }));
 
-    try {
-        const { error } = await supabase
-            .from('cse_marks')
-            .upsert(records, { onConflict: ['username','exam_type','subject_code'] });
+            try {
+                const { error } = await supabase
+                    .from('cse_marks')
+                    .upsert(records, { onConflict: ['username', 'exam_type', 'subject_code'] });
 
-        if (error) throw error;
-        saveStatus.textContent = '✅ Marks saved successfully!';
-        setTimeout(() => saveStatus.textContent = '', 3000);
-    } catch (err) {
-        console.error(err);
-        saveStatus.textContent = `⚠️ Error: ${err.message}`;
-    }
-});
+                if (error) throw error;
+                saveStatus.textContent = '✅ Marks saved successfully!';
+                setTimeout(() => saveStatus.textContent = '', 3000);
+            } catch (err) {
+                console.error(err);
+                saveStatus.textContent = `⚠️ Error: ${err.message}`;
+            }
+        });
 
-// Custom alert function to replace window.alert
-function createCustomAlert(message) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
+        // Custom alert function to replace window.alert
+        function createCustomAlert(message) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
         background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
         box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
         text-align: center; max-width: 80%;
     `;
-    
-    const messageText = document.createElement('p');
-    messageText.textContent = message;
-    messageText.style.cssText = `
+
+            const messageText = document.createElement('p');
+            messageText.textContent = message;
+            messageText.style.cssText = `
         font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
     `;
-    
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = 'OK';
-    closeBtn.style.cssText = `
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'OK';
+            closeBtn.style.cssText = `
         background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
         color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
         cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
     `;
-    
-    closeBtn.onclick = () => modal.remove();
-    
-    modal.appendChild(messageText);
-    modal.appendChild(closeBtn);
-    document.body.appendChild(modal);
-}
 
-// Since window.alert is used, I will create a function to replace it.
-// The existing `alert('Access Denied');` will be replaced with `createCustomAlert('Access Denied');`
-</script>
+            closeBtn.onclick = () => modal.remove();
+
+            modal.appendChild(messageText);
+            modal.appendChild(closeBtn);
+            document.body.appendChild(modal);
+        }
+    </script>
 </body>
+
 </html>
