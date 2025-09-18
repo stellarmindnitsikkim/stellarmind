@@ -81,23 +81,47 @@
             box-shadow: 0 4px 25px var(--shadow-heavy);
         }
 
-        .logo {
+        .logo-container {
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: 1.5rem;
             font-weight: bold;
             color: var(--text-color);
+            /* Fixed width to prevent layout shift during typing animation */
+            min-width: 12rem;
         }
 
-        .logo img {
+        .logo-flipper {
+            position: relative;
             width: 3rem;
             height: 3rem;
-            border-radius: 50%;
-            box-shadow: 0 0 1rem rgba(66, 153, 225, 0.5);
-            transition: box-shadow var(--transition-speed);
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
         }
 
+        .logo-flipper.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .logo-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 1rem rgba(66, 153, 225, 0.5);
+            backface-visibility: hidden;
+            transition: box-shadow var(--transition-speed);
+        }
+        
+        .logo-image.front {
+            transform: rotateY(0deg);
+        }
+
+        .logo-image.back {
+            transform: rotateY(180deg);
+        }
+        
         .animated-logo {
             animation: glowPulse 2s infinite alternate;
         }
@@ -109,6 +133,36 @@
 
             to {
                 box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
+            }
+        }
+        
+        /* New styling for typing animation */
+        .logo-name {
+            font-size: 1.2rem;
+        }
+        .typing {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--text-color);
+            animation: typing-effect 1s steps(20, end) forwards, blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing-effect {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: var(--text-color);
             }
         }
 
@@ -301,12 +355,10 @@
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
-                opacity: 0;
             }
 
             to {
                 transform: translateX(0);
-                opacity: 1;
             }
         }
 
@@ -686,7 +738,6 @@
 
         /* Smooth bounce + wave effect */
         @keyframes bounceWave {
-
             0%,
             100% {
                 transform: translateY(0) scale(1);
@@ -761,7 +812,6 @@
         }
 
         @keyframes pulse {
-
             0%,
             100% {
                 transform: scale(1);
@@ -777,9 +827,12 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="logo">
-            <img src="assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
-            <span>Stellar Mind</span>
+        <div class="logo-container">
+            <div class="logo-flipper" id="logo-flipper">
+                <img class="logo-image front" src="assets/NITLOGONEW.png" alt="NIT Sikkim Logo">
+                <img class="logo-image back animated-logo" src="assets/ttlogo.jpg" alt="Stellar Mind Logo">
+            </div>
+            <span id="logo-name" class="logo-name"></span>
         </div>
         <div class="menu-toggle" id="mobile-menu">
             <i class="fas fa-bars"></i>
@@ -794,17 +847,17 @@
             <li id="marks-link"><a href="#"><i class="fas fa-clipboard"></i> Marks</a></li>
             <!-- New link for teachers -->
             <li id="teacher-performance-link" style="display: none;"><a href="tsprofile/index.html"><i
-                        class="fas fa-chart-line"></i> Student Performance</a></li>
+                            class="fas fa-chart-line"></i> Student Performance</a></li>
             <li class="dropdown">
                 <a href="#"><i class="fas fa-link"></i> Important Links <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="https://kic.nitsikkim.ac.in/downloads/Gate%20Pass%202%20(1).pdf"><i
-                            class="fas fa-user-check"></i> Gate Pass</a>
+                                class="fas fa-user-check"></i> Gate Pass</a>
                     <a href="https://nitsikkim.samarth.edu.in/index.php/site/login"><i class="fas fa-user-check"></i>
                         Samarth Portal</a>
                     <a
                         href="https://nitsikkim.ac.in/documents/downloads/Proforma_Form%20for%20Issuing%20Certificate_English.pdf"><i
-                            class="fas fa-user-check"></i> Academic Document</a>
+                                class="fas fa-user-check"></i> Academic Document</a>
                     <a href="https://nitsikkim.ac.in/students/academicCalendar.php"><i class="fas fa-user-check"></i>
                         Academic Calendar</a>
                 </div>
@@ -838,7 +891,8 @@
                 <p>SM</p>
             </div>
             <div class="mobile-logo mobile-only">
-                <img src="assets/tlogo.png" alt="Stellar Mind Logo" class="glow-logo">
+                <img src="https://placehold.co/100x100/4299E1/ffffff?text=SM" alt="Stellar Mind Logo"
+                    class="glow-logo">
             </div>
         </div>
     </section>
@@ -902,6 +956,60 @@
             checkLogin();
             loadEvents();
             loadClasses();
+
+            // =============================
+            // Logo and Name Animation
+            // =============================
+            const logoFlipper = document.getElementById('logo-flipper');
+            const logoNameSpan = document.getElementById('logo-name');
+
+            const logoNames = ['NIT Sikkim', 'Stellar Mind'];
+            let currentNameIndex = 0;
+
+            const typeText = (text) => {
+                return new Promise(resolve => {
+                    logoNameSpan.textContent = '';
+                    logoNameSpan.classList.add('typing');
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        if (i < text.length) {
+                            logoNameSpan.textContent += text.charAt(i);
+                            i++;
+                        } else {
+                            clearInterval(interval);
+                            logoNameSpan.classList.remove('typing');
+                            logoNameSpan.style.borderRight = 'none';
+                            resolve();
+                        }
+                    }, 50); // Typing speed
+                });
+            };
+
+            const runAnimation = async () => {
+                // Flip the logo
+                logoFlipper.classList.toggle('flipped');
+
+                // Wait for the flip animation to complete
+                await new Promise(resolve => setTimeout(resolve, 600));
+
+                // Change to the next name
+                currentNameIndex = (currentNameIndex + 1) % logoNames.length;
+                
+                // Start the typing animation for the new name
+                await typeText(logoNames[currentNameIndex]);
+
+                // Wait for a pause before the next flip
+                await new Promise(resolve => setTimeout(resolve, 2400));
+                
+                // Loop the animation
+                runAnimation();
+            };
+            
+            // Start the first typing animation immediately
+            typeText(logoNames[currentNameIndex]).then(() => {
+                // Wait for the first typing to finish, then start the loop
+                setTimeout(runAnimation, 2000);
+            });
         });
 
         // =============================
@@ -1041,8 +1149,8 @@
             if (!currentUser) {
                 todaysClassesSection.style.display = 'block';
                 classList.innerHTML = `
-                     <p style="text-align: center; font-size: 1.1rem; color: var(--subtle-text);">Please Login First to see your schedule.</p>
-                 `;
+                    <p style="text-align: center; font-size: 1.1rem; color: var(--subtle-text);">Please Login First to see your schedule.</p>
+                `;
                 return;
             }
 
@@ -1075,10 +1183,10 @@
                 });
             } else {
                 classList.innerHTML = `
-                     <div class="uploading-soon">
-                         <span>📡 Your schedule is uploading soon...</span>
-                     </div>
-                 `;
+                    <div class="uploading-soon">
+                        <span>📡 Your schedule is uploading soon...</span>
+                    </div>
+                `;
             }
         }
 
@@ -1116,10 +1224,10 @@
                     const card = document.createElement("div");
                     card.className = "event-card";
                     card.innerHTML = `
-                     <h3><i class="fas fa-star"></i> ${event.name}</h3>
-                     <p><i class="fas fa-calendar-alt"></i> ${event.date}</p>
-                     <p><i class="fas fa-clock"></i> ${event.time}</p>
-                     `;
+                        <h3><i class="fas fa-star"></i> ${event.name}</h3>
+                        <p><i class="fas fa-calendar-alt"></i> ${event.date}</p>
+                        <p><i class="fas fa-clock"></i> ${event.time}</p>
+                        `;
                     eventsList.appendChild(card);
                 });
             } catch (err) {
