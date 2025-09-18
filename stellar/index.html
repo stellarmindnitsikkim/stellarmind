@@ -839,11 +839,11 @@
         </div>
 
         <ul class="nav-links" id="nav-links">
-            <li><a href="#"><i class="fas fa-home"></i> Home </a></li>
+            <!-- <li><a href="#"><i class="fas fa-home"></i> Home </a></li> -->
             <li><a href="attendence/index.html" id="attendance-link"><i class="fas fa-user-check"></i> Attendance</a>
             </li>
             <li><a href="/ai/index.html"><i class="fas fa-robot"></i> AI HELPER</a></li>
-            <li><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
+            <!-- <li><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li> -->
             <li id="marks-link"><a href="#"><i class="fas fa-clipboard"></i> Marks</a></li>
             <!-- New link for teachers -->
             <li id="teacher-performance-link" style="display: none;"><a href="tsprofile/index.html"><i
@@ -918,6 +918,8 @@
         <div class="footer-content">
             <p>© 2025 Stellar Mind | NIT Sikkim</p>
             <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
+            <li><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms & Conditions</a></li>
+
             <div class="social-icons">
                 <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -1096,44 +1098,47 @@
         // =============================
         const timetable = {
             MON: [
-                "09:30 - 10:30 → CS13113 (ECE Faculty) Shed III",
-                "10:30 - 11:30 → CS13115 (RS) Shed III",
-                "11:30 - 12:30 → CS13111 (LA) Shed III",
+                "09:30 - 10:30 → Digital Logic Design (ECE Faculty) Shed III",
+                "10:30 - 11:30 → Computational Mathematics (RS) Shed III",
+                "11:30 - 12:30 → Data Structure and Algorithms (LA) Shed III",
                 "12:30 - 14:00 → BREAK",
-                "14:00 - 16:00 → CS13211 (LA/AKT/BBS) CL-4",
+                "14:00 - 16:00 → DLD Lab 'Aw' (ECE Faculty)",
+                "16:00 - 18:00 → DSA Lab (LA/AKT/BBS) CL-4",
             ],
             TUE: [
-                "09:30 - 10:30 → CS13112 (ALM) Shed III",
-                "10:30 - 11:30 → CS13111 (LA) Shed III",
-                "11:30 - 12:30 → BREAK",
-                "12:30 - 13:30 → CS13113 (ECE Faculty) Shed III",
-                "14:00 - 16:00 → CS13213 (ECE Faculty) ECE Lab",
+                "09:30 - 10:30 → Computer Networks (ALM) Shed III",
+                "10:30 - 11:30 → Data Structure and Algorithms (LA) Shed III",
+                "11:30 - 13:30 → DSA Lab (LA/AKT/BBS) CL-4",
+                "13:30 - 15:00 → BREAK",
+                "15:00 - 16:00 → Digital Logic Design (ECE Faculty) Shed III",
+                "16:00 - 18:00 → DLD Lab 'Ax' (ECE Faculty)",
             ],
             WED: [
-                "09:30 - 10:30 → CS13112 (ALM) Shed III",
-                "10:30 - 11:30 → CS13116 (BBS) Shed III",
-                "11:30 - 12:30 → BREAK",
-                "12:30 - 13:30 → CS13114 (PKK) Shed III",
-                "14:00 - 15:00 → CS13115 (RS) Shed III",
-                "15:00 - 17:00 → CS13213 (ECE Faculty) ECE Lab",
+                "09:30 - 10:30 → Computer Networks (ALM) Shed III",
+                "10:30 - 11:30 → Foundation to Machine Learning (BBS) Shed III",
+                "11:30 - 12:30 → Computational Mathematics (RS) Shed III",
+                "12:30 - 14:00 → Break",
+                "14:00 - 15:00 → Object Oriented System Design(PKK) Shed III",
+                "15:00 - 16:00 → Digital Logic Design (ECE Faculty) Shed III",
+                "16:00 - 18:00 → DLD Lab 'Ay' (ECE Faculty)",
             ],
             THU: [
-                "08:30 - 09:30 → ZZ13201 (BBS) Shed III",
-                "09:30 - 10:30 → CS13115 (RS) Shed III",
-                "10:30 - 11:30 → CS13112 (ALM) Shed III",
-                "11:30 - 12:30 → CS13212 (ALM) CL-4",
-                "12:30 - 13:30 → BREAK",
-                "13:30 - 14:30 → CS13114 (PKK) Shed III",
-                "14:30 - 16:30 → CS13213 (ECE Faculty) ECE Lab",
+                "08:30 - 09:30 → Professional Practice (BBS) Shed III",
+                "09:30 - 10:30 → Computational Mathematics (RS) Shed III",
+                "10:30 - 11:30 → Computer Networks (ALM) Shed III",
+                "11:30 - 13:30 → Computer Networks Lab (ALM) CL-4",
+                "13:30 - 15:00 → BREAK",
+                "15:00 - 16:00 → Object Oriented System Design (PKK) Shed III",
+                "16:00 - 18:00 → DLD Lab 'Az' (ECE Faculty)",
             ],
             FRI: [
-                "08:30 - 09:30 → ZZ13201 (BBS) Shed III",
-                "09:30 - 10:30 → CS13112 (ALM) Shed III",
-                "10:30 - 12:30 → CS13116 (BBS) Shed III",
-                "12:30 - 13:30 → BREAK",
-                "13:30 - 14:30 → CS13114 (PKK) Shed III",
-                "14:30 - 15:30 → CS13111 (LA) Shed III",
-                "15:30 - 16:30 → CS13214 (PKK) CL-3",
+                "08:30 - 09:30 → Professional Practice (BBS) Shed III",
+                "09:30 - 10:30 → Computer Networks (ALM) Shed III",
+                "10:30 - 12:30 → Foundation to Machine Learning (BBS) Shed III",
+                "12:30 - 14:00 → BREAK",
+                "14:00 - 15:00 → Object Oriented System Design (PKK) Shed III",
+                "15:00 - 16:00 → Data Structure and Algorithms (LA) Shed III",
+                "16:00 - 18:00 → OOSD Lab (PKK) CL-3",
             ],
         };
 
