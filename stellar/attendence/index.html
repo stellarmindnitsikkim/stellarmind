@@ -118,6 +118,41 @@
             color: var(--text-color);
             cursor: pointer;
         }
+        
+        /* Nav link animations */
+        .nav-links li {
+            position: relative;
+            opacity: 0;
+            transform: translateY(-1rem);
+            animation: fadeInUp 0.8s forwards;
+        }
+        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
+        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.3rem;
+            width: 0%;
+            height: 0.15rem;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            transition: width var(--transition-speed);
+            border-radius: 0.1rem;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
 
         @media (max-width: 768px) {
             .nav-links {
@@ -131,6 +166,7 @@
                 padding: 1.5rem;
                 border-radius: 1rem;
                 box-shadow: 0 4px 20px var(--shadow-light);
+                animation: slideInRight 0.5s forwards;
             }
 
             .nav-links.active {
@@ -140,11 +176,16 @@
             .menu-toggle {
                 display: block;
             }
-            
-            /* Mobile-specific adjustments for the chart */
-            .chart-container {
-                padding: 1rem;
-                max-width: 95%;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
 
@@ -348,7 +389,7 @@
         <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
         <ul class="nav-links" id="nav-links">
             <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <!-- <li><a href="index.html"><i class="fas fa-user-check"></i> Attendance</a></li> -->
             <li><a href="../events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
             <li id="logoutBtn"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
@@ -357,6 +398,7 @@
     <!-- Hero -->
     <section class="hero">
         <div class="hero-text">
+            
             <h1>Welcome, <span id="studentName">Loading...</span></h1>
             <p>Your Academic Progress at a Glance</p>
         </div>
@@ -415,9 +457,24 @@
         let currentMonth = new Date();
         let tableVisible = false;
 
-        document.getElementById("mobile-menu").addEventListener("click", () => {
-            document.getElementById("nav-links").classList.toggle("active");
-        });
+        const menuToggle = document.getElementById("mobile-menu");
+        const navLinks = document.getElementById("nav-links");
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener("click", (event) => {
+                event.stopPropagation();
+                navLinks.classList.toggle("active");
+            });
+
+            document.addEventListener('click', function (event) {
+                const isClickInsideNav = navLinks.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+
+                if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
 
         async function getUser() {
             const user = JSON.parse(localStorage.getItem("user"));
@@ -475,24 +532,6 @@
 
         let myChart;
 
-        // Custom Chart.js plugin for responsive labels
-        const mobileLabelsPlugin = {
-            id: 'mobileLabelsPlugin',
-            beforeInit(chart) {
-                chart.originalLabels = chart.data.labels;
-            },
-            beforeDraw(chart) {
-                const isMobile = window.innerWidth < 768;
-                if (isMobile) {
-                    chart.data.labels = chart.originalLabels.map(label => {
-                        return label.length > 8 ? label.substring(0, 7) + '...' : label;
-                    });
-                } else {
-                    chart.data.labels = chart.originalLabels;
-                }
-            }
-        };
-
         function renderBarChart(subjectData) {
             const subjects = Object.values(subjectData);
             const subjectNames = subjects.map(sub => sub.name);
@@ -545,8 +584,7 @@
                             }
                         }
                     }
-                },
-                plugins: [mobileLabelsPlugin]
+                }
             });
         }
 

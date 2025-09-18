@@ -446,7 +446,7 @@
       <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
       <li><a href="/attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
       <li><a href="/terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
-      <li class="active"><a href="#"><i class="fas fa-graduation-cap"></i> Marks</a></li>
+      <!-- <li class="active"><a href="#"><i class="fas fa-graduation-cap"></i> Marks</a></li> -->
       <li id="auth-btn"><a href="../login/index.html"><i class="fas fa-user"></i> Login</a></li>
     </ul>
   </nav>
@@ -491,7 +491,23 @@
     document.addEventListener("DOMContentLoaded", () => {
       const toggleBtn = document.querySelector(".menu-toggle");
       const navLinks = document.querySelector(".nav-links");
-      if (toggleBtn) toggleBtn.addEventListener("click", () => navLinks.classList.toggle("active"));
+      
+      if (toggleBtn && navLinks) {
+          toggleBtn.addEventListener("click", (event) => {
+              event.stopPropagation();
+              navLinks.classList.toggle("active");
+          });
+
+          document.addEventListener('click', function(event) {
+              const isClickInsideNav = navLinks.contains(event.target);
+              const isClickOnToggle = toggleBtn.contains(event.target);
+
+              if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
+                  navLinks.classList.remove('active');
+              }
+          });
+      }
+
 
       try {
         currentUser = JSON.parse(localStorage.getItem("user"));
