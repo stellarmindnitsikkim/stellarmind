@@ -140,6 +140,12 @@
             .menu-toggle {
                 display: block;
             }
+            
+            /* Mobile-specific adjustments for the chart */
+            .chart-container {
+                padding: 1rem;
+                max-width: 95%;
+            }
         }
 
         .hero {
@@ -469,6 +475,24 @@
 
         let myChart;
 
+        // Custom Chart.js plugin for responsive labels
+        const mobileLabelsPlugin = {
+            id: 'mobileLabelsPlugin',
+            beforeInit(chart) {
+                chart.originalLabels = chart.data.labels;
+            },
+            beforeDraw(chart) {
+                const isMobile = window.innerWidth < 768;
+                if (isMobile) {
+                    chart.data.labels = chart.originalLabels.map(label => {
+                        return label.length > 8 ? label.substring(0, 7) + '...' : label;
+                    });
+                } else {
+                    chart.data.labels = chart.originalLabels;
+                }
+            }
+        };
+
         function renderBarChart(subjectData) {
             const subjects = Object.values(subjectData);
             const subjectNames = subjects.map(sub => sub.name);
@@ -521,7 +545,8 @@
                             }
                         }
                     }
-                }
+                },
+                plugins: [mobileLabelsPlugin]
             });
         }
 

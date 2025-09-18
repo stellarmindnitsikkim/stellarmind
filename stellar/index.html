@@ -103,7 +103,7 @@
         .logo-flipper.flipped {
             transform: rotateY(180deg);
         }
-        
+
         .logo-image {
             position: absolute;
             width: 100%;
@@ -113,7 +113,7 @@
             backface-visibility: hidden;
             transition: box-shadow var(--transition-speed);
         }
-        
+
         .logo-image.front {
             transform: rotateY(0deg);
         }
@@ -121,7 +121,7 @@
         .logo-image.back {
             transform: rotateY(180deg);
         }
-        
+
         .animated-logo {
             animation: glowPulse 2s infinite alternate;
         }
@@ -135,11 +135,12 @@
                 box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
             }
         }
-        
+
         /* New styling for typing animation */
         .logo-name {
             font-size: 1.2rem;
         }
+
         .typing {
             display: inline-block;
             overflow: hidden;
@@ -147,20 +148,22 @@
             border-right: 2px solid var(--text-color);
             animation: typing-effect 1s steps(20, end) forwards, blink-caret 0.75s step-end infinite;
         }
-        
+
         @keyframes typing-effect {
             from {
                 width: 0;
             }
+
             to {
                 width: 100%;
             }
         }
-        
+
         @keyframes blink-caret {
             from, to {
                 border-color: transparent;
             }
+
             50% {
                 border-color: var(--text-color);
             }
@@ -891,7 +894,7 @@
                 <p>SM</p>
             </div>
             <div class="mobile-logo mobile-only">
-                <img src="https://placehold.co/100x100/4299E1/ffffff?text=SM" alt="Stellar Mind Logo"
+                <img src="/assets/ttlogo.jpg" alt="Stellar Mind Logo"
                     class="glow-logo">
             </div>
         </div>
@@ -955,6 +958,16 @@
                 });
             }
 
+            // Close mobile menu when clicking outside of it
+            document.addEventListener("click", (e) => {
+                const isClickInsideMenu = navLinks.contains(e.target);
+                const isClickOnToggle = toggleBtn.contains(e.target);
+                
+                if (navLinks.classList.contains("active") && !isClickInsideMenu && !isClickOnToggle) {
+                    navLinks.classList.remove("active");
+                }
+            });
+
             checkLogin();
             loadEvents();
             loadClasses();
@@ -996,17 +1009,17 @@
 
                 // Change to the next name
                 currentNameIndex = (currentNameIndex + 1) % logoNames.length;
-                
+
                 // Start the typing animation for the new name
                 await typeText(logoNames[currentNameIndex]);
 
                 // Wait for a pause before the next flip
                 await new Promise(resolve => setTimeout(resolve, 2400));
-                
+
                 // Loop the animation
                 runAnimation();
             };
-            
+
             // Start the first typing animation immediately
             typeText(logoNames[currentNameIndex]).then(() => {
                 // Wait for the first typing to finish, then start the loop
@@ -1024,7 +1037,7 @@
                 currentUser = JSON.parse(localStorage.getItem("user"));
                 // Log the user object to help with debugging.
                 console.log('Current User Data:', currentUser);
-            } catch { }
+            } catch {}
 
             const authBtn = document.getElementById("auth-btn");
             const welcomeUser = document.getElementById("welcome-user");
@@ -1051,12 +1064,15 @@
                 if (currentUser.role === 'teacher' && !currentUser.teacher_name) {
                     console.log("Teacher logged in, but teacher_name is missing. Fetching from Supabase...");
                     try {
-                        const { data, error } = await supabase
+                        const {
+                            data,
+                            error
+                        } = await supabase
                             .from('teacherportal')
                             .select('teacher_name')
                             .eq('username', currentUser.username)
                             .single();
-                        
+
                         if (data && data.teacher_name) {
                             currentUser.teacher_name = data.teacher_name;
                             localStorage.setItem("user", JSON.stringify(currentUser));
@@ -1080,7 +1096,7 @@
                 } else {
                     displayName = 'User';
                 }
-                
+
                 // Log the final name being displayed
                 console.log("Displaying name:", displayName);
 
