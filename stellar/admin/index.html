@@ -6,15 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Teacher — Mark Attendance</title>
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js"></script>
 
     <style>
@@ -43,6 +40,7 @@
             font-family: 'Poppins', sans-serif;
             background: var(--primary-bg);
             color: var(--text-color);
+            overflow-x: hidden; /* Prevent horizontal scroll on the body */
         }
 
         /* Navbar */
@@ -82,7 +80,6 @@
             from {
                 box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
             }
-
             to {
                 box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
             }
@@ -93,6 +90,24 @@
             display: flex;
             gap: 1.5rem;
             align-items: center;
+        }
+        
+        /* Animation for nav links from index.html */
+        .nav-links li {
+            position: relative;
+            opacity: 0;
+            transform: translateY(-1rem);
+            animation: fadeInUp 0.8s forwards;
+        }
+        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
+        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
+        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .nav-links a {
@@ -106,28 +121,42 @@
             position: relative;
             transition: color var(--transition-speed);
         }
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.3rem;
+            width: 0%;
+            height: 0.15rem;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            transition: width var(--transition-speed);
+            border-radius: 0.1rem;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
         .nav-links a:hover {
             color: var(--accent-end);
         }
 
         .menu-toggle {
-            display: none;
+            display: none; /* Hidden by default */
             font-size: 1.5rem;
             color: var(--text-color);
             cursor: pointer;
         }
         
         .nav-links button, .btn.ghost {
-             background: transparent;
-             color: var(--subtle-text);
-             border: 1px solid #ccc;
-             border-radius: 2rem;
-             padding: 0.5rem 1rem;
-             cursor: pointer;
-             font-weight: bold;
-             font-family: 'Poppins', sans-serif;
-             transition: all 0.3s ease;
-             font-size: 0.9rem;
+            background: transparent;
+            color: var(--subtle-text);
+            border: 1px solid #ccc;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         .nav-links button:hover, .btn.ghost:hover {
             background: var(--card-bg);
@@ -153,7 +182,7 @@
             margin-bottom: 1.5rem;
             display: flex;
             gap: 1.5rem;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* This makes it responsive */
         }
         .controls .row:last-of-type {
             margin-top: 1.5rem;
@@ -161,7 +190,7 @@
         }
         .controls .row>div {
             flex: 1;
-            min-width: 250px;
+            min-width: 250px; /* Ensures stacking on smaller screens */
         }
 
         .controls label {
@@ -197,7 +226,7 @@
             display: flex;
             gap: 0.75rem;
             flex-wrap: nowrap;
-            overflow-x: auto;
+            overflow-x: auto; /* Perfect for mobile */
             padding-bottom: 1rem;
             scrollbar-width: thin;
             scrollbar-color: var(--accent-end) var(--primary-bg);
@@ -318,14 +347,14 @@
             font-weight: 600;
         }
         .grid-wrap {
-            overflow-x: auto;
+            overflow-x: auto; /* Key for mobile table responsiveness */
             border-radius: 1rem;
             border: 1px solid #e0e0e0;
         }
         .att-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 900px; /* Ensures content isn't squished */
         }
         .att-table th,
         .att-table td {
@@ -355,6 +384,7 @@
         .roll { font-weight: 700; }
         .save-bar {
             display: flex;
+            flex-wrap: wrap; /* Allows stacking on mobile */
             align-items: center;
             gap: 1rem;
             margin-top: 1.5rem;
@@ -372,7 +402,7 @@
 
         .footer-content {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap; /* Responsive stacking */
             justify-content: space-around;
             gap: 2rem;
             max-width: 1200px;
@@ -405,28 +435,58 @@
             margin-top: 2rem;
             border-top: 1px solid #e0e0e0;
         }
-
+        
+        /* ===== MOBILE RESPONSIVE STYLES ===== */
         @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
+
             .nav-links {
-                display: none;
+                display: none; /* Hide by default */
                 flex-direction: column;
                 background: var(--secondary-bg);
                 position: absolute;
-                top: 4.5rem;
+                top: 4.5rem; /* Height of the navbar */
                 right: 1rem;
                 width: 14rem;
                 padding: 1.5rem;
                 border-radius: 1rem;
-                box-shadow: 0 4px 20px var(--shadow-light);
+                box-shadow: 0 4px 20px var(--shadow-heavy);
+                animation: slideInRight 0.5s forwards;
             }
-            .nav-links.active { display: flex; }
-            .menu-toggle { display: block; }
+            .nav-links.active {
+                display: flex; /* Show when active */
+            }
+            .nav-links li {
+                width: 100%;
+                text-align: left;
+            }
+            
+            .menu-toggle {
+                display: block; /* Show hamburger icon */
+            }
+
+            .controls .row, .save-bar {
+                 flex-direction: column;
+            }
         }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
             <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
@@ -493,7 +553,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer-container">
         <div class="footer-content">
             <div class="footer-section">
@@ -502,7 +561,7 @@
             </div>
             <div class="footer-section">
                 <h3>Contact & Social</h3>
-                <p>Contact: <a href="tel:+919955542395">+91 9955542395</a></p>
+                <p>Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
                 <div class="social-icons">
                     <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -931,14 +990,22 @@
         
         // ---- Mobile Menu Toggle ----
         document.addEventListener("DOMContentLoaded", () => {
-            const toggleBtn = document.querySelector(".menu-toggle");
-            const navLinks = document.querySelector(".nav-links");
+            const toggleBtn = document.getElementById("mobile-menu");
+            const navLinks = document.getElementById("nav-links");
 
-            if (toggleBtn) {
-                toggleBtn.addEventListener("click", () => {
+            if (toggleBtn && navLinks) {
+                toggleBtn.addEventListener("click", (event) => {
+                    event.stopPropagation(); // Prevent the click from bubbling up to the document
                     navLinks.classList.toggle("active");
                 });
             }
+
+            // Close menu when clicking anywhere outside of it
+            document.addEventListener('click', function(event) {
+                if (navLinks.classList.contains('active') && !navLinks.contains(event.target)) {
+                    navLinks.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>
