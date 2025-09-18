@@ -27,6 +27,7 @@
             --shadow-light: rgba(0, 0, 0, 0.08);
             --shadow-heavy: rgba(0, 0, 0, 0.15);
             --success-color: #27ae60;
+            --danger-color: #e74c3c;
             --transition-speed: 0.5s;
         }
 
@@ -291,6 +292,16 @@
             box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
         }
 
+        .btn.danger {
+            background: var(--danger-color);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn.danger:hover {
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
         .btn:disabled {
             background: #e0e0e0;
             color: #aaa;
@@ -345,6 +356,7 @@
         .att-table td input.status-input:focus {
             outline: none;
             border-color: var(--accent-start);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
         }
 
         .roll {
@@ -372,6 +384,43 @@
             margin-top: 3rem;
             padding: 2rem 1rem;
             color: var(--subtle-text);
+        }
+
+        /* Custom Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 1rem 3rem var(--shadow-heavy);
+            text-align: center;
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-message {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
         }
 
         @media (max-width: 768px) {
@@ -445,6 +494,8 @@
                     <button id="buildGridBtn" class="btn primary" disabled><i class="fa-solid fa-table-list"></i> Build
                         Grid</button>
                     <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
+                    <button id="deleteBtn" class="btn danger" disabled><i class="fa-solid fa-trash-can-arrow-up"></i>
+                        Delete</button>
                 </div>
             </div>
         </section>
@@ -491,6 +542,7 @@
             totalClassesInput = document.getElementById('totalClasses'),
             buildGridBtn = document.getElementById('buildGridBtn'),
             clearGridBtn = document.getElementById('clearGridBtn'),
+            deleteBtn = document.getElementById('deleteBtn'),
             gridSection = document.getElementById('gridSection'),
             attBody = document.getElementById('attBody'),
             saveBtn = document.getElementById('saveBtn'),
@@ -509,35 +561,56 @@
             window.location.href = '/login/index.html';
         }
 
-        // Custom alert function to replace window.alert
-        function createCustomAlert(message) {
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                background-color: var(--secondary-bg); padding: 2rem; border-radius: 1rem;
-                box-shadow: 0 1rem 3rem var(--shadow-heavy); z-index: 9999;
-                text-align: center; max-width: 80%;
-            `;
+        /**
+         * Creates a custom alert or confirmation modal.
+         * @param {string} message The message to display.
+         * @param {boolean} isConfirmation If true, shows OK/Cancel buttons.
+         * @param {Function} onConfirm Callback for OK/confirm action.
+         */
+        function createCustomModal(message, isConfirmation = false, onConfirm = () => {}) {
+            // Remove any existing modal to prevent duplicates
+            const existingModal = document.querySelector('.modal-overlay');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
 
             const messageText = document.createElement('p');
+            messageText.className = 'modal-message';
             messageText.textContent = message;
-            messageText.style.cssText = `
-                font-size: 1.2rem; color: var(--text-color); margin-bottom: 1.5rem;
-            `;
 
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = 'OK';
-            closeBtn.style.cssText = `
-                background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-                color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 2rem;
-                cursor: pointer; font-weight: bold; transition: transform 0.2s ease;
-            `;
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.className = 'modal-buttons';
 
-            closeBtn.onclick = () => modal.remove();
+            const okBtn = document.createElement('button');
+            okBtn.textContent = isConfirmation ? 'Yes, Delete' : 'OK';
+            okBtn.className = `btn ${isConfirmation ? 'danger' : 'primary'}`;
+            okBtn.onclick = () => {
+                modalOverlay.remove();
+                if (isConfirmation) {
+                    onConfirm();
+                }
+            };
 
-            modal.appendChild(messageText);
-            modal.appendChild(closeBtn);
-            document.body.appendChild(modal);
+            buttonsContainer.appendChild(okBtn);
+
+            if (isConfirmation) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.className = 'btn ghost';
+                cancelBtn.onclick = () => modalOverlay.remove();
+                buttonsContainer.appendChild(cancelBtn);
+            }
+
+            modalContent.appendChild(messageText);
+            modalContent.appendChild(buttonsContainer);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -547,7 +620,10 @@
             }
             const tempUser = JSON.parse(userData);
 
-            const { data, error } = await supabase
+            const {
+                data,
+                error
+            } = await supabase
                 .from('teacherportal')
                 .select('id, teacher_name, subject_code, subject_name, password')
                 .eq('username', tempUser.username)
@@ -561,7 +637,7 @@
             currentUser = data;
 
             if (currentUser.subject_code === null) {
-                createCustomAlert('Access Denied. Only teachers with a subject can access this portal.');
+                createCustomModal('Access Denied. Only teachers with a subject can access this portal.');
                 return redirectToLogin();
             }
 
@@ -581,7 +657,9 @@
         attDate.addEventListener('change', validateInputs);
 
         function validateInputs() {
-            buildGridBtn.disabled = !(yearSelect.value === '2' && attDate.value);
+            const isReady = yearSelect.value === '2' && attDate.value;
+            buildGridBtn.disabled = !isReady;
+            deleteBtn.disabled = !isReady;
         }
 
         clearGridBtn.addEventListener('click', () => {
@@ -612,7 +690,7 @@
                     length: 64
                 }, (_, i) => {
                     const rollNumber = `b2400${(i + 1).toString().padStart(2, '0')}`;
-                    const studentName = studentsMap.get(rollNumber) || `Student ${rollNumber}`;
+                    const studentName = studentsMap.get(rollNumber) || `Student ${i + 1}`; // Fallback to a generic name
                     return {
                         roll_no: rollNumber,
                         student_name: studentName
@@ -623,10 +701,10 @@
 
                 attBody.innerHTML = students.map(student => {
                     return `<tr data-roll="${student.roll_no}" data-name="${student.student_name}">
-                                      <td class="roll">${student.roll_no.toUpperCase()}</td>
-                                      <td class="student-name">${student.student_name}</td>
-                                      <td><input type="number" class="status-input" min="0" max="${totalClasses}" value="${totalClasses}"/></td>
-                                    </tr>`;
+                                <td><span class="roll">${student.roll_no.toUpperCase()}</span></td>
+                                <td class="student-name">${student.student_name}</td>
+                                <td><input type="number" class="status-input" min="0" max="${totalClasses}" value="${totalClasses}"/></td>
+                            </tr>`;
                 }).join('');
 
                 gridSection.style.display = 'block';
@@ -676,7 +754,7 @@
 
         saveBtn.addEventListener('click', async () => {
             const rows = attBody.querySelectorAll('tr');
-            if (rows.length === 0) return createCustomAlert('Nothing to save.');
+            if (rows.length === 0) return createCustomModal('Nothing to save.');
 
             saveBtn.disabled = true;
             saveStatus.textContent = '⏳ Saving attendance...';
@@ -690,7 +768,7 @@
                     if (errorFound) return;
                     const status = parseInt(row.querySelector('.status-input').value, 10);
                     if (status > totalClasses) {
-                        createCustomAlert(`Attendance for ${row.dataset.roll} cannot exceed total classes.`);
+                        createCustomModal(`Attendance for ${row.dataset.roll} cannot exceed total classes.`);
                         errorFound = true;
                     }
                     recordsToUpsert.push({
@@ -727,6 +805,47 @@
             } finally {
                 saveBtn.disabled = false;
             }
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            const selectedDate = attDate.value;
+            if (!selectedDate) {
+                createCustomModal('Please select a date to delete attendance.');
+                return;
+            }
+
+            createCustomModal(
+                `Are you sure you want to delete all attendance records for ${selectedDate} and subject ${currentUser.subject_code}? This action cannot be undone.`,
+                true,
+                async () => {
+                    saveStatus.textContent = '⏳ Deleting attendance...';
+                    deleteBtn.disabled = true;
+
+                    try {
+                        const {
+                            error
+                        } = await supabase
+                            .from('attendance')
+                            .delete()
+                            .eq('date', selectedDate)
+                            .eq('subject_code', currentUser.subject_code);
+
+                        if (error) throw error;
+
+                        saveStatus.textContent = '✅ Attendance deleted successfully!';
+                        setTimeout(() => saveStatus.textContent = '', 4000);
+
+                        // Clear the grid after successful deletion
+                        gridSection.style.display = 'none';
+                        attBody.innerHTML = '';
+                    } catch (error) {
+                        console.error('Error deleting attendance:', error);
+                        saveStatus.textContent = `⚠️ Error: ${error.message}`;
+                    } finally {
+                        deleteBtn.disabled = false;
+                    }
+                }
+            );
         });
     </script>
 </body>
