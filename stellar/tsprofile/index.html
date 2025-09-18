@@ -399,7 +399,9 @@
         <!-- Profile Header -->
         <div id="profileHeader" class="profile-header hidden">
             <h2 id="studentName" class="gradient-text"></h2>
-            <p>Username: <span id="studentUsername" style="font-family: monospace;"></span></p>
+            <p>Enrollment Number: <span id="studentUsername" style="font-family: monospace;font-size: 1rem;"></span></p>
+            <!-- New element to display the student's branch -->
+            <p>Branch: <span id="studentBranch"></span></p>
         </div>
 
         <!-- Loading Indicator -->
@@ -473,6 +475,7 @@
         const mobileMenu = document.getElementById('mobile-menu');
         const navLinks = document.getElementById('nav-links');
         const logoutBtn = document.getElementById('logoutBtn');
+        const studentBranchEl = document.getElementById('studentBranch');
 
         // Function to display messages
         function showMessage(message, isError = true) {
@@ -576,19 +579,23 @@
                     throw new Error("User not found.");
                 }
 
-                studentNameEl.textContent = userData.studentname;
-                studentUsernameEl.textContent = username;
-                profileHeaderEl.classList.remove('hidden');
-
-                // Fetch and aggregate attendance data
+                // Fetch attendance data, including the branch
                 const { data: attendanceData, error: attendanceError } = await supabaseClient
                     .from('attendance')
-                    .select('subject_name, subject_code, status, total_classes')
+                    .select('subject_name, subject_code, status, total_classes, branch')
                     .eq('username', username);
 
                 if (attendanceError) {
                     throw new Error(attendanceError.message);
                 }
+
+                // Get the branch from the first record found
+                let studentBranch = (attendanceData && attendanceData.length > 0) ? attendanceData[0].branch : 'N/A';
+
+                studentNameEl.textContent = userData.studentname;
+                studentUsernameEl.textContent = username;
+                studentBranchEl.textContent = studentBranch;
+                profileHeaderEl.classList.remove('hidden');
 
                 if (!attendanceData || attendanceData.length === 0) {
                     showMessage('No attendance records found for this user.', false);
@@ -663,7 +670,6 @@
             localStorage.removeItem('user');
             window.location.href = '/login/index.html';
         });
-
     </script>
 </body>
 </html>

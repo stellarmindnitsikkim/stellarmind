@@ -847,7 +847,7 @@
             <li id="marks-link"><a href="#"><i class="fas fa-clipboard"></i> Marks</a></li>
             <!-- New link for teachers -->
             <li id="teacher-performance-link" style="display: none;"><a href="tsprofile/index.html"><i
-                            class="fas fa-chart-line"></i> Student Performance</a></li>
+                        class="fas fa-chart-line"></i> Student Performance</a></li>
             <li class="dropdown">
                 <a href="#"><i class="fas fa-link"></i> Important Links <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
@@ -917,8 +917,8 @@
     <footer class="footer">
         <div class="footer-content">
             <p>© 2025 Stellar Mind | NIT Sikkim</p>
-            <p>📞 Contact: <a href="tel:+919955542395">+91 99555542395</a></p>
-            <li><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms & Conditions</a></li>
+            <p>📞 Contact: <a href="tel:+9199555542395">+91 99555542395</a></p>
+            <p><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms & Conditions</a></p>
 
             <div class="social-icons">
                 <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -1022,6 +1022,8 @@
         async function checkLogin() {
             try {
                 currentUser = JSON.parse(localStorage.getItem("user"));
+                // Log the user object to help with debugging.
+                console.log('Current User Data:', currentUser);
             } catch { }
 
             const authBtn = document.getElementById("auth-btn");
@@ -1044,8 +1046,43 @@
                 teacherPerformanceLink.style.display = 'none';
             }
 
-            if (currentUser && (currentUser.username || currentUser.studentname) && currentUser.role) {
-                const displayName = currentUser.studentname || currentUser.username;
+            if (currentUser && currentUser.role) {
+                // Add this new block to fetch teacher_name if it's missing
+                if (currentUser.role === 'teacher' && !currentUser.teacher_name) {
+                    console.log("Teacher logged in, but teacher_name is missing. Fetching from Supabase...");
+                    try {
+                        const { data, error } = await supabase
+                            .from('teacherportal')
+                            .select('teacher_name')
+                            .eq('username', currentUser.username)
+                            .single();
+                        
+                        if (data && data.teacher_name) {
+                            currentUser.teacher_name = data.teacher_name;
+                            localStorage.setItem("user", JSON.stringify(currentUser));
+                            console.log("teacher_name fetched and saved to localStorage:", currentUser.teacher_name);
+                        } else if (error) {
+                            console.error("Error fetching teacher_name:", error);
+                        }
+                    } catch (e) {
+                        console.error("An exception occurred while fetching teacher_name:", e);
+                    }
+                }
+
+                let displayName;
+                // Explicitly check for teacher_name when the user is a teacher
+                if (currentUser.role === 'teacher' && currentUser.teacher_name) {
+                    displayName = currentUser.teacher_name;
+                } else if (currentUser.studentname) {
+                    displayName = currentUser.studentname;
+                } else if (currentUser.username) {
+                    displayName = currentUser.username;
+                } else {
+                    displayName = 'User';
+                }
+                
+                // Log the final name being displayed
+                console.log("Displaying name:", displayName);
 
                 authBtn.innerHTML = `<a href="#" id="logout-link"><i class="fas fa-user"></i> ${displayName} (Logout)</a>`;
                 if (welcomeUser) welcomeUser.textContent = `Hi, ${displayName} 👋`;

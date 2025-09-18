@@ -212,7 +212,6 @@
         document.getElementById("login-form").addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            // Get and trim the username and password to handle any leading/trailing whitespace
             const username = document.getElementById("username").value.trim().toLowerCase();
             const password = document.getElementById("password").value.trim();
             const message = document.getElementById("login-message");
@@ -229,7 +228,6 @@
                     body: { username, password },
                 });
                 
-                // Check for success from the function itself
                 if (userLoginData && !userLoginData.error) {
                     role = "user";
                     userData = userLoginData;
@@ -237,15 +235,14 @@
 
                 // 2️⃣ If not a user, try TEACHERPORTAL (NEW encrypted login via Edge Function)
                 if (!userData) {
-                    // Call the new 'login-teacher' edge function
                     const { data: teacherLoginData, error: teacherLoginError } = await supabase.functions.invoke("login-teacher", {
                         body: { username, password },
                     });
 
-                    // Check for success from the function
+                    // Ensure `teacher_name` is present in the saved data
                     if (teacherLoginData && !teacherLoginData.error) {
                         role = "teacher";
-                        userData = teacherLoginData;
+                        userData = { ...teacherLoginData, teacher_name: teacherLoginData.teacher_name || null };
                     }
                 }
 
@@ -280,7 +277,6 @@
 
                     // Redirect based on role
                     setTimeout(() => {
-                        // Customize your redirects as needed
                         if (role === "admin") {
                             window.location.href = "/index.html"; // Or admin dashboard
                         } else if (role === "teacher") {
