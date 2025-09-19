@@ -118,7 +118,7 @@
             color: var(--text-color);
             cursor: pointer;
         }
-        
+
         /* Nav link animations */
         .nav-links li {
             position: relative;
@@ -126,10 +126,22 @@
             transform: translateY(-1rem);
             animation: fadeInUp 0.8s forwards;
         }
-        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
-        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
-        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
-        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
+
+        .nav-links li:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-links li:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-links li:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .nav-links li:nth-child(4) {
+            animation-delay: 0.8s;
+        }
 
         @keyframes fadeInUp {
             to {
@@ -137,7 +149,7 @@
                 transform: translateY(0);
             }
         }
-        
+
         .nav-links a::after {
             content: "";
             position: absolute;
@@ -149,6 +161,7 @@
             transition: width var(--transition-speed);
             border-radius: 0.1rem;
         }
+
         .nav-links a:hover::after {
             width: 100%;
         }
@@ -177,12 +190,13 @@
                 display: block;
             }
         }
-        
+
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -376,6 +390,39 @@
             color: var(--accent-end);
             transform: scale(1.2) translateY(-0.25rem);
         }
+
+        /* Mobile-specific styles for better readability and full-width chart */
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 1.8rem;
+            }
+
+            #studentName {
+                font-size: 1.5rem;
+                background: none;
+                -webkit-background-clip: unset;
+                -webkit-text-fill-color: var(--text-color);
+                animation: none;
+            }
+
+            /* Removes the max-width and adds padding for a full-width chart on mobile */
+            .chart-container {
+                max-width: 100%;
+                padding: 1rem 0.5rem;
+                border-radius: 0.5rem;
+            }
+
+            .attendance-table th,
+            .attendance-table td {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+
+            /* Fixes the "tilted" look by allowing subject names to wrap */
+            .attendance-table th {
+                white-space: normal;
+            }
+        }
     </style>
 </head>
 
@@ -383,7 +430,7 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
-            <img src="../assets/tlogo.png" alt="Logo" class="animated-logo">
+            <img src="/assets/ttlogo.jpg" alt="Logo" class="animated-logo">
             <span>Attendance Portal</span>
         </div>
         <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
@@ -398,7 +445,6 @@
     <!-- Hero -->
     <section class="hero">
         <div class="hero-text">
-            
             <h1>Welcome, <span id="studentName">Loading...</span></h1>
             <p>Your Academic Progress at a Glance</p>
         </div>
@@ -466,7 +512,7 @@
                 navLinks.classList.toggle("active");
             });
 
-            document.addEventListener('click', function (event) {
+            document.addEventListener('click', function(event) {
                 const isClickInsideNav = navLinks.contains(event.target);
                 const isClickOnToggle = menuToggle.contains(event.target);
 
@@ -563,12 +609,20 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            ticks: { color: '#6b7a8c' },
-                            grid: { color: '#e0e0e0' }
+                            ticks: {
+                                color: '#6b7a8c'
+                            },
+                            grid: {
+                                color: '#e0e0e0'
+                            }
                         },
                         x: {
-                            ticks: { color: '#6b7a8c' },
-                            grid: { display: false }
+                            ticks: {
+                                color: '#6b7a8c'
+                            },
+                            grid: {
+                                display: false
+                            }
                         }
                     },
                     plugins: {
@@ -577,7 +631,7 @@
                         },
                         tooltip: {
                             callbacks: {
-                                label: function (context) {
+                                label: function(context) {
                                     const subject = subjects[context.dataIndex];
                                     return `Attendance: ${subject.attended}/${subject.total} (${context.raw}%)`;
                                 }

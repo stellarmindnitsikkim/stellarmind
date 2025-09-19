@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellar Mind - Redesigned</title>
+    <title>Stellar Mind</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         /* New light theme variables */
@@ -66,7 +66,7 @@
             justify-content: space-between;
             align-items: center;
             background: var(--secondary-bg);
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             position: sticky;
             top: 0;
@@ -173,7 +173,7 @@
         .nav-links {
             list-style: none;
             display: flex;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .nav-links li {
@@ -848,9 +848,10 @@
             <li><a href="/ai/index.html"><i class="fas fa-robot"></i> AI HELPER</a></li>
             <!-- <li><a href="terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li> -->
             <li id="marks-link"><a href="#"><i class="fas fa-clipboard"></i> Marks</a></li>
-            <!-- New link for teachers -->
+            <!-- New links for teachers/admins -->
             <li id="teacher-performance-link" style="display: none;"><a href="tsprofile/index.html"><i
-                        class="fas fa-chart-line"></i> Student Performance</a></li>
+                            class="fas fa-chart-line"></i> Student Performance</a></li>
+            <li id="event-management-link" style="display: none;"><a href="events/index.html"><i class="fas fa-calendar-alt"></i> Event Management</a></li>
             <li class="dropdown">
                 <a href="#"><i class="fas fa-link"></i> Important Links <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
@@ -1043,6 +1044,7 @@
             const welcomeUser = document.getElementById("welcome-user");
             const attendanceLink = document.getElementById("attendance-link");
             const teacherPerformanceLink = document.getElementById("teacher-performance-link");
+            const eventManagementLink = document.getElementById("event-management-link");
 
             let marksLink = document.getElementById("marks-link");
             if (!marksLink) {
@@ -1054,10 +1056,14 @@
                 marksLink = li;
             }
 
-            // Hide the teacher-specific link by default
+            // Hide the teacher/admin-specific links by default
             if (teacherPerformanceLink) {
                 teacherPerformanceLink.style.display = 'none';
             }
+            if (eventManagementLink) {
+                eventManagementLink.style.display = 'none';
+            }
+
 
             if (currentUser && currentUser.role) {
                 // Add this new block to fetch teacher_name if it's missing
@@ -1118,13 +1124,23 @@
                     }
                 });
 
-                // Show and handle the student performance link for teachers
-                if (currentUser.role === "teacher" && teacherPerformanceLink) {
-                    teacherPerformanceLink.style.display = 'block';
-                    teacherPerformanceLink.querySelector("a").addEventListener("click", (e) => {
-                        e.preventDefault();
-                        window.location.href = "tsprofile/index.html";
-                    });
+                // Show and handle the student performance and event management link for teachers/admins
+                if (currentUser.role === "teacher" || currentUser.role === "admin") {
+                    if (teacherPerformanceLink) teacherPerformanceLink.style.display = 'block';
+                    if (eventManagementLink) eventManagementLink.style.display = 'block';
+
+                    if (teacherPerformanceLink) {
+                        teacherPerformanceLink.querySelector("a").addEventListener("click", (e) => {
+                            e.preventDefault();
+                            window.location.href = "tsprofile/index.html";
+                        });
+                    }
+                    if (eventManagementLink) {
+                        eventManagementLink.querySelector("a").addEventListener("click", (e) => {
+                            e.preventDefault();
+                            window.location.href = "events/index.html";
+                        });
+                    }
                 }
 
 
@@ -1168,7 +1184,7 @@
             ],
             WED: [
                 "09:30 - 10:30 → Computer Networks (ALM) Shed III",
-                "10:30 - 11:30 → Foundation to Machine Learning (BBS) Shed III",
+                "10:30 - 11:30 → Foundation of Machine Learning (BBS) Shed III",
                 "11:30 - 12:30 → Computational Mathematics (RS) Shed III",
                 "12:30 - 14:00 → Break",
                 "14:00 - 15:00 → Object Oriented System Design(PKK) Shed III",
@@ -1187,7 +1203,7 @@
             FRI: [
                 "08:30 - 09:30 → Professional Practice (BBS) Shed III",
                 "09:30 - 10:30 → Computer Networks (ALM) Shed III",
-                "10:30 - 12:30 → Foundation to Machine Learning (BBS) Shed III",
+                "10:30 - 12:30 → Foundation of Machine Learning (BBS) Shed III",
                 "12:30 - 14:00 → BREAK",
                 "14:00 - 15:00 → Object Oriented System Design (PKK) Shed III",
                 "15:00 - 16:00 → Data Structure and Algorithms (LA) Shed III",
