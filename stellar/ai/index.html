@@ -2,14 +2,20 @@
 <html lang="en">
 
 <head>
+   
   <meta charset="UTF-8">
+   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stellar Mind | StellarChatBot</title>
+    <title>Stellar Mind | StellarChatBot</title>
+   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+   
   <link rel="preconnect" href="https://fonts.googleapis.com">
+   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
+    <style>
     /* Light theme variables from index.html */
     :root {
       --primary-bg: #f0f4f8;
@@ -86,23 +92,45 @@
 
     /* Animations */
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     @keyframes pulseGlow {
-      from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
-      to { box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1); }
+      from {
+        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+      }
+
+      to {
+        box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1);
+      }
     }
-    
+
     @keyframes glowPulse {
-        from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
-        to { box-shadow: 0 0 2rem rgba(0, 135, 197, 1); }
+      from {
+        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+      }
+
+      to {
+        box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
+      }
     }
 
     @keyframes fadeBlink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
     }
 
     /* Navbar */
@@ -133,9 +161,9 @@
       height: 3rem;
       border-radius: 50%;
     }
-    
+
     .animated-logo {
-        animation: glowPulse 2s infinite alternate;
+      animation: glowPulse 2s infinite alternate;
     }
 
     .nav-links {
@@ -143,25 +171,40 @@
       display: flex;
       gap: 1.5rem;
     }
-    
+
     /* Nav link animations from index page */
     .nav-links li {
-        position: relative;
-        opacity: 0;
-        transform: translateY(-1rem);
-        animation: fadeInUp 0.8s forwards;
+      position: relative;
+      opacity: 0;
+      transform: translateY(-1rem);
+      animation: fadeInUp 0.8s forwards;
     }
-    .nav-links li:nth-child(1) { animation-delay: 0.2s; }
-    .nav-links li:nth-child(2) { animation-delay: 0.4s; }
-    .nav-links li:nth-child(3) { animation-delay: 0.6s; }
-    .nav-links li:nth-child(4) { animation-delay: 0.8s; }
-    .nav-links li:nth-child(5) { animation-delay: 1s; }
+
+    .nav-links li:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    .nav-links li:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    .nav-links li:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .nav-links li:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+
+    .nav-links li:nth-child(5) {
+      animation-delay: 1s;
+    }
 
     @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .nav-links a {
@@ -193,6 +236,42 @@
     }
 
     .nav-links a:hover {
+      color: var(--accent-end);
+    }
+
+    .nav-links button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-color);
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 0.5rem 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: relative;
+      transition: color var(--transition-speed);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .nav-links button::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.3rem;
+      width: 0%;
+      height: 0.15rem;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      transition: width var(--transition-speed);
+      border-radius: 0.1rem;
+    }
+
+    .nav-links button:hover::after {
+      width: 100%;
+    }
+
+    .nav-links button:hover {
       color: var(--accent-end);
     }
 
@@ -287,116 +366,126 @@
     }
 
     /* ===== MOBILE RESPONSIVE STYLES ===== */
-    @media(max-width:768px){
-        .navbar {
-            padding: 1rem 1.5rem;
-        }
+    @media(max-width:768px) {
+      .navbar {
+        padding: 1rem 1.5rem;
+      }
 
-        .nav-links {
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            background: var(--secondary-bg);
-            position: absolute;
-            top: 4.5rem; /* Matches navbar height */
-            right: 1rem;
-            width: 14rem;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 20px var(--shadow-heavy);
-            animation: slideInRight 0.5s forwards;
-        }
+      .nav-links {
+        display: none;
+        /* Hidden by default */
+        flex-direction: column;
+        background: var(--secondary-bg);
+        position: absolute;
+        top: 4.5rem;
+        /* Matches navbar height */
+        right: 1rem;
+        width: 14rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px var(--shadow-heavy);
+        animation: slideInRight 0.5s forwards;
+      }
 
-        .nav-links.active { 
-            display: flex; 
-        }
+      .nav-links.active {
+        display: flex;
+      }
 
-        .menu-toggle { 
-            display: block; 
-        }
+      .menu-toggle {
+        display: block;
+      }
 
-        /* Adjustments for smaller screens */
-        .hero {
-            padding: 3rem 1rem;
-        }
+      /* Adjustments for smaller screens */
+      .hero {
+        padding: 3rem 1rem;
+      }
 
-        .hero h1 {
-            font-size: 2rem;
-        }
+      .hero h1 {
+        font-size: 2rem;
+      }
 
-        .chat-container {
-            padding: 0 1rem 3rem;
-        }
+      .chat-container {
+        padding: 0 1rem 3rem;
+      }
 
-        #stellar-chat {
-            height: 75vh;
-            min-height: 450px;
-        }
+      #stellar-chat {
+        height: 75vh;
+        min-height: 450px;
+      }
     }
 
     @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Loader Overlay -->
-  <div id="custom-loader">
-    <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="loader-logo">
-    <div class="spinner"></div>
-    <div class="loading-text">Launching StellarChatBot...</div>
-  </div>
+    <!-- Loader Overlay -->
+    <div id="custom-loader">
+        <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="loader-logo">
+        <div class="spinner"></div>
+        <div class="loading-text">Launching StellarChatBot...</div>
+      </div>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">
-      <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
-      <span>Stellar Mind</span>
-    </div>
-    <ul class="nav-links" id="nav-links">
-      <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
-      <li><a href="../attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
-      <!-- <li><a href="https://wa.me/7037796470"><i class="fas fa-phone-alt"></i> Help</a></li> -->
-      <li><a href="../terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
-      <li><a href="../login/index.html"><i class="fas fa-user"></i> Login</a></li>
-    </ul>
-    <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
-  </nav>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
+            <span>Stellar Mind</span>
+          </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="../attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <!-- <li><a href="https://wa.me/7037796470"><i class="fas fa-phone-alt"></i> Help</a></li> -->
+            <li><a href="../terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
+            <li>
+        <button id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </li>
+          </ul>
+        <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
+      </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>🤖 Chat with <span>StellarChatBot</span></h1>
-      <p>Ask anything — our AI assistant is here to help you 24/7.</p>
-    </div>
-  </section>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>🤖 Chat with <span>StellarChatBot</span></h1>
+            <p>Ask anything — our AI assistant is here to help you 24/7.</p>
+          </div>
+      </section>
 
-  <!-- Chat Section -->
-  <section class="chat-container">
-    <iframe id="stellar-chat" src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json" frameborder="0"></iframe>
-  </section>
+    <!-- Chat Section -->
+    <section class="chat-container">
+        <iframe id="stellar-chat"
+      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json"
+      frameborder="0"></iframe>
+      </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p>© 2025 Stellar Mind | NIT Sikkim</p>
-      <p>📞 Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
-      <div class="social-icons">
-        <a href="https://wa.me/7037796470"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://instagram.com/"><i class="fab fa-instagram"></i></a>
-        <a href="https://linkedin.com/"><i class="fab fa-linkedin"></i></a>
-      </div>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Stellar Mind | NIT Sikkim</p>
+            <p>📞 Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
+            <div class="social-icons">
+                <a href="https://wa.me/7037796470"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/"><i class="fab fa-linkedin"></i></a>
+              </div>
+          </div>
+      </footer>
 
+   
   <script>
     const iframe = document.getElementById("stellar-chat");
     const loader = document.getElementById("custom-loader");
@@ -408,24 +497,24 @@
 
 
     // =============================
-        // Attempt to Disable Developer Tools
-        // NOTE: This is not a secure or foolproof method.
-        // Determined users can always bypass these measures.
-        // =============================
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', event => {
-            // Prevent F12
-            if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
-                event.preventDefault();
-            }
-            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
-                event.preventDefault();
-            }
-            if (event.ctrlKey && event.key.toUpperCase() === 'U') {
-                event.preventDefault();
-            }
-        });
+    // Attempt to Disable Developer Tools
+    // NOTE: This is not a secure or foolproof method.
+    // Determined users can always bypass these measures.
+    // =============================
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('keydown', event => {
+      // Prevent F12
+      if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
+        event.preventDefault();
+      }
+      // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+      if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
+        event.preventDefault();
+      }
+      if (event.ctrlKey && event.key.toUpperCase() === 'U') {
+        event.preventDefault();
+      }
+    });
 
     // Wait for iframe to load completely
     iframe.onload = () => {
@@ -444,12 +533,12 @@
       });
 
       // Close menu when clicking anywhere outside of it
-      document.addEventListener('click', function(event) {
+      document.addEventListener('click', function (event) {
         const isClickInsideNav = navLinks.contains(event.target);
         const isClickOnToggle = menuToggle.contains(event.target);
-        
+
         if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
-            navLinks.classList.remove('active');
+          navLinks.classList.remove('active');
         }
       });
     }
@@ -457,4 +546,3 @@
 </body>
 
 </html>
-

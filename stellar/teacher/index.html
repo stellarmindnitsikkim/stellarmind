@@ -239,7 +239,8 @@
         .actions {
             display: flex;
             gap: 1rem;
-            flex-wrap: wrap; /* Added this line to fix the button layout */
+            flex-wrap: wrap;
+            /* Added this line to fix the button layout */
         }
 
         .btn {
@@ -708,23 +709,20 @@
 
                 const studentsMap = new Map(usersData.map(user => [user.username, user.studentname]));
 
-                const students = Array.from({
+                // Generate a list of all required roll numbers
+                const fixedRollNumbers = ['b240086', 'b240091', 'b240158'];
+                const studentRollNumbers = Array.from({
                     length: 64
-                }, (_, i) => {
-                    const rollNumber = `b2400${(i + 1).toString().padStart(2, '0')}`;
-                    const studentName = studentsMap.get(rollNumber) || `Student ${i + 1}`; // Fallback to a generic name
-                    return {
-                        roll_no: rollNumber,
-                        student_name: studentName
-                    };
-                });
+                }, (_, i) => `b2400${(i + 1).toString().padStart(2, '0')}`);
+                const allRollNumbers = [...new Set([...studentRollNumbers, ...fixedRollNumbers])].sort();
 
                 const totalClasses = totalClassesInput.value;
 
-                attBody.innerHTML = students.map(student => {
-                    return `<tr data-roll="${student.roll_no}" data-name="${student.student_name}">
-                                <td><span class="roll">${student.roll_no.toUpperCase()}</span></td>
-                                <td class="student-name">${student.student_name}</td>
+                attBody.innerHTML = allRollNumbers.map(rollNumber => {
+                    const studentName = studentsMap.get(rollNumber) || `Student ${rollNumber.slice(-2)}`;
+                    return `<tr data-roll="${rollNumber}" data-name="${studentName}">
+                                <td><span class="roll">${rollNumber.toUpperCase()}</span></td>
+                                <td class="student-name">${studentName}</td>
                                 <td><input type="number" class="status-input" min="0" max="${totalClasses}" value="${totalClasses}"/></td>
                             </tr>`;
                 }).join('');

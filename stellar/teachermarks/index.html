@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* New light theme variables */
         :root {
             --primary-bg: #f0f4f8;
             --secondary-bg: #ffffff;
@@ -24,7 +23,6 @@
             --shadow-heavy: rgba(0, 0, 0, 0.15);
         }
 
-        /* General Styling */
         * {
             margin: 0;
             padding: 0;
@@ -54,11 +52,15 @@
         }
 
         @keyframes pulseBackground {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
         }
 
-        /* Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -70,6 +72,7 @@
             top: 0;
             z-index: 1000;
         }
+
         .logo {
             display: flex;
             align-items: center;
@@ -78,42 +81,66 @@
             font-weight: bold;
             color: var(--text-color);
         }
+
         .logo img {
             width: 2.5rem;
             height: 2.5rem;
             border-radius: 50%;
         }
+
         .animated-logo {
             animation: glowPulse 2s infinite alternate;
         }
+
         @keyframes glowPulse {
-            from { box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4); }
-            to { box-shadow: 0 0 1.5rem rgba(0, 135, 197, 1); }
+            from {
+                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+            }
+
+            to {
+                box-shadow: 0 0 1.5rem rgba(0, 135, 197, 1);
+            }
         }
-        /* Nav links */
+
         .nav-links {
             list-style: none;
             display: flex;
             gap: 1.5rem;
             align-items: center;
         }
+
         .nav-links li {
             position: relative;
             opacity: 0;
             transform: translateY(-1rem);
             animation: fadeInUp 0.8s forwards;
         }
-        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
-        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
-        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
-        .nav-links li:nth-child(4) { animation-delay: 0.8s; }
+
+        .nav-links li:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-links li:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-links li:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .nav-links li:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
         @keyframes fadeInUp {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        .nav-links a, .nav-links button {
+
+        .nav-links a,
+        .nav-links button {
             color: var(--text-color);
             text-decoration: none;
             font-size: 1rem;
@@ -128,6 +155,7 @@
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
         }
+
         .nav-links a::after {
             content: "";
             position: absolute;
@@ -139,22 +167,27 @@
             transition: width var(--transition-speed);
             border-radius: 0.1rem;
         }
+
         .nav-links a:hover::after {
             width: 100%;
         }
-        .nav-links a:hover, .nav-links button:hover {
+
+        .nav-links a:hover,
+        .nav-links button:hover {
             color: var(--accent-end);
         }
-        /* Mobile Menu */
+
         .menu-toggle {
             display: none;
             font-size: 1.5rem;
             color: var(--text-color);
             cursor: pointer;
         }
+
         .nav-links.active {
             display: flex;
         }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -168,12 +201,12 @@
                 border-radius: 1rem;
                 box-shadow: 0 4px 20px var(--shadow-light);
             }
+
             .menu-toggle {
                 display: block;
             }
         }
-        
-        /* Main content styling */
+
         .container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -253,16 +286,18 @@
             color: #fff;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
         }
+
         .btn.primary:hover {
             transform: translateY(-0.25rem);
             box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
-        
+
         .btn.success {
             background: #27ae60;
             color: #fff;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
+
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -270,7 +305,10 @@
             box-shadow: none;
         }
 
-        .grid-section { display: none; }
+        .grid-section {
+            display: none;
+        }
+
         .grid-wrap {
             overflow-x: auto;
             margin-bottom: 20px;
@@ -283,11 +321,14 @@
             border-collapse: collapse;
             background: var(--secondary-bg);
         }
-        th, td {
+
+        th,
+        td {
             padding: 1rem;
             border-bottom: 1px solid var(--card-bg);
             text-align: center;
         }
+
         th {
             background: var(--card-bg);
             color: var(--accent-end);
@@ -295,6 +336,7 @@
             position: sticky;
             top: 0;
         }
+
         td input {
             width: 80px;
             text-align: center;
@@ -305,17 +347,18 @@
             padding: 0.5rem;
             font-size: 1rem;
         }
+
         td input.readonly {
             background: #e0e6ed;
             cursor: not-allowed;
         }
+
         .save-status {
             font-weight: bold;
             margin-left: 1rem;
             transition: color 0.3s;
         }
 
-        /* Footer */
         .footer {
             background: var(--secondary-bg);
             color: var(--subtle-text);
@@ -336,7 +379,6 @@
         <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
         <ul class="nav-links" id="nav-links">
             <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
-            <!-- <li><a href="/teachermarks/index.html"><i class="fas fa-clipboard"></i> Marks</a></li> -->
             <li><a href="/teacher/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
             <li>
                 <button id="logoutBtn">
@@ -372,7 +414,7 @@
                 </select>
             </div>
             <div>
-                 <label>&nbsp;</label> <!-- Spacer for alignment -->
+                <label>&nbsp;</label>
                 <button id="buildGridBtn" class="btn primary" disabled>Build Grid</button>
             </div>
         </section>
@@ -397,7 +439,7 @@
     </main>
 
     <footer class="footer">
-         <p>© 2025 Stellar Mind | NIT Sikkim</p>
+        <p>© 2025 Stellar Mind | NIT Sikkim</p>
     </footer>
 
     <script type="module">
@@ -407,19 +449,11 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-
-        // =============================
-        // Attempt to Disable Developer Tools
-        // NOTE: This is not a secure or foolproof method.
-        // Determined users can always bypass these measures.
-        // =============================
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('keydown', event => {
-            // Prevent F12
             if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
                 event.preventDefault();
             }
-            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
             if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
                 event.preventDefault();
             }
@@ -464,19 +498,22 @@
 
             if (error || !data) {
                 console.error('Error fetching teacher data:', error);
-                return redirectToLogin();
+                saveStatus.textContent = 'Access Denied. Please log in again.';
+                setTimeout(redirectToLogin, 2000);
+                return;
             }
 
             currentUser = data;
 
             if (currentUser.subject_code === null) {
-                alert('Access Denied. Only teachers with assigned subjects can access this portal.');
-                return redirectToLogin();
+                saveStatus.textContent = 'Access Denied. Only teachers with assigned subjects can access this portal.';
+                setTimeout(redirectToLogin, 2000);
+                return;
             }
 
             teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
             subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
-            
+
             mobileMenu.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
             });
@@ -490,10 +527,14 @@
 
         function formatExamType(exam) {
             switch (exam) {
-                case 'Mid 1': return 'mid1';
-                case 'Mid 2': return 'mid2';
-                case 'End Term': return 'endsem';
-                default: return exam.toLowerCase().replace(/\s/g, '');
+                case 'Mid 1':
+                    return 'mid1';
+                case 'Mid 2':
+                    return 'mid2';
+                case 'End Term':
+                    return 'endsem';
+                default:
+                    return exam.toLowerCase().replace(/\s/g, '');
             }
         }
 
@@ -520,10 +561,18 @@
 
                 const studentsMap = new Map(usersData.map(user => [user.username.toLowerCase(), user.studentname]));
 
-                const students = Array.from({ length: 64 }, (_, i) => {
-                    const roll = `b2400${(i + 1).toString().padStart(2, '0')}`;
-                    return { roll, student_name: studentsMap.get(roll.toLowerCase()) || `Student ${roll}` };
-                });
+                // Manually define the list of all roll numbers, including the new ones.
+                const allRollNumbers = [
+                    ...Array.from({ length: 64 }, (_, i) => `b2400${(i + 1).toString().padStart(2, '0')}`),
+                    'b240086',
+                    'b240091',
+                    'b240158'
+                ];
+
+                const students = allRollNumbers.map(roll => ({
+                    roll,
+                    student_name: studentsMap.get(roll.toLowerCase()) || `Student ${roll}`
+                }));
 
                 const { data: existingMarks, error } = await supabase
                     .from('cse_marks')
@@ -544,12 +593,28 @@
                                 <td>${student.roll.toUpperCase()}</td>
                                 <td>${student.student_name}</td>
                                 <td><input type="number" step="0.5" class="max-input" value="${maxMarksValue}" min="1" max="200" ${isReadOnly}></td>
-                                <td><input type="number" step="0.5" class="marks-input" value="${marksValue}" min="0" max="${maxMarksValue}"></td>
+                                <td><input type="number" step="0.5" class="marks-input" value="${marksValue}" min="0"></td>
                             </tr>`;
                 }).join('');
 
                 const marksInputs = marksBody.querySelectorAll('.marks-input');
                 marksInputs.forEach((input, index) => {
+                    const row = input.closest('tr');
+                    const maxInput = row.querySelector('.max-input');
+
+                    input.setAttribute('max', maxInput.value);
+
+                    input.addEventListener('input', () => {
+                        const marksValue = parseFloat(input.value);
+                        const maxMarksValue = parseFloat(maxInput.value);
+                        if (marksValue > maxMarksValue) {
+                            input.value = maxMarksValue;
+                            saveStatus.textContent = "Marks cannot exceed max marks.";
+                        } else {
+                            saveStatus.textContent = "";
+                        }
+                    });
+
                     input.addEventListener('keydown', (event) => {
                         if (event.key === 'Enter') {
                             event.preventDefault();
@@ -588,7 +653,9 @@
             try {
                 const { error } = await supabase
                     .from('cse_marks')
-                    .upsert(records, { onConflict: ['username', 'exam_type', 'subject_code'] });
+                    .upsert(records, {
+                        onConflict: ['username', 'exam_type', 'subject_code']
+                    });
 
                 if (error) throw error;
                 saveStatus.textContent = '✅ Marks saved successfully!';
