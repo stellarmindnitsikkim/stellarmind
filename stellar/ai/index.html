@@ -406,6 +406,27 @@
       iframe.style.display = "block"; // show chatbox
     }
 
+
+    // =============================
+        // Attempt to Disable Developer Tools
+        // NOTE: This is not a secure or foolproof method.
+        // Determined users can always bypass these measures.
+        // =============================
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            // Prevent F12
+            if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
+                event.preventDefault();
+            }
+            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
+                event.preventDefault();
+            }
+            if (event.ctrlKey && event.key.toUpperCase() === 'U') {
+                event.preventDefault();
+            }
+        });
+
     // Wait for iframe to load completely
     iframe.onload = () => {
       setTimeout(showChatbox, 2000); // delay 2s to bypass botpress splash

@@ -407,6 +407,27 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+
+        // =============================
+        // Attempt to Disable Developer Tools
+        // NOTE: This is not a secure or foolproof method.
+        // Determined users can always bypass these measures.
+        // =============================
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            // Prevent F12
+            if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
+                event.preventDefault();
+            }
+            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
+                event.preventDefault();
+            }
+            if (event.ctrlKey && event.key.toUpperCase() === 'U') {
+                event.preventDefault();
+            }
+        });
+
         const teacherNameEl = document.getElementById('teacherName');
         const subjectNameEl = document.getElementById('subjectName');
         const yearSelect = document.getElementById('yearSelect');

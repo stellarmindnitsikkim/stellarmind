@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stellar Mind | Sign Up</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Light theme variables from index.html */
+    :root {
+      --primary-bg: #f0f4f8;
+      --secondary-bg: #ffffff;
+      --card-bg: #eaf1f7;
+      --text-color: #1c2b3a;
+      --subtle-text: #6b7a8c;
+      --accent-start: #4299e1;
+      --accent-end: #0087c5;
+      --shadow-light: rgba(0, 0, 0, 0.08);
+      --shadow-heavy: rgba(0, 0, 0, 0.15);
+      --transition-speed: 0.5s;
+    }
+
+    /* Reset and basic styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-bg);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background from the main page */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 10%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(0, 135, 197, 0.1) 0%, transparent 50%);
+      animation: pulseBackground 10s infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes pulseBackground {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.1);
+      }
+    }
+    
+    /* Container styles */
+    .signup-container {
+      background: var(--secondary-bg);
+      padding: 2.5rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 30px var(--shadow-heavy);
+      width: 100%;
+      max-width: 25rem;
+      text-align: center;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      animation: fadeIn 1s ease-out;
+      position: relative;
+      z-index: 1;
+    }
+     @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* Logo */
+     .logo img {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 1.5rem rgba(66, 153, 225, 0.5);
+      animation: glowPulse 2s infinite alternate;
+    }
+    @keyframes glowPulse {
+      from {
+        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+      }
+      to {
+        box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1);
+      }
+    }
+
+    /* Title */
+    .signup-container h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+        color: var(--subtle-text);
+        margin-bottom: 2rem;
+    }
+
+    /* Input group */
+    .input-group {
+        position: relative;
+        margin-bottom: 1.25rem;
+    }
+    .input-group i {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--subtle-text);
+        transition: color 0.3s;
+    }
+    .input-group input {
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 3rem;
+        border: 1px solid #ddd;
+        border-radius: 2rem;
+        background: var(--primary-bg);
+        outline: none;
+        color: var(--text-color);
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .input-group input:focus {
+        border-color: var(--accent-start);
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    }
+    .input-group input:focus + i {
+        color: var(--accent-start);
+    }
+    
+    .example-text {
+        font-size: 0.8rem;
+        color: var(--subtle-text);
+        text-align: left;
+        margin-left: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    /* Button */
+    .btn {
+        background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border-radius: 2rem;
+        text-decoration: none;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1rem;
+        transition: all var(--transition-speed) ease;
+        box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+        margin-top: 1rem;
+    }
+    .btn:hover {
+        transform: translateY(-0.25rem) scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
+    }
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Message & Link */
+    #signup-message {
+      margin-top: 1rem;
+      min-height: 1.2rem;
+      font-weight: bold;
+    }
+    .login-link {
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--subtle-text);
+    }
+    .login-link a {
+        color: var(--accent-start);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <div class="logo">
+      <img src="/assets/tlogo.png" alt="Stellar Mind Logo" onerror="this.style.display='none'">
+    </div>
+    
+    <h1>Forgot Password!</h1>
+    <p class="subtitle"> Create a new one in just a few clicks to regain access to your account</p>
+
+    <form id="signup-form">
+      <p class="example-text">e.g., b240002</p>
+      <div class="input-group">
+        <input type="text" id="rollno" placeholder="Institute Roll Number" maxlength="7" required>
+        <i class="fas fa-id-card"></i>
+      </div>
+
+      <div class="input-group">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <i class="fas fa-user"></i>
+      </div>
+
+      <button type="submit" class="btn" id="submit-btn">Send Verification Code</button>
+      <p id="signup-message"></p>
+    </form>
+    
+    <p class="login-link">
+      Already have an account? <a href="/login/index.html">Login</a>
+    </p>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+    
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('signup-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const messageEl = document.getElementById('signup-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const rollno = document.getElementById('rollno').value.trim().toLowerCase();
+      const name = document.getElementById('name').value.trim();
+
+      if (!rollno || !name) {
+        messageEl.textContent = 'Please fill out all fields.';
+        messageEl.style.color = '#e74c3c';
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      messageEl.textContent = '⏳ Sending verification email...';
+      messageEl.style.color = 'var(--subtle-text)';
+
+      // Construct the institute email address
+      const email = `${rollno}@nitsikkim.ac.in`;
+
+      try {
+        const { data, error } = await supabase.functions.invoke('send-verification-email', {
+          body: { email, name },
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data.error) {
+           throw new Error(data.error);
+        }
+
+        messageEl.textContent = '✅ Email sent! Please check your inbox.';
+        messageEl.style.color = '#27ae60';
+
+        const verificationData = { rollno, name, email };
+        sessionStorage.setItem('verificationData', JSON.stringify(verificationData));
+
+        setTimeout(() => {
+          window.location.href = 'verify.html';
+        }, 2000);
+
+      } catch (err) {
+        console.error("Error sending verification email:", err);
+        messageEl.textContent = `⚠️ Error: Could not send email.`;
+        messageEl.style.color = '#e67e22';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Verification Code';
+      }
+    });
+  </script>
+</body>
+</html>

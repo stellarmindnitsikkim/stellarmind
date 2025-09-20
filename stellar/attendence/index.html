@@ -437,7 +437,7 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
             <!-- <li><a href="index.html"><i class="fas fa-user-check"></i> Attendance</a></li> -->
-            <li><a href="../events.html"><i class="fas fa-calendar-alt"></i> Events</a></li>
+            <li><a href="/attendence/index.html"><i class="fas fa-calendar-alt"></i> Attendance</a></li>
             <li id="logoutBtn"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
@@ -491,6 +491,27 @@
         const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+
+        // =============================
+        // Attempt to Disable Developer Tools
+        // NOTE: This is not a secure or foolproof method.
+        // Determined users can always bypass these measures.
+        // =============================
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            // Prevent F12
+            if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
+                event.preventDefault();
+            }
+            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
+                event.preventDefault();
+            }
+            if (event.ctrlKey && event.key.toUpperCase() === 'U') {
+                event.preventDefault();
+            }
+        });
 
         const studentNameEl = document.getElementById("studentName");
         const attendanceHead = document.getElementById("attendanceHead");

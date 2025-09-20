@@ -110,6 +110,24 @@
             font-size: 15px;
         }
 
+        /* Link below password */
+        .forgot-password-link {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        
+        .forgot-password-link a {
+            font-size: 13px;
+            color: #4a90e2;
+            text-decoration: none;
+            transition: text-decoration 0.2s;
+        }
+
+        .forgot-password-link a:hover {
+            text-decoration: underline;
+        }
+
         /* Button Styles */
         .btn {
             display: inline-block;
@@ -182,13 +200,17 @@
         <form id="login-form">
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" id="username" placeholder="Username" required>
+                <input type="text" id="username" placeholder="Institute Roll Number" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
                 <input type="password" id="password" placeholder="Password" required>
             </div>
+            
+            <p class="forgot-password-link">
+                <a href="forget.html" target="_blank">Forgot Password?</a>
+            </p>
 
             <button type="submit" class="btn">Login</button>
             <p id="login-message"></p>
