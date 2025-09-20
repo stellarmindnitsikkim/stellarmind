@@ -189,6 +189,10 @@
             .menu-toggle {
                 display: block;
             }
+            .subject-list {
+                grid-template-columns: 1fr; /* Stack items on top of each other */
+                text-align: left;
+            }
         }
 
         @keyframes slideInRight {
@@ -248,6 +252,53 @@
         .attendance-section h2 {
             margin-bottom: 2rem;
             font-size: 1.8rem;
+        }
+
+        .subject-info-container {
+            background: var(--secondary-bg);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 8px 30px var(--shadow-light);
+        }
+
+        .subject-info-container h3 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .subject-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding-left: 0;
+            text-align: left;
+        }
+
+        .subject-list li {
+            background: var(--card-bg);
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--subtle-text);
+            text-align: left;
+        }
+        
+        .subject-code {
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        .subject-percent {
+            font-weight: 700;
+            color: var(--accent-end);
         }
 
         .chart-container {
@@ -320,6 +371,7 @@
             border-collapse: collapse;
             width: 100%;
             min-width: 600px;
+            table-layout: fixed;
         }
 
         .attendance-table th,
@@ -437,7 +489,7 @@
         <ul class="nav-links" id="nav-links">
             <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
             <!-- <li><a href="index.html"><i class="fas fa-user-check"></i> Attendance</a></li> -->
-            <li><a href="/attendence/index.html"><i class="fas fa-calendar-alt"></i> Attendance</a></li>
+            <li><a href="/marks/index.html"><i class="fas fa-calendar-alt"></i> Marks</a></li>
             <li id="logoutBtn"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </nav>
@@ -453,6 +505,13 @@
     <!-- Attendance Section -->
     <section class="attendance-section">
         <h2>Your Attendance Summary</h2>
+
+        <div class="subject-info-container" id="subjectInfo">
+            <h3>Subject Codes & Names</h3>
+            <ul class="subject-list" id="subjectList">
+                <!-- Subject list will be dynamically populated here -->
+            </ul>
+        </div>
 
         <div class="chart-container">
             <canvas id="attendanceChart"></canvas>
@@ -478,7 +537,7 @@
     <footer class="footer">
         <div class="footer-content">
             <p>© 2025 Stellar Mind | NIT Sikkim</p>
-            <p>📞 Contact: <a href="tel:+917908750746">7908750746</a></p>
+            <p>📞 Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
             <div class="social-icons">
                 <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -520,6 +579,7 @@
         const toggleBtn = document.getElementById("toggleViewBtn");
         const attendanceGrid = document.getElementById("attendanceGrid");
         const attendanceChartCanvas = document.getElementById("attendanceChart");
+        const subjectListEl = document.getElementById("subjectList");
 
         let currentMonth = new Date();
         let tableVisible = false;
@@ -581,10 +641,11 @@
 
             const subjectData = {};
             data.forEach(record => {
-                const subjectIdentifier = record.subject_code || record.subject_name;
+                const subjectIdentifier = record.subject_code; // Use subject_code as the unique key
                 if (!subjectData[subjectIdentifier]) {
                     subjectData[subjectIdentifier] = {
                         name: record.subject_name,
+                        code: record.subject_code,
                         attended: 0,
                         total: 0
                     };
@@ -593,15 +654,24 @@
                 subjectData[subjectIdentifier].total += record.total_classes;
             });
 
+            renderSubjectList(subjectData);
             renderBarChart(subjectData);
             loadAttendanceTable(currentMonth);
+        }
+
+        function renderSubjectList(subjectData) {
+            const subjects = Object.values(subjectData);
+            subjectListEl.innerHTML = subjects.map(sub => {
+                const percentage = sub.total > 0 ? ((sub.attended / sub.total) * 100).toFixed(1) : 0;
+                return `<li><span class="subject-code">${sub.code}</span>: ${sub.name} <br> <span class="subject-percent">${percentage}%</span></li>`;
+            }).join('');
         }
 
         let myChart;
 
         function renderBarChart(subjectData) {
             const subjects = Object.values(subjectData);
-            const subjectNames = subjects.map(sub => sub.name);
+            const subjectCodes = subjects.map(sub => sub.code); // Use subject code for labels
             const percentages = subjects.map(sub => {
                 const attended = sub.attended;
                 const total = sub.total;
@@ -613,7 +683,7 @@
             myChart = new Chart(attendanceChartCanvas, {
                 type: 'bar',
                 data: {
-                    labels: subjectNames,
+                    labels: subjectCodes, // Use subject code here
                     datasets: [{
                         label: 'Attendance %',
                         data: percentages,
@@ -654,7 +724,8 @@
                             callbacks: {
                                 label: function(context) {
                                     const subject = subjects[context.dataIndex];
-                                    return `Attendance: ${subject.attended}/${subject.total} (${context.raw}%)`;
+                                    // Update tooltip to show both name and code
+                                    return `${subject.name} (${subject.code}): ${subject.attended}/${subject.total} (${context.raw}%)`;
                                 }
                             }
                         }
