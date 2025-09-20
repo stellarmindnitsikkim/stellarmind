@@ -2,547 +2,656 @@
 <html lang="en">
 
 <head>
-   
-  <meta charset="UTF-8">
-   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellar Mind | StellarChatBot</title>
-   
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-   
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-    /* Light theme variables from index.html */
-    :root {
-      --primary-bg: #f0f4f8;
-      --secondary-bg: #ffffff;
-      --card-bg: #eaf1f7;
-      --text-color: #1c2b3a;
-      --subtle-text: #6b7a8c;
-      --accent-start: #4299e1;
-      --accent-end: #0087c5;
-      --shadow-light: rgba(0, 0, 0, 0.08);
-      --shadow-heavy: rgba(0, 0, 0, 0.15);
-      --transition-speed: 0.5s;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stellar Mind | StellarChatBot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Light theme variables from index.html */
+        :root {
+            --primary-bg: #f0f4f8;
+            --secondary-bg: #ffffff;
+            --card-bg: #eaf1f7;
+            --text-color: #1c2b3a;
+            --subtle-text: #6b7a8c;
+            --accent-start: #4299e1;
+            --accent-end: #0087c5;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+            --transition-speed: 0.5s;
+        }
 
-    /* Global styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        /* Reset and basic styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: var(--primary-bg);
-      color: var(--text-color);
-      overflow-x: hidden;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-color);
+            transition: background var(--transition-speed);
+            position: relative;
+            overflow-x: hidden;
+        }
 
-    /* Loader Overlay */
-    #custom-loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--primary-bg);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
-    }
+        /* Background animation from index.html */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(66, 153, 225, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(0, 135, 197, 0.1) 0%, transparent 50%);
+            animation: pulseBackground 10s infinite alternate;
+            z-index: -1;
+        }
 
-    #custom-loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
+        @keyframes pulseBackground {
+            from {
+                transform: scale(1);
+            }
 
-    .loader-logo {
-      width: 8rem;
-      height: 8rem;
-      border-radius: 50%;
-      margin-bottom: 2rem;
-      animation: pulseGlow 2s infinite alternate;
-    }
+            to {
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Loader Overlay */
+        #custom-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
 
-    .spinner {
-      border: 6px solid rgba(0, 135, 197, 0.15);
-      border-top: 6px solid var(--accent-end);
-      border-radius: 50%;
-      width: 5rem;
-      height: 5rem;
-      animation: spin 1.2s linear infinite;
-      margin-bottom: 1.5rem;
-    }
+        #custom-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
 
-    .loading-text {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--text-color);
-      animation: fadeBlink 2s infinite;
-    }
+        .loader-logo {
+            width: 8rem;
+            height: 8rem;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            animation: pulseGlow 2s infinite alternate;
+        }
 
-    /* Animations */
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
+        .spinner {
+            border: 6px solid rgba(0, 135, 197, 0.15);
+            border-top: 6px solid var(--accent-end);
+            border-radius: 50%;
+            width: 5rem;
+            height: 5rem;
+            animation: spin 1.2s linear infinite;
+            margin-bottom: 1.5rem;
+        }
 
-      to {
-        transform: rotate(360deg);
-      }
-    }
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            animation: fadeBlink 2s infinite;
+        }
 
-    @keyframes pulseGlow {
-      from {
-        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
-      }
+        /* Animations */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
 
-      to {
-        box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1);
-      }
-    }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-    @keyframes glowPulse {
-      from {
-        box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
-      }
+        @keyframes pulseGlow {
+            from {
+                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+            }
 
-      to {
-        box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
-      }
-    }
+            to {
+                box-shadow: 0 0 2.5rem rgba(0, 135, 197, 1);
+            }
+        }
 
-    @keyframes fadeBlink {
+        @keyframes fadeBlink {
 
-      0%,
-      100% {
-        opacity: 1;
-      }
+            0%,
+            100% {
+                opacity: 1;
+            }
 
-      50% {
-        opacity: 0.7;
-      }
-    }
+            50% {
+                opacity: 0.7;
+            }
+        }
 
-    /* Navbar */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--secondary-bg);
-      padding: 1rem 2rem;
-      box-shadow: 0 4px 20px var(--shadow-light);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--secondary-bg);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background var(--transition-speed), box-shadow var(--transition-speed);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--text-color);
-    }
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 25px var(--shadow-heavy);
+        }
 
-    .logo img {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-    }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: bold;
+            color: var(--text-color);
+            min-width: 12rem;
+        }
 
-    .animated-logo {
-      animation: glowPulse 2s infinite alternate;
-    }
+        .logo-flipper {
+            position: relative;
+            width: 3rem;
+            height: 3rem;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
 
-    .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-    }
+        .logo-flipper.flipped {
+            transform: rotateY(180deg);
+        }
 
-    /* Nav link animations from index page */
-    .nav-links li {
-      position: relative;
-      opacity: 0;
-      transform: translateY(-1rem);
-      animation: fadeInUp 0.8s forwards;
-    }
+        .logo-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 1rem rgba(66, 153, 225, 0.5);
+            backface-visibility: hidden;
+            transition: box-shadow var(--transition-speed);
+        }
 
-    .nav-links li:nth-child(1) {
-      animation-delay: 0.2s;
-    }
+        .logo-image.front {
+            transform: rotateY(0deg);
+        }
 
-    .nav-links li:nth-child(2) {
-      animation-delay: 0.4s;
-    }
+        .logo-image.back {
+            transform: rotateY(180deg);
+        }
 
-    .nav-links li:nth-child(3) {
-      animation-delay: 0.6s;
-    }
+        .animated-logo {
+            animation: glowPulse 2s infinite alternate;
+        }
 
-    .nav-links li:nth-child(4) {
-      animation-delay: 0.8s;
-    }
+        @keyframes glowPulse {
+            from {
+                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
+            }
 
-    .nav-links li:nth-child(5) {
-      animation-delay: 1s;
-    }
+            to {
+                box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
+            }
+        }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .logo-name {
+            font-size: 1.2rem;
+        }
 
-    .nav-links a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 0.5rem 0.3rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      position: relative;
-      transition: color var(--transition-speed);
-    }
+        .typing {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--text-color);
+            animation: typing-effect 1s steps(20, end) forwards, blink-caret 0.75s step-end infinite;
+        }
 
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -0.3rem;
-      width: 0%;
-      height: 0.15rem;
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      transition: width var(--transition-speed);
-      border-radius: 0.1rem;
-    }
+        @keyframes typing-effect {
+            from {
+                width: 0;
+            }
 
-    .nav-links a:hover::after {
-      width: 100%;
-    }
+            to {
+                width: 100%;
+            }
+        }
 
-    .nav-links a:hover {
-      color: var(--accent-end);
-    }
+        @keyframes blink-caret {
 
-    .nav-links button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-color);
-      text-decoration: none;
-      font-size: 1rem;
-      padding: 0.5rem 0.3rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      position: relative;
-      transition: color var(--transition-speed);
-      font-family: 'Poppins', sans-serif;
-    }
+            from,
+            to {
+                border-color: transparent;
+            }
 
-    .nav-links button::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -0.3rem;
-      width: 0%;
-      height: 0.15rem;
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      transition: width var(--transition-speed);
-      border-radius: 0.1rem;
-    }
+            50% {
+                border-color: var(--text-color);
+            }
+        }
 
-    .nav-links button:hover::after {
-      width: 100%;
-    }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+        }
 
-    .nav-links button:hover {
-      color: var(--accent-end);
-    }
+        .nav-links li {
+            position: relative;
+            opacity: 0;
+            transform: translateY(-1rem);
+            animation: fadeInUp 0.8s forwards;
+        }
 
-    .menu-toggle {
-      display: none;
-      font-size: 1.5rem;
-      color: var(--text-color);
-      cursor: pointer;
-    }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    /* Hero Section */
-    .hero {
-      padding: 4rem 2rem;
-      text-align: center;
-    }
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+            transition: color var(--transition-speed);
+        }
 
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -0.3rem;
+            width: 0%;
+            height: 0.15rem;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            transition: width var(--transition-speed);
+            border-radius: 0.1rem;
+        }
 
-    .hero h1 span {
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
 
-    .hero p {
-      font-size: 1.1rem;
-      color: var(--subtle-text);
-      max-width: 600px;
-      margin: 0 auto;
-    }
+        .nav-links a:hover {
+            color: var(--accent-end);
+        }
 
-    /* Chat Section */
-    .chat-container {
-      padding: 0 2rem 4rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+        }
 
-    #stellar-chat {
-      width: 100%;
-      height: 70vh;
-      min-height: 500px;
-      border-radius: 1.5rem;
-      display: none;
-      box-shadow: 0 8px 30px var(--shadow-heavy);
-      border: 1px solid #e0e0e0;
-    }
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
 
-    /* Footer */
-    .footer {
-      background: var(--secondary-bg);
-      color: var(--subtle-text);
-      text-align: center;
-      padding: 2rem 1rem;
-      margin-top: 3rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-    }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
 
-    .footer-content p {
-      margin: 0.3rem 0;
-    }
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    .footer-content a {
-      color: var(--subtle-text);
-      text-decoration: none;
-      transition: color var(--transition-speed);
-    }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--subtle-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    .footer-content a:hover {
-      color: var(--accent-end);
-    }
+        /* Chat Section */
+        .chat-container {
+            padding: 0 2rem 4rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-    .social-icons {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      gap: 1.25rem;
-    }
+        #stellar-chat {
+            width: 100%;
+            height: 70vh;
+            min-height: 500px;
+            border-radius: 1.5rem;
+            display: none;
+            box-shadow: 0 8px 30px var(--shadow-heavy);
+            border: 1px solid #e0e0e0;
+        }
 
-    .social-icons a {
-      font-size: 1.5rem;
-      color: var(--subtle-text);
-      transition: all var(--transition-speed) ease-in-out;
-    }
+        /* Footer */
+        .footer {
+            background: var(--secondary-bg);
+            color: var(--subtle-text);
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
 
-    .social-icons a:hover {
-      color: var(--accent-end);
-      transform: scale(1.2) translateY(-0.25rem);
-    }
+        .footer-content p {
+            margin: 0.3rem 0;
+        }
 
-    /* ===== MOBILE RESPONSIVE STYLES ===== */
-    @media(max-width:768px) {
-      .navbar {
-        padding: 1rem 1.5rem;
-      }
+        .footer-content a {
+            color: var(--subtle-text);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
 
-      .nav-links {
-        display: none;
-        /* Hidden by default */
-        flex-direction: column;
-        background: var(--secondary-bg);
-        position: absolute;
-        top: 4.5rem;
-        /* Matches navbar height */
-        right: 1rem;
-        width: 14rem;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        box-shadow: 0 4px 20px var(--shadow-heavy);
-        animation: slideInRight 0.5s forwards;
-      }
+        .footer-content a:hover {
+            color: var(--accent-end);
+        }
 
-      .nav-links.active {
-        display: flex;
-      }
+        .social-icons {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.25rem;
+        }
 
-      .menu-toggle {
-        display: block;
-      }
+        .social-icons a {
+            font-size: 1.5rem;
+            color: var(--subtle-text);
+            transition: all var(--transition-speed) ease-in-out;
+        }
 
-      /* Adjustments for smaller screens */
-      .hero {
-        padding: 3rem 1rem;
-      }
+        .social-icons a:hover {
+            color: var(--accent-end);
+            transform: scale(1.2) translateY(-0.25rem);
+        }
 
-      .hero h1 {
-        font-size: 2rem;
-      }
+        /* ===== MOBILE RESPONSIVE STYLES ===== */
+        @media(max-width:768px) {
+            .navbar {
+                padding: 1rem 1.5rem;
+            }
 
-      .chat-container {
-        padding: 0 1rem 3rem;
-      }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                background: var(--secondary-bg);
+                position: absolute;
+                top: 4.5rem;
+                right: 1rem;
+                width: 14rem;
+                padding: 1.5rem;
+                border-radius: 1rem;
+                box-shadow: 0 4px 20px var(--shadow-heavy);
+                animation: slideInRight 0.5s forwards;
+            }
 
-      #stellar-chat {
-        height: 75vh;
-        min-height: 450px;
-      }
-    }
+            .nav-links.active {
+                display: flex;
+            }
 
-    @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
+            .menu-toggle {
+                display: block;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
 
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-  </style>
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .chat-container {
+                padding: 0 1rem 3rem;
+            }
+
+            #stellar-chat {
+                height: 75vh;
+                min-height: 450px;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- Loader Overlay -->
-    <div id="custom-loader">
-        <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="loader-logo">
-        <div class="spinner"></div>
-        <div class="loading-text">Launching StellarChatBot...</div>
-      </div>
+    <!-- Loader Overlay -->
+    <div id="custom-loader">
+        <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="loader-logo">
+        <div class="spinner"></div>
+        <div class="loading-text">Launching StellarChatBot...</div>
+    </div>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <img src="../assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
-            <span>Stellar Mind</span>
-          </div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="../attendence/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
-            <!-- <li><a href="https://wa.me/7037796470"><i class="fas fa-phone-alt"></i> Help</a></li> -->
-            <li><a href="../terms/index.html"><i class="fas fa-file-contract"></i> Terms</a></li>
-            <li>
-        <button id="logoutBtn">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </li>
-          </ul>
-        <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
-      </nav>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <div class="logo-flipper" id="logo-flipper">
+                <img class="logo-image front" src="../assets/NITLOGONEW.png" alt="NIT Sikkim Logo">
+                <img class="logo-image back animated-logo" src="../assets/ttlogo.jpg" alt="Stellar Mind Logo">
+            </div>
+            <span id="logo-name" class="logo-name"></span>
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-text">
-            <h1>🤖 Chat with <span>StellarChatBot</span></h1>
-            <p>Ask anything — our AI assistant is here to help you 24/7.</p>
-          </div>
-      </section>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="../attendence/index.html" id="attendance-link"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <li><a href="../marks/index.html" id="marks-link"><i class="fas fa-clipboard"></i> Marks</a></li>
+            <li id="auth-btn"><a href="../login/index.html"><i class="fas fa-user"></i> Login</a></li>
+        </ul>
+    </nav>
 
-    <!-- Chat Section -->
-    <section class="chat-container">
-        <iframe id="stellar-chat"
-      src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json"
-      frameborder="0"></iframe>
-      </section>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>🤖 Chat with <span>StellarChatBot</span></h1>
+            <p>Ask anything — our AI assistant is here to help you 24/7.</p>
+        </div>
+    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p>© 2025 Stellar Mind | NIT Sikkim</p>
-            <p>📞 Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
-            <div class="social-icons">
-                <a href="https://wa.me/7037796470"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://instagram.com/"><i class="fab fa-instagram"></i></a>
-                <a href="https://linkedin.com/"><i class="fab fa-linkedin"></i></a>
-              </div>
-          </div>
-      </footer>
+    <!-- Chat Section -->
+    <section class="chat-container">
+        <iframe id="stellar-chat" src="https://cdn.botpress.cloud/webchat/v3.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/09/09/17/20250909173600-4HKS072I.json" frameborder="0"></iframe>
+    </section>
 
-   
-  <script>
-    const iframe = document.getElementById("stellar-chat");
-    const loader = document.getElementById("custom-loader");
-
-    function showChatbox() {
-      loader.classList.add("hidden"); // fade out loader
-      iframe.style.display = "block"; // show chatbox
-    }
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 Stellar Mind | NIT Sikkim</p>
+            <p>📞 Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
+            <p><a href="../terms/index.html"><i class="fas fa-file-contract"></i> Terms & Conditions</a></p>
+            <div class="social-icons">
+                <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
 
 
-    // =============================
-    // Attempt to Disable Developer Tools
-    // NOTE: This is not a secure or foolproof method.
-    // Determined users can always bypass these measures.
-    // =============================
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.addEventListener('keydown', event => {
-      // Prevent F12
-      if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
-        event.preventDefault();
-      }
-      // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-      if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
-        event.preventDefault();
-      }
-      if (event.ctrlKey && event.key.toUpperCase() === 'U') {
-        event.preventDefault();
-      }
-    });
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-    // Wait for iframe to load completely
-    iframe.onload = () => {
-      setTimeout(showChatbox, 2000); // delay 2s to bypass botpress splash
-    }
+        const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Fallback: force show chat if onload fails
-    setTimeout(showChatbox, 6000);
+        const iframe = document.getElementById("stellar-chat");
+        const loader = document.getElementById("custom-loader");
+        let currentUser = null;
 
-    // Mobile nav toggle
-    const menuToggle = document.getElementById("mobile-menu");
-    const navLinks = document.getElementById("nav-links");
-    if (menuToggle && navLinks) {
-      menuToggle.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-      });
-
-      // Close menu when clicking anywhere outside of it
-      document.addEventListener('click', function (event) {
-        const isClickInsideNav = navLinks.contains(event.target);
-        const isClickOnToggle = menuToggle.contains(event.target);
-
-        if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
-          navLinks.classList.remove('active');
+        function showChatbox() {
+            loader.classList.add("hidden"); // fade out loader
+            iframe.style.display = "block"; // show chatbox
         }
-      });
-    }
-  </script>
+
+        // Wait for iframe to load completely
+        iframe.onload = () => {
+            setTimeout(showChatbox, 2000); // delay 2s to bypass botpress splash
+        }
+
+        // Fallback: force show chat if onload fails
+        setTimeout(showChatbox, 6000);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleBtn = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    navLinks.classList.toggle("active");
+                });
+            }
+             document.addEventListener("click", (e) => {
+                const isClickInsideMenu = navLinks.contains(e.target);
+                const isClickOnToggle = toggleBtn.contains(e.target);
+                
+                if (navLinks.classList.contains("active") && !isClickInsideMenu && !isClickOnToggle) {
+                    navLinks.classList.remove("active");
+                }
+            });
+
+            checkLogin();
+
+            const logoFlipper = document.getElementById('logo-flipper');
+            const logoNameSpan = document.getElementById('logo-name');
+            const logoNames = ['NIT Sikkim', 'Stellar Mind'];
+            let currentNameIndex = 0;
+
+            const typeText = (text) => {
+                return new Promise(resolve => {
+                    logoNameSpan.textContent = '';
+                    logoNameSpan.classList.add('typing');
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        if (i < text.length) {
+                            logoNameSpan.textContent += text.charAt(i);
+                            i++;
+                        } else {
+                            clearInterval(interval);
+                            logoNameSpan.classList.remove('typing');
+                            logoNameSpan.style.borderRight = 'none';
+                            resolve();
+                        }
+                    }, 50);
+                });
+            };
+
+            const runAnimation = async () => {
+                logoFlipper.classList.toggle('flipped');
+                await new Promise(resolve => setTimeout(resolve, 600));
+                currentNameIndex = (currentNameIndex + 1) % logoNames.length;
+                await typeText(logoNames[currentNameIndex]);
+                await new Promise(resolve => setTimeout(resolve, 2400));
+                runAnimation();
+            };
+
+            typeText(logoNames[currentNameIndex]).then(() => {
+                setTimeout(runAnimation, 2000);
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        async function checkLogin() {
+            try {
+                currentUser = JSON.parse(localStorage.getItem("user"));
+            } catch {}
+
+            const authBtn = document.getElementById("auth-btn");
+            const attendanceLink = document.getElementById("attendance-link");
+            const marksLink = document.getElementById("marks-link");
+
+            if (currentUser && currentUser.role) {
+                 if (currentUser.role === 'teacher' && !currentUser.teacher_name) {
+                    try {
+                        const { data, error } = await supabase.from('teacherportal').select('teacher_name').eq('username', currentUser.username).single();
+                        if (data && data.teacher_name) {
+                            currentUser.teacher_name = data.teacher_name;
+                            localStorage.setItem("user", JSON.stringify(currentUser));
+                        }
+                    } catch (e) {}
+                }
+
+                let displayName = currentUser.studentname || currentUser.teacher_name || currentUser.username || 'User';
+                authBtn.innerHTML = `<a href="#" id="logout-link"><i class="fas fa-user"></i> ${displayName} (Logout)</a>`;
+                
+                document.getElementById("logout-link").addEventListener("click", (e) => {
+                    e.preventDefault();
+                    logoutUser();
+                });
+                
+                if (attendanceLink) {
+                    attendanceLink.href = (currentUser.role === "teacher" || currentUser.role === "admin") ? "../teacher/index.html" : "../attendence/index.html";
+                }
+                if(marksLink) {
+                    marksLink.href = (currentUser.role === "teacher" || currentUser.role === "admin") ? "../teachermarks/index.html" : "../marks/index.html";
+                }
+
+            } else {
+                authBtn.innerHTML = `<a href="../login/index.html"><i class="fas fa-user"></i> Login</a>`;
+                 if (attendanceLink) attendanceLink.href = "../attendence/index.html";
+                 if(marksLink) marksLink.href = "../marks/index.html";
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem("user");
+            currentUser = null;
+            checkLogin();
+        }
+    </script>
 </body>
 
 </html>
+
