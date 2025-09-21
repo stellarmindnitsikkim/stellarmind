@@ -1,0 +1,43 @@
+-- 1. Enable Row-Level Security on the attendance table.
+ALTER TABLE attendance ENABLE ROW LEVEL SECURITY;
+
+-- 2. Drop any existing RLS policies on the attendance table to avoid conflicts.
+DROP POLICY IF EXISTS "Allow all inserts" ON attendance;
+DROP POLICY IF EXISTS "Allow all selects" ON attendance;
+DROP POLICY IF EXISTS "Allow all updates" ON attendance;
+DROP POLICY IF EXISTS "Allow all deletes" ON attendance;
+
+-- 3. Create a policy to allow INSERTs only for teachers.
+-- The WITH CHECK clause ensures that the user's email from their JWT exists in the teacherportal table.
+CREATE POLICY "Allow teacherportal inserts"
+ON attendance
+FOR INSERT
+WITH CHECK (
+    EXISTS (
+        SELECT 1
+        FROM teacherportal t
+        WHERE t.email = auth.jwt() ->> 'email'
+    )
+);
+
+-- 4. Create a policy to allow teachers to SELECT all attendance records.
+-- The USING clause checks if the user's email exists in the teacherportal table.
+CREATE POLICY "Allow teacherportal select all"
+ON attendance
+FOR SELECT
+USING (
+    EXISTS (
+        SELECT 1
+        FROM teacherportal t
+        WHERE t.email = auth.jwt() ->> 'email'
+    )
+);
+
+-- 5. Create a policy to allow students to SELECT only their own attendance records.
+-- The USING clause checks if the 'username' in the attendance row matches the user's email from their JWT.
+CREATE POLICY "Allow students select own"
+ON attendance
+FOR SELECT
+USING (
+    username = auth.jwt() ->> 'email'
+);

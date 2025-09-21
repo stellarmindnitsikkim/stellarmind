@@ -769,6 +769,57 @@
                 transform: scale(1.05);
             }
         }
+
+        .holidays {
+            padding: 4rem 1rem;
+            background: var(--primary-bg);
+            text-align: center;
+            color: var(--text-color);
+            transition: background var(--transition-speed);
+        }
+
+        .holidays h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 0.75rem rgba(0, 135, 197, 0.6);
+            color: var(--text-color);
+        }
+
+        .holidays-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .holiday-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 0 1.25rem var(--shadow-light);
+            transition: all var(--transition-speed) ease;
+            width: 16.5rem;
+            text-align: left;
+            border: 1px solid rgba(0, 135, 197, 0.1);
+        }
+
+        .holiday-card:hover {
+            transform: translateY(-0.5rem) scale(1.02);
+            box-shadow: 0 0 2rem rgba(0, 135, 197, 0.2);
+        }
+
+        .holiday-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-start);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .holiday-card p {
+            margin: 0.3rem 0;
+            color: var(--subtle-text);
+        }
     </style>
 </head>
 
@@ -798,12 +849,12 @@
                 <a href="#"><i class="fas fa-link"></i> Important Links <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="https://kic.nitsikkim.ac.in/downloads/Gate%20Pass%202%20(1).pdf"><i
-                            class="fas fa-user-check"></i> Gate Pass</a>
+                                class="fas fa-user-check"></i> Gate Pass</a>
                     <a href="https://nitsikkim.samarth.edu.in/index.php/site/login"><i class="fas fa-user-check"></i>
                         Samarth Portal</a>
                     <a
                         href="https://nitsikkim.ac.in/documents/downloads/Proforma_Form%20for%20Issuing%20Certificate_English.pdf"><i
-                            class="fas fa-user-check"></i> Academic Document</a>
+                                class="fas fa-user-check"></i> Academic Document</a>
                     <a href="https://nitsikkim.ac.in/students/academicCalendar.php"><i class="fas fa-user-check"></i>
                         Academic Calendar</a>
                 </div>
@@ -853,6 +904,13 @@
         <h2>Upcoming Events</h2>
         <div id="events-list" class="events-list">
             <p>Loading events...</p>
+        </div>
+    </section>
+    
+    <section class="holidays" id="upcoming-holidays-section">
+        <h2>Upcoming Holidays</h2>
+        <div id="holidays-list" class="holidays-list">
+            <p>Loading holidays...</p>
         </div>
     </section>
 
@@ -916,6 +974,7 @@
             checkLogin();
             loadEvents();
             loadClasses();
+            loadHolidays();
 
             const logoFlipper = document.getElementById('logo-flipper');
             const logoNameSpan = document.getElementById('logo-name');
@@ -1210,6 +1269,42 @@
                 });
             } catch (err) {
                 eventsList.innerHTML = `<p class="error">  Could not load events</p>`;
+            }
+        }
+        
+        async function loadHolidays() {
+            const holidaysList = document.getElementById("holidays-list");
+            if (!holidaysList) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from("holidays")
+                    .select("*")
+                    .order("date", { ascending: true });
+
+                holidaysList.innerHTML = "";
+
+                if (error) {
+                    holidaysList.innerHTML = `<p class="error">  Failed to load holidays</p>`;
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    holidaysList.innerHTML = "<p>No upcoming holidays 🎉</p>";
+                    return;
+                }
+
+                data.forEach((holiday) => {
+                    const card = document.createElement("div");
+                    card.className = "holiday-card";
+                    card.innerHTML = `
+                    <h3><i class="fas fa-umbrella-beach"></i> ${holiday.name}</h3>
+                    <p><i class="fas fa-calendar-day"></i> ${holiday.date}</p>
+                    `;
+                    holidaysList.appendChild(card);
+                });
+            } catch (err) {
+                holidaysList.innerHTML = `<p class="error">  Could not load holidays</p>`;
             }
         }
     </script>
