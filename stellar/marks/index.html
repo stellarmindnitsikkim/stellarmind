@@ -120,7 +120,7 @@
       list-style: none;
       display: flex;
       align-items: center;
-      gap: 1.5rem;
+      gap: 1rem;
     }
 
     /* Add the fade-in animation for desktop links */
@@ -130,25 +130,6 @@
       animation: fadeInUp 0.8s forwards;
     }
 
-    .nav-links li:nth-child(1) {
-      animation-delay: 0.2s;
-    }
-
-    .nav-links li:nth-child(2) {
-      animation-delay: 0.4s;
-    }
-
-    .nav-links li:nth-child(3) {
-      animation-delay: 0.6s;
-    }
-
-    .nav-links li:nth-child(4) {
-      animation-delay: 0.8s;
-    }
-
-    .nav-links li:nth-child(5) {
-      animation-delay: 1s;
-    }
 
     @keyframes fadeInUp {
       to {
@@ -197,25 +178,30 @@
       font-size: 1.5rem;
       color: var(--text-color);
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      /* Adjusted to remove background and shadow for a cleaner, integrated look */
+      background: transparent;
+      box-shadow: none;
       padding: 0.5rem;
       border-radius: 0.5rem;
       transition: all 0.3s ease;
     }
 
     .menu-toggle:hover {
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      transform: translateY(-2px);
+      /* Keep the hover effect but remove the box shadow */
+      transform: scale(1.1);
     }
 
     @media (max-width: 768px) {
+      .navbar {
+        padding: 0.75rem 1rem; /* Reduced height on mobile */
+      }
       .nav-links {
         display: none;
         flex-direction: column;
         align-items: flex-start;
         background: var(--secondary-bg);
         position: absolute;
-        top: 4.5rem;
+        top: 3.5rem; /* Adjusted top position to match new navbar height */
         right: 1rem;
         width: 14rem;
         padding: 1.5rem;
@@ -425,7 +411,7 @@
         font-weight: 700;
         color: var(--text-color);
         /* Set a min-width to prevent collision on very small screens */
-        min-width: 45%; 
+        min-width: 45%;
         padding-right: 1rem;
       }
     }
@@ -437,7 +423,7 @@
   <nav class="navbar">
     <div class="logo">
       <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo" />
-      <span>Stellar Mind</span>
+      <span>Marks Portal</span>
     </div>
     <div class="menu-toggle" id="mobile-menu">
       <i class="fas fa-bars"></i>
@@ -490,44 +476,44 @@
 
 
     // =============================
-        // Attempt to Disable Developer Tools
-        // NOTE: This is not a secure or foolproof method.
-        // Determined users can always bypass these measures.
-        // =============================
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', event => {
-            // Prevent F12
-            if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
-                event.preventDefault();
-            }
-            // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
-                event.preventDefault();
-            }
-            if (event.ctrlKey && event.key.toUpperCase() === 'U') {
-                event.preventDefault();
-            }
-        });
+    // Attempt to Disable Developer Tools
+    // NOTE: This is not a secure or foolproof method.
+    // Determined users can always bypass these measures.
+    // =============================
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('keydown', event => {
+      // Prevent F12
+      if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
+        event.preventDefault();
+      }
+      // Prevent Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+      if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
+        event.preventDefault();
+      }
+      if (event.ctrlKey && event.key.toUpperCase() === 'U') {
+        event.preventDefault();
+      }
+    });
     let currentUser = null;
 
     document.addEventListener("DOMContentLoaded", () => {
       const toggleBtn = document.querySelector(".menu-toggle");
       const navLinks = document.querySelector(".nav-links");
-      
+
       if (toggleBtn && navLinks) {
-          toggleBtn.addEventListener("click", (event) => {
-              event.stopPropagation();
-              navLinks.classList.toggle("active");
-          });
+        toggleBtn.addEventListener("click", (event) => {
+          event.stopPropagation();
+          navLinks.classList.toggle("active");
+        });
 
-          document.addEventListener('click', function(event) {
-              const isClickInsideNav = navLinks.contains(event.target);
-              const isClickOnToggle = toggleBtn.contains(event.target);
+        document.addEventListener('click', function(event) {
+          const isClickInsideNav = navLinks.contains(event.target);
+          const isClickOnToggle = toggleBtn.contains(event.target);
 
-              if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
-                  navLinks.classList.remove('active');
-              }
-          });
+          if (navLinks.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
+            navLinks.classList.remove('active');
+          }
+        });
       }
 
 
@@ -618,7 +604,7 @@
       }
 
       if (!data || data.length === 0) {
-        area.innerHTML = `<div class="uploading-soon">No marks found for <strong>${examType.replace('endsem', 'End Semester')}</strong>.</div>`;
+        area.innerHTML = `<div class="uploading-soon">No marks found for <strong>${examType.replace('endsem', 'End Semester').toUpperCase()}</strong>.</div>`;
         return;
       }
 
