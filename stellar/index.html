@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
     <title>Stellar Mind</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
@@ -64,7 +64,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 103%;
+            width: 100%;
             background: var(--secondary-bg);
             padding: 1rem 1.5rem;
             box-shadow: 0 4px 20px var(--shadow-light);
@@ -227,6 +227,7 @@
             z-index: 100;
         }
 
+        /* New CSS for the dropdown toggle on click */
         .dropdown-content {
             display: none;
             position: absolute;
@@ -242,7 +243,8 @@
             border: 1px solid #e0e0e0;
         }
 
-        .dropdown:hover .dropdown-content {
+        /* This new rule replaces the :hover selector */
+        .dropdown.active .dropdown-content {
             display: block;
         }
 
@@ -310,9 +312,10 @@
                 border: none;
             }
 
-            .dropdown:hover .dropdown-content {
+            /* No longer needed with the new JS logic */
+            /* .dropdown:hover .dropdown-content {
                 display: block;
-            }
+            } */
 
             .dropdown-content a {
                 padding: 0.5rem 1rem;
@@ -377,6 +380,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-left: 5%;
         }
 
         .spline-frame {
@@ -790,7 +794,7 @@
             text-align: center;
             margin: 2rem auto;
         }
-        
+
         @keyframes gradientFlow {
             0% {
                 background-position: 0% 50%;
@@ -925,16 +929,17 @@
                         class="fas fa-chart-line"></i> Student Performance</a></li>
             <li id="event-management-link" style="display: none;"><a href="events/index.html"><i
                         class="fas fa-calendar-alt"></i> Event Management</a></li>
-            <li class="dropdown">
-                <a href="#"><i class="fas fa-link"></i> Important Links <i class="fas fa-caret-down"></i></a>
+            <li class="dropdown" id="important-links-dropdown">
+                <a href="#" id="important-links-toggle"><i class="fas fa-link"></i> Important Links <i
+                        class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
                     <a href="https://kic.nitsikkim.ac.in/downloads/Gate%20Pass%202%20(1).pdf"><i
-                                class="fas fa-user-check"></i> Gate Pass</a>
+                            class="fas fa-user-check"></i> Gate Pass</a>
                     <a href="https://nitsikkim.samarth.edu.in/index.php/site/login"><i class="fas fa-user-check"></i>
                         Samarth Portal</a>
                     <a
                         href="https://nitsikkim.ac.in/documents/downloads/Proforma_Form%20for%20Issuing%20Certificate_English.pdf"><i
-                                class="fas fa-user-check"></i> Academic Document</a>
+                            class="fas fa-user-check"></i> Academic Document</a>
                     <a href="https://nitsikkim.ac.in/students/academicCalendar.php"><i class="fas fa-user-check"></i>
                         Academic Calendar</a>
                 </div>
@@ -967,8 +972,7 @@
                 <p>SM</p>
             </div>
             <div class="mobile-logo mobile-only">
-                <img src="/assets/ttlogo.jpg" alt="Stellar Mind Logo"
-                    class="glow-logo">
+                <img src="/assets/ttlogo.jpg" alt="Stellar Mind Logo" class="glow-logo">
             </div>
         </div>
     </section>
@@ -988,7 +992,7 @@
             <p>Loading events...</p>
         </div>
     </section>
-    
+
     <section class="holidays" id="upcoming-holidays-section">
         <h2>Upcoming Holidays</h2>
         <div id="holidays-list" class="holidays-list">
@@ -1021,22 +1025,11 @@
 
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', event => {
-            if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
-                event.preventDefault();
-            }
-            if (event.ctrlKey && event.shiftKey && ['I', 'J'].includes(event.key.toUpperCase())) {
-                event.preventDefault();
-            }
-            if (event.ctrlKey && event.key.toUpperCase() === 'U') {
-                event.preventDefault();
-            }
-        });
-
         document.addEventListener("DOMContentLoaded", () => {
             const toggleBtn = document.querySelector(".menu-toggle");
             const navLinks = document.querySelector(".nav-links");
+            const importantLinksDropdown = document.getElementById('important-links-dropdown');
+            const importantLinksToggle = document.getElementById('important-links-toggle');
 
             if (toggleBtn) {
                 toggleBtn.addEventListener("click", () => {
@@ -1047,11 +1040,26 @@
             document.addEventListener("click", (e) => {
                 const isClickInsideMenu = navLinks.contains(e.target);
                 const isClickOnToggle = toggleBtn.contains(e.target);
-                
+
                 if (navLinks.classList.contains("active") && !isClickInsideMenu && !isClickOnToggle) {
                     navLinks.classList.remove("active");
                 }
             });
+
+            // New logic for the "Important Links" dropdown
+            importantLinksToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Toggle the 'active' class on the parent list item to show/hide the dropdown
+                importantLinksDropdown.classList.toggle('active');
+            });
+
+            // Close the dropdown when clicking anywhere else on the page
+            document.addEventListener('click', (e) => {
+                if (!importantLinksDropdown.contains(e.target)) {
+                    importantLinksDropdown.classList.remove('active');
+                }
+            });
+
 
             checkLogin();
             loadEvents();
@@ -1174,9 +1182,12 @@
                     else attendanceLink.href = "attendence/index.html";
                 }
 
+                // Updated marks link logic
                 marksLink.querySelector("a").addEventListener("click", (e) => {
                     e.preventDefault();
-                    if (currentUser.role === "teacher") {
+                    if (currentUser.role === "admin") {
+                        window.location.href = "admin/marks.html";
+                    } else if (currentUser.role === "teacher") {
                         window.location.href = "teachermarks/index.html";
                     } else {
                         window.location.href = "marks/index.html";
@@ -1304,8 +1315,8 @@
                     const time = parts[0].trim();
                     const details = parts[1].trim();
                     card.innerHTML = `
-                        <p><i class="fas fa-clock"></i> ${time}</p>
-                        <p>${details}</p>
+                    <p><i class="fas fa-clock"></i> ${time}</p>
+                    <p>${details}</p>
                     `;
                     classList.appendChild(card);
                 });
@@ -1336,7 +1347,7 @@
                 eventsList.innerHTML = "";
 
                 if (error) {
-                    eventsList.innerHTML = `<p class="error">  Failed to load events</p>`;
+                    eventsList.innerHTML = `<p class="error"> Failed to load events</p>`;
                     return;
                 }
 
@@ -1356,24 +1367,29 @@
                     eventsList.appendChild(card);
                 });
             } catch (err) {
-                eventsList.innerHTML = `<p class="error">  Could not load events</p>`;
+                eventsList.innerHTML = `<p class="error"> Could not load events</p>`;
             }
         }
-        
+
         async function loadHolidays() {
             const holidaysList = document.getElementById("holidays-list");
             if (!holidaysList) return;
 
             try {
-                const { data, error } = await supabase
+                const {
+                    data,
+                    error
+                } = await supabase
                     .from("holidays")
                     .select("*")
-                    .order("date", { ascending: true });
+                    .order("date", {
+                        ascending: true
+                    });
 
                 holidaysList.innerHTML = "";
 
                 if (error) {
-                    holidaysList.innerHTML = `<p class="error">  Failed to load holidays</p>`;
+                    holidaysList.innerHTML = `<p class="error"> Failed to load holidays</p>`;
                     return;
                 }
 
@@ -1392,7 +1408,7 @@
                     holidaysList.appendChild(card);
                 });
             } catch (err) {
-                holidaysList.innerHTML = `<p class="error">  Could not load holidays</p>`;
+                holidaysList.innerHTML = `<p class="error"> Could not load holidays</p>`;
             }
         }
     </script>

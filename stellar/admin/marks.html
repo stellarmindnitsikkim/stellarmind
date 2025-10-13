@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
-    <title>Teacher Portal — Marks Setter</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+    <title>Admin Portal — Marks Setter</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -358,13 +358,13 @@
 <body>
     <nav class="navbar">
         <div class="logo">
-            <img src="https://placehold.co/128x128/eaf1f7/0087c5?text=SM" alt="Stellar Mind Logo" class="animated-logo">
-            <span>Teacher Portal</span>
+            <img src="/assets/ttlogo.jpg" alt="Stellar Mind Logo" class="animated-logo">
+            <span>Admin Portal</span>
         </div>
         <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
         <ul class="nav-links" id="nav-links">
             <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="/teacher/index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
+            <li><a href="index.html"><i class="fas fa-user-check"></i> Attendance</a></li>
             <li>
                 <button id="logoutBtn">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -375,8 +375,8 @@
 
     <main class="container">
         <section class="teacher-header">
-            <h1 id="teacherName"></h1>
-            <p id="subjectName"></p>
+            <h1 id="adminName">Admin Portal</h1>
+            <p id="subjectName">Manage student marks for all subjects.</p>
         </section>
 
         <section class="controls">
@@ -390,8 +390,14 @@
                 </select>
             </div>
             <div>
+                <label for="subjectSelect">Subject</label>
+                <select id="subjectSelect" disabled>
+                    <option value="">— Select Subject —</option>
+                </select>
+            </div>
+            <div>
                 <label for="examSelect">Exam</label>
-                <select id="examSelect">
+                <select id="examSelect" disabled>
                     <option value="">— Select Exam —</option>
                     <option value="Mid 1">Mid 1</option>
                     <option value="Mid 2">Mid 2</option>
@@ -430,10 +436,16 @@
     <script type="module">
         import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+        // Supabase credentials (replace with your actual project URL and public key)
         const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // =============================
+        // Attempt to Disable Developer Tools
+        // NOTE: This is not a secure or foolproof method.
+        // Determined users can always bypass these measures.
+        // =============================
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('keydown', event => {
             if (event.key === 'F12' || (event.keyCode && event.keyCode === 123)) {
@@ -447,9 +459,10 @@
             }
         });
 
-        const teacherNameEl = document.getElementById('teacherName');
+        const adminNameEl = document.getElementById('adminName');
         const subjectNameEl = document.getElementById('subjectName');
         const yearSelect = document.getElementById('yearSelect');
+        const subjectSelect = document.getElementById('subjectSelect');
         const examSelect = document.getElementById('examSelect');
         const buildGridBtn = document.getElementById('buildGridBtn');
         const marksBody = document.getElementById('marksBody');
@@ -464,7 +477,8 @@
 
         function redirectToLogin() {
             localStorage.removeItem('user');
-            window.location.href = '../login/index.html';
+            // Assuming login page is in the parent directory
+            window.location.href = '/login/index.html';
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
@@ -472,38 +486,64 @@
             if (!userData) {
                 return redirectToLogin();
             }
-
             const tempUser = JSON.parse(userData);
 
-            const { data, error } = await supabase
-                .from('teacherportal')
-                .select('id, teacher_name, subject_code, subject_name, password')
+            // First, check if the user is an admin
+            const {
+                data: adminData,
+                error: adminError
+            } = await supabase
+                .from('admins')
+                .select('username')
                 .eq('username', tempUser.username)
                 .single();
 
-            if (error || !data) {
-                console.error('Error fetching teacher data:', error);
-                saveStatus.textContent = 'Access Denied. Please log in again.';
-                setTimeout(redirectToLogin, 2000);
-                return;
+            if (adminError || !adminData) {
+                console.error('Error fetching admin data:', adminError);
+                // Redirect if not an admin
+                return redirectToLogin();
             }
 
-            currentUser = data;
+            currentUser = tempUser;
+            adminNameEl.textContent = `Welcome, ${currentUser.username}`;
+            
+            // Now fetch all unique subjects to populate the dropdown
+            const {
+                data: subjectsData,
+                error: subjectsError
+            } = await supabase
+                .from('teacherportal')
+                .select('subject_code, subject_name')
+                .not('subject_code', 'is', null);
 
-            if (currentUser.subject_code === null) {
-                saveStatus.textContent = 'Access Denied. Only teachers with assigned subjects can access this portal.';
-                setTimeout(redirectToLogin, 2000);
+            if (subjectsError) {
+                console.error('Error fetching subjects:', subjectsError);
                 return;
             }
+            
+            const uniqueSubjects = new Map();
+            subjectsData.forEach(subject => {
+                if (subject.subject_code && subject.subject_name) {
+                    uniqueSubjects.set(subject.subject_code, subject.subject_name);
+                }
+            });
 
-            teacherNameEl.textContent = `Welcome, ${currentUser.teacher_name}`;
-            subjectNameEl.textContent = `${currentUser.subject_name} (${currentUser.subject_code})`;
+            subjectSelect.innerHTML = '<option value="">— Select Subject —</option>';
+            uniqueSubjects.forEach((name, code) => {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = `${name} (${code})`;
+                subjectSelect.appendChild(option);
+            });
+
+            // Enable subject and exam dropdowns after fetching data
+            subjectSelect.disabled = false;
+            examSelect.disabled = false;
+            validateInputs();
 
             mobileMenu.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
             });
-
-            // Added new event listener to close the mobile menu when clicking outside
             document.addEventListener('click', (event) => {
                 const isClickInsideMenu = navLinks.contains(event.target) || mobileMenu.contains(event.target);
                 if (!isClickInsideMenu && navLinks.classList.contains('active')) {
@@ -514,9 +554,15 @@
 
         logoutBtn.addEventListener('click', redirectToLogin);
 
-        [yearSelect, examSelect].forEach(el => el.addEventListener('change', () => {
-            buildGridBtn.disabled = !(yearSelect.value && examSelect.value);
+        [yearSelect, subjectSelect, examSelect].forEach(el => el.addEventListener('change', () => {
+            validateInputs();
         }));
+
+        function validateInputs() {
+            const isReady = yearSelect.value && subjectSelect.value && examSelect.value;
+            buildGridBtn.disabled = !isReady;
+            saveBtn.disabled = !isReady;
+        }
 
         function formatExamType(exam) {
             switch (exam) {
@@ -540,11 +586,14 @@
         buildGridBtn.addEventListener('click', async () => {
             marksBody.innerHTML = '';
             gridSection.style.display = 'block';
-            saveStatus.textContent = 'Loading students...';
+            saveStatus.textContent = 'Loading students and existing marks...';
 
             const year = yearSelect.value;
             const exam = examSelect.value;
-
+            const selectedSubjectCode = subjectSelect.value;
+            const selectedSubjectName = subjectSelect.options[subjectSelect.selectedIndex].textContent.split('(')[0].trim();
+            subjectNameEl.textContent = `${selectedSubjectName} (${selectedSubjectCode})`;
+            
             try {
                 const { data: usersData, error: usersError } = await supabase
                     .from('users')
@@ -569,16 +618,17 @@
 
                 const { data: existingMarks, error } = await supabase
                     .from('cse_marks')
-                    .select('*')
-                    .eq('subject_code', currentUser.subject_code)
+                    .select('username, marks, max_marks')
+                    .eq('subject_code', selectedSubjectCode)
                     .eq('exam_type', formatExamType(exam));
 
                 if (error) throw error;
 
                 const defaultMax = getDefaultMaxMarks(exam);
+                const existingMarksMap = new Map(existingMarks.map(m => [m.username.toLowerCase(), m]));
 
                 marksBody.innerHTML = students.map(student => {
-                    const record = existingMarks?.find(m => m.username.toLowerCase() === student.roll.toLowerCase());
+                    const record = existingMarksMap.get(student.roll.toLowerCase());
                     const marksValue = record ? record.marks : '';
                     const maxMarksValue = record ? record.max_marks : defaultMax;
                     const isReadOnly = ['Mid 1', 'Mid 2', 'End Term'].includes(exam) ? 'readonly class="readonly"' : '';
@@ -619,7 +669,7 @@
                     });
                 });
 
-                saveStatus.textContent = 'Grid ready.';
+                saveStatus.textContent = existingMarks.length > 0 ? 'Existing marks loaded. You can modify and save.' : 'Grid ready to accept marks.';
             } catch (error) {
                 console.error('Error building grid:', error);
                 saveStatus.textContent = `⚠️ Error: ${error.message}`;
@@ -629,16 +679,19 @@
         saveBtn.addEventListener('click', async () => {
             const rows = marksBody.querySelectorAll('tr');
             if (rows.length === 0) return;
-
+            
+            saveBtn.disabled = true;
             saveStatus.textContent = 'Saving marks...';
             const exam = examSelect.value;
+            const selectedSubjectCode = subjectSelect.value;
+            const selectedSubjectName = subjectSelect.options[subjectSelect.selectedIndex].textContent.split('(')[0].trim();
 
             const records = Array.from(rows).map(row => ({
                 username: row.dataset.roll.toLowerCase(),
                 student_name: row.dataset.name,
                 exam_type: formatExamType(exam),
-                subject_code: currentUser.subject_code,
-                subject_name: currentUser.subject_name,
+                subject_code: selectedSubjectCode,
+                subject_name: selectedSubjectName,
                 marks: parseFloat(row.querySelector('.marks-input').value) || 0,
                 max_marks: parseFloat(row.querySelector('.max-input').value) || getDefaultMaxMarks(exam)
             }));
@@ -647,7 +700,7 @@
                 const { error } = await supabase
                     .from('cse_marks')
                     .upsert(records, {
-                        onConflict: ['username', 'exam_type', 'subject_code']
+                        onConflict: 'username, exam_type, subject_code'
                     });
 
                 if (error) throw error;
@@ -656,7 +709,13 @@
             } catch (err) {
                 console.error(err);
                 saveStatus.textContent = `⚠️ Error: ${err.message}`;
+            } finally {
+                saveBtn.disabled = false;
             }
+        });
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
     </script>
 </body>

@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teacher — Mark Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0" />
+    <title>Admin Portal — Mark Attendance</title>
 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://unpkg.com/@supabase/supabase-js"></script>
 
     <style>
         /* Light theme variables from index.html */
@@ -27,6 +27,7 @@
             --shadow-light: rgba(0, 0, 0, 0.08);
             --shadow-heavy: rgba(0, 0, 0, 0.15);
             --success-color: #27ae60;
+            --danger-color: #e74c3c;
             --transition-speed: 0.5s;
         }
 
@@ -40,7 +41,6 @@
             font-family: 'Poppins', sans-serif;
             background: var(--primary-bg);
             color: var(--text-color);
-            overflow-x: hidden; /* Prevent horizontal scroll on the body */
         }
 
         /* Navbar */
@@ -49,59 +49,37 @@
             justify-content: space-between;
             align-items: center;
             background: var(--secondary-bg);
-            padding: 1rem 2rem;
+            padding: 0.75rem 2rem;
             box-shadow: 0 4px 20px var(--shadow-light);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .logo {
+        .navbar .logo {
             display: flex;
+            gap: 0.75rem;
             align-items: center;
-            gap: 1rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-color);
+            color: var(--accent-end);
+            font-weight: 700;
+            font-size: 1.2rem;
         }
 
-        .logo img {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-        }
-
-        .animated-logo {
-            animation: glowPulse 2s infinite alternate;
-        }
-
-        @keyframes glowPulse {
-            from {
-                box-shadow: 0 0 1rem rgba(66, 153, 225, 0.4);
-            }
-            to {
-                box-shadow: 0 0 2rem rgba(0, 135, 197, 1);
-            }
-        }
-
+        /* Nav links */
         .nav-links {
             list-style: none;
             display: flex;
             gap: 1.5rem;
             align-items: center;
         }
-        
-        /* Animation for nav links from index.html */
+
         .nav-links li {
             position: relative;
             opacity: 0;
             transform: translateY(-1rem);
             animation: fadeInUp 0.8s forwards;
         }
-        .nav-links li:nth-child(1) { animation-delay: 0.2s; }
-        .nav-links li:nth-child(2) { animation-delay: 0.4s; }
-        .nav-links li:nth-child(3) { animation-delay: 0.6s; }
+
 
         @keyframes fadeInUp {
             to {
@@ -110,7 +88,8 @@
             }
         }
 
-        .nav-links a {
+        .nav-links a,
+        .nav-links button {
             color: var(--text-color);
             text-decoration: none;
             font-size: 1rem;
@@ -120,7 +99,12 @@
             gap: 0.4rem;
             position: relative;
             transition: color var(--transition-speed);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
         }
+
         .nav-links a::after {
             content: "";
             position: absolute;
@@ -132,65 +116,78 @@
             transition: width var(--transition-speed);
             border-radius: 0.1rem;
         }
+
         .nav-links a:hover::after {
             width: 100%;
         }
-        .nav-links a:hover {
+
+        .nav-links a:hover,
+        .nav-links button:hover {
             color: var(--accent-end);
         }
 
+        /* Mobile Menu */
         .menu-toggle {
-            display: none; /* Hidden by default */
+            display: none;
             font-size: 1.5rem;
             color: var(--text-color);
             cursor: pointer;
         }
-        
-        .nav-links button, .btn.ghost {
-            background: transparent;
-            color: var(--subtle-text);
-            border: 1px solid #ccc;
-            border-radius: 2rem;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-weight: bold;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        .nav-links button:hover, .btn.ghost:hover {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border-color: #bbb;
-        }
-        
-        /* Container and Controls */
+
         .container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        .controls {
+        .teacher-header {
+            background: var(--secondary-bg);
+            border: 1px solid #e0e0e0;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 30px var(--shadow-light);
+        }
+
+        .teacher-header h1 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .teacher-header p {
+            font-size: 1rem;
+            color: var(--subtle-text);
+            margin-top: 0.25rem;
+        }
+
+        .teacher-header .chip {
+            background: var(--accent-end);
+            color: white;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .controls-wrapper {
             background: var(--secondary-bg);
             padding: 1.5rem;
             border-radius: 1.5rem;
             box-shadow: 0 8px 30px var(--shadow-light);
         }
 
-        .controls .row {
-            margin-bottom: 1.5rem;
-            display: flex;
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
-            flex-wrap: wrap; /* This makes it responsive */
+            align-items: flex-end;
         }
-        .controls .row:last-of-type {
-            margin-top: 1.5rem;
-            margin-bottom: 0;
-        }
-        .controls .row>div {
-            flex: 1;
-            min-width: 250px; /* Ensures stacking on smaller screens */
+
+        .controls .row {
+            min-width: 200px;
         }
 
         .controls label {
@@ -198,124 +195,106 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
+
         .controls label i {
             margin-right: 0.5rem;
             color: var(--accent-start);
         }
-        
-        .controls input[type="date"],
+
+        .controls input,
         .controls select {
+            width: 100%;
             background: var(--primary-bg);
             border: 1px solid #ddd;
             border-radius: 0.75rem;
             color: var(--text-color);
             padding: 0.75rem 1rem;
-            width: 100%;
-            font-family: 'Poppins', sans-serif;
             font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
         }
-        .controls input[type="date"]:focus,
+
+        .controls input:focus,
         .controls select:focus {
             outline: none;
             border-color: var(--accent-start);
             box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
         }
-        
-        /* Subjects Box */
-        .subjects-box {
+
+        .actions {
             display: flex;
-            gap: 0.75rem;
-            flex-wrap: nowrap;
-            overflow-x: auto; /* Perfect for mobile */
-            padding-bottom: 1rem;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent-end) var(--primary-bg);
+            gap: 1rem;
+            flex-wrap: wrap;
         }
 
-        .subject-check {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: flex-start;
-            background: var(--primary-bg);
-            border: 1px solid #e0e0e0;
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            flex-shrink: 0;
-            min-width: 280px;
-        }
-        .subject-check:hover {
-            border-color: var(--accent-start);
-        }
-        .subject-check label {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .subject-check input[type="checkbox"] {
-            transform: scale(1.2);
-            accent-color: var(--accent-end);
-        }
-        .subject-check .total-classes-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.8rem;
-            width: 100%;
-        }
-        .subject-check .total-classes-row label {
-            margin-bottom: 0;
-        }
-        .subject-check .total-classes-row input[type="number"] {
-            width: 4rem;
-            text-align: center;
-            padding: 0.25rem 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 0.5rem;
-            background: var(--secondary-bg);
-        }
-
-        /* Buttons */
         .btn {
             border: 0;
             border-radius: 2rem;
             padding: 0.75rem 1.5rem;
             cursor: pointer;
             font-weight: bold;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
             font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
         }
-        .btn i { margin-right: 0.5rem; }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
 
         .btn.primary {
             background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             color: #fff;
             box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
         }
+
         .btn.primary:hover {
-            transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 135, 197, 0.4);
         }
+
+        .btn.ghost {
+            background: transparent;
+            color: var(--subtle-text);
+            border: 1px solid #ccc;
+        }
+
+        .btn.ghost:hover {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-color: #bbb;
+        }
+
         .btn.success {
             background: var(--success-color);
             color: #fff;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
+
         .btn.success:hover {
-            transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
         }
-        .btn.xs {
-            padding: 0.5rem 1rem;
-            border-radius: 1.5rem;
-            font-size: 0.8rem;
+
+        .btn.danger {
+            background: var(--danger-color);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
 
-        /* Grid Section */
+        .btn.danger:hover {
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn:disabled {
+            background: #e0e0e0;
+            color: #aaa;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .grid-section {
             margin-top: 2rem;
             background: var(--secondary-bg);
@@ -323,264 +302,229 @@
             border-radius: 1.5rem;
             box-shadow: 0 8px 30px var(--shadow-light);
         }
-        .grid-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-        .bulk {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--primary-bg);
-            border: 1px solid #e0e0e0;
-            border-radius: 2rem;
-            padding: 0.5rem;
-        }
-        .chip {
-            background: var(--accent-end);
-            color: white;
-            border-radius: 2rem;
-            padding: 0.25rem 0.75rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
+
         .grid-wrap {
-            overflow-x: auto; /* Key for mobile table responsiveness */
-            border-radius: 1rem;
+            overflow-x: auto;
             border: 1px solid #e0e0e0;
+            border-radius: 1rem;
         }
+
         .att-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px; /* Ensures content isn't squished */
+            min-width: 600px;
         }
+
         .att-table th,
         .att-table td {
             border: 1px solid #e0e0e0;
             padding: 0.75rem;
             text-align: center;
-            vertical-align: middle;
         }
+
         .att-table th {
             background: var(--card-bg);
             font-weight: 600;
         }
-        .att-table td input {
+
+        .att-table td input.status-input {
             background: var(--primary-bg);
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 0.5rem;
             color: var(--text-color);
             padding: 0.5rem;
+            font-size: 1rem;
             width: 5rem;
             text-align: center;
-            font-size: 1rem;
         }
-        .att-table td input:focus {
+
+        .att-table td input.status-input:focus {
             outline: none;
             border-color: var(--accent-start);
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
         }
-        .roll { font-weight: 700; }
+
+        .roll {
+            font-weight: 700;
+        }
+
+        .student-name {
+            text-align: left;
+        }
+
         .save-bar {
             display: flex;
-            flex-wrap: wrap; /* Allows stacking on mobile */
             align-items: center;
             gap: 1rem;
             margin-top: 1.5rem;
         }
-        .status { color: var(--subtle-text); font-weight: 500; }
-        
-        /* Footer */
-        .footer-container {
-            background: var(--secondary-bg);
-            padding: 2rem 1rem;
+
+        .status {
+            color: var(--subtle-text);
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
             margin-top: 3rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 2rem 1rem;
             color: var(--subtle-text);
         }
 
-        .footer-content {
+        /* Custom Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
-            flex-wrap: wrap; /* Responsive stacking */
-            justify-content: space-around;
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: left;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
         }
-        .footer-section { flex: 1; min-width: 220px; }
-        .footer-section h3 {
+
+        .modal-content {
+            background: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 1rem 3rem var(--shadow-heavy);
+            text-align: center;
+            max-width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-message {
+            font-size: 1.2rem;
             color: var(--text-color);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
         }
-        .footer-section p { line-height: 1.6; }
-        .footer-section a {
-            text-decoration: none;
-            color: var(--subtle-text);
-            transition: color 0.3s;
-        }
-        .footer-section a:hover { color: var(--accent-end); }
-        .social-icons {
-            margin-top: 1rem;
+
+        .modal-buttons {
             display: flex;
             gap: 1rem;
         }
-        .social-icons a { font-size: 1.5rem; }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid #e0e0e0;
-        }
-        
-        /* ===== MOBILE RESPONSIVE STYLES ===== */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem 1.5rem;
-            }
 
+        @media (max-width: 768px) {
             .nav-links {
-                display: none; /* Hide by default */
+                display: none;
                 flex-direction: column;
+                align-items: flex-start;
                 background: var(--secondary-bg);
                 position: absolute;
-                top: 4.5rem; /* Height of the navbar */
+                top: 4.5rem;
                 right: 1rem;
                 width: 14rem;
                 padding: 1.5rem;
                 border-radius: 1rem;
-                box-shadow: 0 4px 20px var(--shadow-heavy);
-                animation: slideInRight 0.5s forwards;
+                box-shadow: 0 4px 20px var(--shadow-light);
             }
+
             .nav-links.active {
-                display: flex; /* Show when active */
+                display: flex;
             }
-            .nav-links li {
-                width: 100%;
-                text-align: left;
-            }
-            
+
             .menu-toggle {
-                display: block; /* Show hamburger icon */
-            }
-
-            .controls .row, .save-bar {
-                 flex-direction: column;
+                display: block;
             }
         }
-        
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
     </style>
 </head>
 
 <body>
     <nav class="navbar">
-        <div class="logo">
-            <img src="/assets/tlogo.png" alt="Stellar Mind Logo" class="animated-logo">
-            <span>Teacher Portal</span>
-        </div>
-        <div class="menu-toggle" id="mobile-menu">
-            <i class="fas fa-bars"></i>
-        </div>
+        <div class="logo"><i class="fa-solid fa-chalkboard-user"></i><span>Admin Portal</span></div>
+        <div class="menu-toggle" id="mobile-menu"><i class="fas fa-bars"></i></div>
         <ul class="nav-links" id="nav-links">
-            <li><a href="../index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="../attendance/index.html"><i class="fas fa-user-check"></i> Student View</a></li>
-            <li><button id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button></li>
+            <li><a href="/index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="marks.html"><i class="fas fa-clipboard"></i> Marks</a></li>
+            <!-- <li><a href="/teacher/index.html"><i class="fas fa-user-check"></i> Attendance</a></li> -->
+            <li>
+                <button id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </li>
         </ul>
     </nav>
-
-
     <main class="container">
-        <section class="controls">
-            <div class="row">
-                <div>
-                    <label for="branchSelect"><i class="fa-solid fa-code-branch"></i> Branch</label>
-                    <select id="branchSelect">
-                        <option value="">— Select Branch —</option>
-                        <option value="CSE">CSE</option>
-                        <option value="ECE">ECE</option>
-                        <option value="EEE">EEE</option>
-                        <option value="ME">Mechanical</option>
-                        <option value="CE">Civil</option>
+        <section id="adminHeader" class="teacher-header" style="display: none;">
+            <h1 id="adminName"></h1>
+            <p>Select a subject to mark attendance:</p>
+            <div id="subjectName" class="chip"></div>
+        </section>
+
+        <section class="controls-wrapper">
+            <div class="controls">
+                <div class="row">
+                    <label for="yearSelect"><i class="fa-solid fa-graduation-cap"></i> Year</label>
+                    <select id="yearSelect">
+                        <option value="">— Select Year —</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3" disabled>3rd Year (Not Available)</option>
+                        <option value="4" disabled>4th Year (Not Available)</option>
                     </select>
                 </div>
-                <div>
+                <div class="row">
+                    <label for="subjectSelect"><i class="fa-solid fa-book"></i> Subject</label>
+                    <select id="subjectSelect" disabled>
+                        <option value="">— Select Subject —</option>
+                    </select>
+                </div>
+                <div class="row">
                     <label for="attDate"><i class="fa-regular fa-calendar-days"></i> Date</label>
                     <input type="date" id="attDate" />
                 </div>
-            </div>
-
-            <div class="row">
-                <div id="subjectsBox" class="subjects-box">
-                    <!-- checkboxes rendered here -->
+                <div class="row">
+                    <label for="totalClasses"><i class="fa-solid fa-list-ol"></i> Today’s Total Classes</label>
+                    <input type="number" id="totalClasses" min="1" value="1" />
                 </div>
-            </div>
-
-            <div class="row actions">
-                <button id="buildGridBtn" class="btn primary"><i class="fa-solid fa-table-list"></i> Build Grid</button>
-                <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
+                <div class="row actions">
+                    <button id="buildGridBtn" class="btn primary" disabled><i class="fa-solid fa-table-list"></i> Build
+                        Grid</button>
+                    <button id="clearGridBtn" class="btn ghost"><i class="fa-regular fa-trash-can"></i> Clear</button>
+                    <button id="deleteBtn" class="btn danger" disabled><i class="fa-solid fa-trash-can-arrow-up"></i>
+                        Delete</button>
+                </div>
             </div>
         </section>
 
+
         <section id="gridSection" class="grid-section" style="display:none;">
-            <div class="grid-toolbar" id="bulkToolbar">
-                <!-- per-subject bulk controls -->
-            </div>
             <div class="grid-wrap">
                 <table id="attTable" class="att-table">
-                    <thead id="attHead"></thead>
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Student Name</th>
+                            <th>Attendance Count</th>
+                        </tr>
+                    </thead>
                     <tbody id="attBody"></tbody>
                 </table>
             </div>
-
             <div class="save-bar">
-                <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save Attendance</button>
+                <button id="saveBtn" class="btn success"><i class="fa-solid fa-floppy-disk"></i> Save
+                    Attendance</button>
                 <span id="saveStatus" class="status"></span>
             </div>
         </section>
     </main>
-
-    <footer class="footer-container">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Teacher Portal</h3>
-                <p>Manage student attendance efficiently and accurately. Designed for faculty to streamline daily tasks.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Contact & Social</h3>
-                <p>Contact: <a href="tel:+917908750746">+91 7908750746</a></p>
-                <div class="social-icons">
-                    <a href="https://wa.me/7037796470" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 Stellar Mind | All Rights Reserved.</p>
-        </div>
+    <footer class="footer">
+        <p>© 2025 Stellar Mind | Admin Portal</p>
     </footer>
 
     <script type="module">
-        // ---- Supabase ----
-        const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
-        const SUPABASE_KEY =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        import {
+            createClient
+        } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+        // Supabase credentials (replace with your actual project URL and public key)
+        const SUPABASE_URL = "https://yrzpuxhvktpcwksmlnwl.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyenB1eGh2a3RwY3drc21sbndsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyOTY1NzksImV4cCI6MjA3MTg3MjU3OX0.rjUVbGsQvPsLaua936DqA9fB5CVq8puRTq6DgJ1L_bs";
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
         // =============================
@@ -603,431 +547,365 @@
             }
         });
 
-        // ---- Branch Data ----
-        const BRANCHES = {
-            CSE: {
-                subjects: [{
-                    code: "CS13111",
-                    name: "Data Structure and Algorithms"
-                }, {
-                    code: "CS13112",
-                    name: "Computer Networks"
-                }, {
-                    code: "CS13113",
-                    name: "Digital Logic Design"
-                }, {
-                    code: "CS13114",
-                    name: "Object Oriented System Design"
-                }, {
-                    code: "CS13115",
-                    name: "Computational Mathematics"
-                }, {
-                    code: "CS13116",
-                    name: "Foundation of Machine Learning"
-                }, {
-                    code: "CS13211",
-                    name: "DSA Laboratory"
-                }, {
-                    code: "CS13212",
-                    name: "Computer Networks Laboratory"
-                }, {
-                    code: "CS13213",
-                    name: "Digital Logic Design Laboratory"
-                }, {
-                    code: "CS13214",
-                    name: "System Design Lab using Python"
-                }],
-                rollRange: [1, 64],
-                exclude: [],
-                extra: ["b240086", "b240091", "b240158"]
-            },
-            ECE: {
-                subjects: [{
-                    code: "EC13101_2",
-                    name: "Mathematics III"
-                }, {
-                    code: "EC13102_2",
-                    name: "Analog Electronic Circuits"
-                }, {
-                    code: "EC13103_2",
-                    name: "Signals and Systems"
-                }, {
-                    code: "EC13104_2",
-                    name: "Electromagnetic Theory"
-                }, {
-                    code: "EC13105_2",
-                    name: "Communication Systems"
-                }, {
-                    code: "EC13201_2",
-                    name: "Analog Electronic Circuits Lab"
-                }, {
-                    code: "EC13202_2",
-                    name: "Signals and Systems Lab"
-                }, {
-                    code: "EC13203_2",
-                    name: "Communication Systems Lab"
-                }],
-                rollRange: [65, 92],
-                exclude: [86, 91],
-                extra: []
-            },
-            EEE: {
-                subjects: [{
-                    code: "EE13101_2",
-                    name: "Mathematics III"
-                }, {
-                    code: "EE13102_2",
-                    name: "Electrical Machines I"
-                }, {
-                    code: "EE13103_2",
-                    name: "Power Systems I"
-                }, {
-                    code: "EE13104_2",
-                    name: "Control Systems"
-                }, {
-                    code: "EE13105_2",
-                    name: "Electromagnetic Theory"
-                }, {
-                    code: "EE13201_2",
-                    name: "Electrical Machines I Lab"
-                }, {
-                    code: "EE13202_2",
-                    name: "Control Systems Lab"
-                }],
-                rollRange: [93, 119],
-                exclude: [],
-                extra: []
-            },
-            CE: {
-                subjects: [{
-                    code: "CE13112_2",
-                    name: "Mathematics III"
-                }, {
-                    code: "ZZ13201_2",
-                    name: "Professional Practice I"
-                }, {
-                    code: "CE13108_2",
-                    name: "Structural Analysis I"
-                }, {
-                    code: "CE13111_2",
-                    name: "Transportation Engineering I"
-                }, {
-                    code: "CE13206_2",
-                    name: "Transportation Engineering Lab"
-                }, {
-                    code: "CE13110",
-                    name: "Surveying And Remote Sensing"
-                }, {
-                    code: "CE13107",
-                    name: "Building Material and Construction"
-                }, {
-                    code: "CE13205_2",
-                    name: "Applied Engineering Geology & Material Testing"
-                }, {
-                    code: "CE13207_2",
-                    name: "Building Drawing"
-                }],
-                rollRange: [120, 142],
-                exclude: [138],
-                extra: []
-            },
-            ME: {
-                subjects: [{
-                    code: "ME13101_2",
-                    name: "Mathematics III"
-                }, {
-                    code: "ME13102_2",
-                    name: "Fluid Mechanics"
-                }, {
-                    code: "ME13104_2",
-                    name: "Thermodynamics"
-                }, {
-                    code: "ME13105_2",
-                    name: "Materials Science and Metallurgy"
-                }, {
-                    code: "ME13106_2",
-                    name: "Metrology and Measurements"
-                }, {
-                    code: "ME13107_2",
-                    name: "Kinematics of Machinery"
-                }, {
-                    code: "ME13201_2",
-                    name: "Fluid Mechanics Lab"
-                }, {
-                    code: "ME13203_2",
-                    name: "Metrology Lab"
-                }, {
-                    code: "ME13204_2",
-                    name: "Machine Drawing"
-                }, {
-                    code: "ME13205_2",
-                    name: "Kinematics Lab"
-                }],
-                rollRange: [143, 167],
-                exclude: [158],
-                extra: []
+        const adminHeader = document.getElementById('adminHeader'),
+            adminNameEl = document.getElementById('adminName'),
+            subjectSelect = document.getElementById('subjectSelect'),
+            yearSelect = document.getElementById('yearSelect'),
+            attDate = document.getElementById('attDate'),
+            totalClassesInput = document.getElementById('totalClasses'),
+            buildGridBtn = document.getElementById('buildGridBtn'),
+            clearGridBtn = document.getElementById('clearGridBtn'),
+            deleteBtn = document.getElementById('deleteBtn'),
+            gridSection = document.getElementById('gridSection'),
+            attBody = document.getElementById('attBody'),
+            saveBtn = document.getElementById('saveBtn'),
+            saveStatus = document.getElementById('saveStatus'),
+            logoutBtn = document.getElementById('logoutBtn'),
+            mobileMenu = document.getElementById('mobile-menu'),
+            navLinks = document.getElementById('nav-links');
+
+
+        let currentUser = null;
+
+        // Function to redirect to the login page
+        function redirectToLogin() {
+            localStorage.removeItem('user');
+            window.location.href = '/login/index.html';
+        }
+
+        /**
+         * Creates a custom alert or confirmation modal.
+         * @param {string} message The message to display.
+         * @param {boolean} isConfirmation If true, shows OK/Cancel buttons.
+         * @param {Function} onConfirm Callback for OK/confirm action.
+         */
+        function createCustomModal(message, isConfirmation = false, onConfirm = () => {}) {
+            // Remove any existing modal to prevent duplicates
+            const existingModal = document.querySelector('.modal-overlay');
+            if (existingModal) {
+                existingModal.remove();
             }
-        };
 
-        // ---- Elements ----
-        const attDate = document.getElementById("attDate");
-        const subjectsBox = document.getElementById("subjectsBox");
-        const branchSelect = document.getElementById("branchSelect");
-        const buildGridBtn = document.getElementById("buildGridBtn");
-        const clearGridBtn = document.getElementById("clearGridBtn");
-        const gridSection = document.getElementById("gridSection");
-        const attHead = document.getElementById("attHead");
-        const attBody = document.getElementById("attBody");
-        const bulkToolbar = document.getElementById("bulkToolbar");
-        const saveBtn = document.getElementById("saveBtn");
-        const saveStatus = document.getElementById("saveStatus");
-        const logoutBtn = document.getElementById("logoutBtn");
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
 
-        let currentBranch = null;
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
 
-        // Default date to today
-        attDate.valueAsDate = new Date();
+            const messageText = document.createElement('p');
+            messageText.className = 'modal-message';
+            messageText.textContent = message;
 
-        // Render subjects when branch changes
-        branchSelect.addEventListener("change", () => {
-            currentBranch = branchSelect.value;
-            if (!currentBranch) {
-                subjectsBox.innerHTML = "";
-                return;
-            }
-            const branch = BRANCHES[currentBranch];
-            subjectsBox.innerHTML = branch.subjects
-                .map(
-                    (s) => `
-        <div class="subject-check">
-          <label>
-            <input type="checkbox" value="${s.code}" data-name="${s.name}"/>
-            <span>${s.code} — ${s.name}</span>
-          </label>
-          <div class="total-classes-row">
-            <label>Classes today:</label>
-            <input type="number" class="total-classes-input" value="1" min="1" data-code="${s.code}">
-          </div>
-        </div>
-      `
-                )
-                .join("");
-        });
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.className = 'modal-buttons';
 
-        // Generate roll numbers and placeholder names
-        function getStudents(branchKey) {
-            const b = BRANCHES[branchKey];
-            if (!b) return [];
-            const students = [];
-            for (let i = b.rollRange[0]; i <= b.rollRange[1]; i++) {
-                if (!b.exclude.includes(i)) {
-                    students.push({
-                        roll: "b240" + String(i).padStart(3, "0"),
-                        name: `Student ${String(i).padStart(3, "0")}`
-                    });
+            const okBtn = document.createElement('button');
+            okBtn.textContent = isConfirmation ? 'Yes, Delete' : 'OK';
+            okBtn.className = `btn ${isConfirmation ? 'danger' : 'primary'}`;
+            okBtn.onclick = () => {
+                modalOverlay.remove();
+                if (isConfirmation) {
+                    onConfirm();
                 }
+            };
+
+            buttonsContainer.appendChild(okBtn);
+
+            if (isConfirmation) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.className = 'btn ghost';
+                cancelBtn.onclick = () => modalOverlay.remove();
+                buttonsContainer.appendChild(cancelBtn);
             }
-            return [...students, ...b.extra.map(roll => ({
-                roll,
-                name: `Student ${roll.slice(-3)}`
-            }))].sort((a, b) => a.roll.localeCompare(b.roll));
+
+            modalContent.appendChild(messageText);
+            modalContent.appendChild(buttonsContainer);
+            modalOverlay.appendChild(modalContent);
+            document.body.appendChild(modalOverlay);
         }
 
-        function selectedSubjectData() {
-            const subjects = [];
-            subjectsBox.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
-                const code = checkbox.value;
-                const name = checkbox.dataset.name;
-                const totalClassesInput = subjectsBox.querySelector(`.total-classes-input[data-code="${code}"]`);
-                const totalClasses = totalClassesInput ? parseInt(totalClassesInput.value, 10) : 1;
-                subjects.push({
-                    code,
-                    name,
-                    totalClasses
-                });
-            });
-            return subjects;
-        }
-
-        // Build Grid
-        async function buildGrid() {
-            const when = attDate.value;
-            if (!currentBranch) {
-                alert("Pick a branch first.");
-                return;
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userData = localStorage.getItem('user');
+            if (!userData) {
+                return redirectToLogin();
             }
-            const activeSubjects = selectedSubjectData();
-            if (!when || activeSubjects.length === 0) {
-                alert("Pick a date and select at least one subject.");
-                return;
-            }
+            const tempUser = JSON.parse(userData);
 
-            const currentStudents = getStudents(currentBranch);
-
-            attHead.innerHTML = `
-        <tr>
-          <th>Roll No.</th>
-          <th>Name</th>
-          ${activeSubjects.map((s) => `<th data-code="${s.code}">${s.code}<br><small>(Total: ${s.totalClasses})</small></th>`).join("")}
-        </tr>
-      `;
-
+            // First, check if the user is an admin
             const {
-                data: existingData,
-                error
-            } = await supabaseClient
-                .from('attendance')
-                .select('username, subject_code, status')
-                .eq('date', when)
-                .eq('branch', currentBranch)
-                .in('subject_code', activeSubjects.map(s => s.code));
+                data: adminData,
+                error: adminError
+            } = await supabase
+                .from('admins')
+                .select('username')
+                .eq('username', tempUser.username)
+                .single();
 
-            if (error) console.error("Error fetching existing data:", error);
+            if (adminError || !adminData) {
+                console.error('Error fetching admin data:', adminError);
+                createCustomModal('Access Denied. You do not have administrator privileges.');
+                return redirectToLogin();
+            }
 
-            attBody.innerHTML = currentStudents
-                .map(
-                    (student) => `
-        <tr data-roll="${student.roll}" data-name="${student.name}">
-          <td class="roll">${student.roll.toUpperCase()}</td>
-          <td>${student.name}</td>
-          ${activeSubjects
-                        .map(
-                            (subject) => {
-                                const record = existingData?.find(r => r.username === student.roll && r.subject_code === subject.code);
-                                const status = record ? record.status : subject.totalClasses; // Default to present
-                                return `
-                <td data-code="${subject.code}">
-                  <input type="number" class="status-input" value="${status}" min="0" max="${subject.totalClasses}">
-                </td>
-              `
-                            }
-                        )
-                        .join("")}
-        </tr>
-      `
-                )
-                .join("");
+            // User is an admin, now fetch all unique subjects from the teacherportal
+            const {
+                data: subjectsData,
+                error: subjectsError
+            } = await supabase
+                .from('teacherportal')
+                .select('subject_code, subject_name')
+                .not('subject_code', 'is', null);
 
-            bulkToolbar.innerHTML = activeSubjects
-                .map(
-                    (s) => `
-        <div class="bulk">
-          <span class="chip">${s.code}</span>
-          <button class="btn xs ghost" data-bulk-absent="${s.code}">Mark All Absent (0)</button>
-        </div>
-      `
-                )
-                .join("");
+            if (subjectsError) {
+                console.error('Error fetching subjects:', subjectsError);
+                createCustomModal('An error occurred while loading subjects. Please try again.');
+                return redirectToLogin();
+            }
 
-            bulkToolbar.querySelectorAll("button[data-bulk-absent]").forEach((btn) => {
-                btn.addEventListener("click", () => {
-                    const code = btn.dataset.bulkAbsent;
-                    attBody
-                        .querySelectorAll(`td[data-code="${code}"] .status-input`)
-                        .forEach((s) => {
-                            s.value = "0";
-                        });
-                });
+            // Populate the subject dropdown
+            const uniqueSubjects = new Map();
+            subjectsData.forEach(subject => {
+                if (subject.subject_code && subject.subject_name) {
+                    uniqueSubjects.set(subject.subject_code, subject.subject_name);
+                }
             });
 
-            gridSection.style.display = "block";
-            saveStatus.textContent = "";
-        }
+            uniqueSubjects.forEach((name, code) => {
+                const option = document.createElement('option');
+                option.value = code;
+                option.textContent = `${name} (${code})`;
+                subjectSelect.appendChild(option);
+            });
 
-        buildGridBtn.addEventListener("click", buildGrid);
-        clearGridBtn.addEventListener("click", () => {
-            subjectsBox.querySelectorAll('input[type="checkbox"]').forEach(
-                (c) => (c.checked = false)
-            );
-            gridSection.style.display = "none";
-            attHead.innerHTML = "";
-            attBody.innerHTML = "";
-            bulkToolbar.innerHTML = "";
+            currentUser = tempUser; // Store the admin user info
+            adminNameEl.textContent = `Welcome, ${currentUser.username}`;
+            adminHeader.style.display = 'block';
+            attDate.value = new Date().toISOString().split('T')[0];
+            subjectSelect.disabled = false;
+            validateInputs();
+
+            mobileMenu.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
         });
 
-        // Save Attendance
-        saveBtn.addEventListener("click", async () => {
-            const when = attDate.value;
-            const activeSubjects = selectedSubjectData();
-            const allRollsInGrid = [...attBody.querySelectorAll("tr")].map(
-                (tr) => tr.dataset.roll
-            );
+        logoutBtn.addEventListener('click', redirectToLogin);
 
-            if (!when || activeSubjects.length === 0 || !currentBranch || allRollsInGrid.length === 0) {
-                alert("Please build the grid first.");
-                return;
+        yearSelect.addEventListener('change', validateInputs);
+        subjectSelect.addEventListener('change', validateInputs);
+        attDate.addEventListener('change', validateInputs);
+
+        function validateInputs() {
+            const isReady = yearSelect.value === '2' && subjectSelect.value && attDate.value;
+            buildGridBtn.disabled = !isReady;
+            deleteBtn.disabled = !isReady;
+        }
+
+        clearGridBtn.addEventListener('click', () => {
+            gridSection.style.display = 'none';
+            attBody.innerHTML = '';
+            yearSelect.value = '';
+            subjectSelect.value = '';
+            attDate.value = new Date().toISOString().split('T')[0];
+            totalClassesInput.value = 1;
+            validateInputs();
+        });
+
+        buildGridBtn.addEventListener('click', async () => {
+            const selectedSubjectCode = subjectSelect.value;
+            const selectedSubjectName = subjectSelect.options[subjectSelect.selectedIndex].textContent.split('(')[0].trim();
+            const selectedDate = attDate.value;
+            const totalClasses = parseInt(totalClassesInput.value, 10) || 1;
+
+            if (!selectedSubjectCode || !selectedDate) {
+                return createCustomModal('Please select a subject and date.');
             }
 
-            const rowsToUpsert = [];
-            attBody.querySelectorAll("tr").forEach((tr) => {
-                const roll = tr.dataset.roll;
-                const name = tr.dataset.name;
-                tr.querySelectorAll("td[data-code]").forEach((td) => {
-                    const code = td.dataset.code;
-                    const status = parseInt(td.querySelector(".status-input").value, 10);
-                    const subjectData = activeSubjects.find(s => s.code === code);
-                    if (subjectData) {
-                        rowsToUpsert.push({
-                            username: roll,
-                            student_name: name,
-                            branch: currentBranch,
-                            date: when,
-                            subject: subjectData.name, // Keep for backward compatibility if needed
-                            subject_code: subjectData.code,
-                            subject_name: subjectData.name,
-                            status: status,
-                            total_classes: subjectData.totalClasses,
-                        });
-                    }
-                });
+            saveStatus.textContent = 'Building grid...';
+            try {
+                // Fetch student data from the 'users' table
+                const {
+                    data: usersData,
+                    error: usersError
+                } = await supabase
+                    .from('users')
+                    .select('username, studentname');
+
+                if (usersError) throw usersError;
+
+                const studentsMap = new Map(usersData.map(user => [user.username, user.studentname]));
+
+                // Generate a list of all required roll numbers for 2nd year
+                const fixedRollNumbers = ['b240086', 'b240091', 'b240158'];
+                const studentRollNumbers = Array.from({
+                    length: 64
+                }, (_, i) => `b2400${(i + 1).toString().padStart(2, '0')}`);
+                const allRollNumbers = [...new Set([...studentRollNumbers, ...fixedRollNumbers])].sort();
+
+                attBody.innerHTML = allRollNumbers.map(rollNumber => {
+                    const studentName = studentsMap.get(rollNumber) || `Student ${rollNumber.slice(-2)}`;
+                    return `<tr data-roll="${rollNumber}" data-name="${studentName}">
+                                <td><span class="roll">${rollNumber.toUpperCase()}</span></td>
+                                <td class="student-name">${studentName}</td>
+                                <td><input type="number" class="status-input" min="0" max="${totalClasses}" value="${totalClasses}"/></td>
+                            </tr>`;
+                }).join('');
+
+                gridSection.style.display = 'block';
+                saveStatus.textContent = 'Grid built. Checking for existing records...';
+
+                // Fetch existing attendance records for the selected date and subject
+                const {
+                    data: existingAtt,
+                    error
+                } = await supabase
+                    .from('attendance')
+                    .select('username, status, total_classes')
+                    .eq('date', selectedDate)
+                    .eq('subject_code', selectedSubjectCode);
+
+                if (error) throw error;
+
+                if (existingAtt && existingAtt.length > 0) {
+                    // Update the form with existing data
+                    totalClassesInput.value = existingAtt[0].total_classes || 1;
+                    existingAtt.forEach(record => {
+                        const row = attBody.querySelector(`tr[data-roll="${record.username.toLowerCase()}"]`);
+                        if (row) {
+                            const input = row.querySelector('.status-input');
+                            if (input) {
+                                input.max = totalClassesInput.value;
+                                input.value = record.status;
+                            }
+                        }
+                    });
+                    saveStatus.textContent = 'Existing attendance loaded. You can modify and save.';
+                } else {
+                     saveStatus.textContent = 'No existing records found. Please mark new attendance.';
+                }
+
+                
+            } catch (error) {
+                console.error('Error in build grid process:', error);
+                saveStatus.textContent = `Error: ${error.message}`;
+            }
+        });
+
+        totalClassesInput.addEventListener('change', () => {
+            const newMax = totalClassesInput.value;
+            attBody.querySelectorAll('.status-input').forEach(input => {
+                input.max = newMax;
+                if (parseInt(input.value) > parseInt(newMax)) {
+                    input.value = newMax;
+                }
             });
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const rows = attBody.querySelectorAll('tr');
+            if (rows.length === 0) return createCustomModal('Nothing to save.');
 
             saveBtn.disabled = true;
-            saveStatus.textContent = "Saving…";
+            saveStatus.textContent = '⏳ Saving attendance...';
+            const date = attDate.value;
+            const totalClasses = parseInt(totalClassesInput.value, 10) || 1;
+            const selectedSubjectCode = subjectSelect.value;
+            const selectedSubjectName = subjectSelect.options[subjectSelect.selectedIndex].textContent.split('(')[0].trim();
+
+            if (!selectedSubjectCode) {
+                saveStatus.textContent = '⚠️ Error: Please select a subject before saving.';
+                saveBtn.disabled = false;
+                return;
+            }
 
             try {
-                const {
-                    error: upsertErr
-                } = await supabaseClient
-                    .from("attendance")
-                    .upsert(rowsToUpsert, {
-                        onConflict: ['username', 'date', 'subject_code']
+                const recordsToUpsert = [];
+                let errorFound = false;
+                rows.forEach(row => {
+                    if (errorFound) return;
+                    const status = parseInt(row.querySelector('.status-input').value, 10);
+                    if (status > totalClasses) {
+                        createCustomModal(`Attendance for ${row.dataset.roll} cannot exceed total classes.`);
+                        errorFound = true;
+                        return;
+                    }
+                    recordsToUpsert.push({
+                        username: row.dataset.roll.toLowerCase(),
+                        student_name: row.dataset.name,
+                        branch: 'CSE', // Hardcoded for 2nd year
+                        date: date,
+                        status: status,
+                        total_classes: totalClasses,
+                        subject_code: selectedSubjectCode,
+                        subject_name: selectedSubjectName
                     });
-                if (upsertErr) throw upsertErr;
+                });
 
-                saveStatus.textContent = `✅ Saved attendance for ${rowsToUpsert.length} entries.`;
-            } catch (e) {
-                console.error(e);
-                saveStatus.textContent = "❌ Error while saving. Check console.";
+                if (errorFound) {
+                    throw new Error("Invalid attendance count.");
+                }
+
+                // Upsert with a composite key to handle updates properly
+                const {
+                    error
+                } = await supabase.from('attendance').upsert(recordsToUpsert, {
+                    onConflict: 'username, date, subject_code'
+                });
+
+                if (error) throw error;
+
+                saveStatus.textContent = '✅ Attendance saved successfully!';
+                setTimeout(() => saveStatus.textContent = '', 4000);
+
+            } catch (error) {
+                console.error('Error saving attendance:', error);
+                saveStatus.textContent = `⚠️ Error: ${error.message}`;
             } finally {
                 saveBtn.disabled = false;
             }
         });
 
-        // ---- Logout ----
-        logoutBtn.addEventListener("click", () => {
-            localStorage.removeItem("user");
-            window.location.href = "../index.html";
-        });
-        
-        // ---- Mobile Menu Toggle ----
-        document.addEventListener("DOMContentLoaded", () => {
-            const toggleBtn = document.getElementById("mobile-menu");
-            const navLinks = document.getElementById("nav-links");
-
-            if (toggleBtn && navLinks) {
-                toggleBtn.addEventListener("click", (event) => {
-                    event.stopPropagation(); // Prevent the click from bubbling up to the document
-                    navLinks.classList.toggle("active");
-                });
+        deleteBtn.addEventListener('click', () => {
+            const selectedDate = attDate.value;
+            const selectedSubjectCode = subjectSelect.value;
+            if (!selectedDate || !selectedSubjectCode) {
+                createCustomModal('Please select a date and subject to delete attendance.');
+                return;
             }
 
-            // Close menu when clicking anywhere outside of it
-            document.addEventListener('click', function(event) {
-                if (navLinks.classList.contains('active') && !navLinks.contains(event.target)) {
-                    navLinks.classList.remove('active');
+            createCustomModal(
+                `Are you sure you want to delete all attendance records for ${selectedDate} and subject ${selectedSubjectCode}? This action cannot be undone.`,
+                true,
+                async () => {
+                    saveStatus.textContent = '⏳ Deleting attendance...';
+                    deleteBtn.disabled = true;
+
+                    try {
+                        const {
+                            error
+                        } = await supabase
+                            .from('attendance')
+                            .delete()
+                            .eq('date', selectedDate)
+                            .eq('subject_code', selectedSubjectCode);
+
+                        if (error) throw error;
+
+                        saveStatus.textContent = '✅ Attendance deleted successfully!';
+                        setTimeout(() => saveStatus.textContent = '', 4000);
+
+                        // Clear the grid after successful deletion
+                        gridSection.style.display = 'none';
+                        attBody.innerHTML = '';
+                    } catch (error) {
+                        console.error('Error deleting attendance:', error);
+                        saveStatus.textContent = `⚠️ Error: ${error.message}`;
+                    } finally {
+                        deleteBtn.disabled = false;
+                    }
                 }
-            });
+            );
         });
     </script>
 </body>
